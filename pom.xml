@@ -28,6 +28,7 @@
 
 	<modules>
 		<module>edocs-common</module>
+		<module>edocs-annotation</module>
 	</modules>
 	
 	<dependencyManagement>
