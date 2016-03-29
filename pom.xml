@@ -25,6 +25,10 @@
 			</plugin>
 		</plugins>
 	</build>
+
+	<modules>
+		<module>edocs-common</module>
+	</modules>
 	
 	<dependencyManagement>
 		<dependencies>
