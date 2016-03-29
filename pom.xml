@@ -9,7 +9,7 @@
 	<artifactId>e-docs</artifactId>
 	<packaging>pom</packaging>
 	<version>${project.release}</version>
-	<name>e-docs</name>
+	<name>edocs</name>
 	
 	<build>
 		<plugins>
