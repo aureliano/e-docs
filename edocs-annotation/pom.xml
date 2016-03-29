@@ -19,7 +19,6 @@
 		<dependency>
 			<groupId>com.github.aureliano</groupId>
 			<artifactId>edocs-common</artifactId>
-			<version>${project.release}</version>
 		</dependency>
 	
 		<dependency>
