@@ -9,6 +9,14 @@ import com.github.aureliano.edocs.common.exception.EDocsException;
 
 public final class ReflectionHelper {
     
+    public static Object newInstance(Class<?> clazz) {
+    	try {
+    		return clazz.newInstance();
+    	} catch (Exception ex) {
+    		throw new EDocsException(ex);
+    	}
+    }
+    
     public static Method getMethod(Class<?> clazz, String methodName, Class<?>[] parameters) {
     	try {
     		return clazz.getMethod(methodName, parameters);

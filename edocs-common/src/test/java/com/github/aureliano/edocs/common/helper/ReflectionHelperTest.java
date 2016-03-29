@@ -1,6 +1,8 @@
 package com.github.aureliano.edocs.common.helper;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.lang.reflect.Method;
 import java.util.List;
@@ -10,6 +12,14 @@ import org.junit.Test;
 import com.github.aureliano.edocs.common.model.CommonModel;
 
 public class ReflectionHelperTest {
+	
+	@Test
+	public void testNewInstance() {
+		Object model = ReflectionHelper.newInstance(CommonModel.class);
+		
+		assertNotNull(model);
+		assertTrue(model instanceof CommonModel);
+	}
 
 	@Test
 	public void testGetMethod() {
