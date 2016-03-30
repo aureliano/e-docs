@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class Document {
+import com.github.aureliano.edocs.common.persistence.IEntity;
+
+public class Document implements IEntity<Document> {
 
 	private Integer id;
 	private Category category;

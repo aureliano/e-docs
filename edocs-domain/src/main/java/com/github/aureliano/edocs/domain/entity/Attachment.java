@@ -2,7 +2,9 @@ package com.github.aureliano.edocs.domain.entity;
 
 import java.util.Date;
 
-public class Attachment {
+import com.github.aureliano.edocs.common.persistence.IEntity;
+
+public class Attachment implements IEntity<Attachment> {
 
 	private Integer id;
 	private String name;
