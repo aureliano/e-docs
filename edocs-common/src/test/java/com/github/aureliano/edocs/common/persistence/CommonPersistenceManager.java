@@ -14,10 +14,10 @@ public class CommonPersistenceManager implements IPersistenceManager {
 	public <T> void delete(T entity) {}
 
 	@Override
-	public void delete(Integer id) {}
+	public void delete(Class<? extends IEntity<?>> type, Integer id) {}
 
 	@Override
-	public <T> T find(Integer id) {
+	public <T> T find(Class<T> type, Integer id) {
 		return null;
 	}
 
@@ -27,7 +27,7 @@ public class CommonPersistenceManager implements IPersistenceManager {
 	}
 
 	@Override
-	public <T> List<T> search(String query) {
+	public <T> List<T> search(Class<T> type, String query) {
 		return null;
 	}
 

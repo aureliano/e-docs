@@ -11,11 +11,11 @@ public interface IPersistenceManager {
 	
 	public abstract <T> void delete(T entity);
 	
-	public abstract void delete(Integer id);
+	public abstract void delete(Class<? extends IEntity<?>> type, Integer id);
 	
-	public abstract <T> T find(Integer id);
+	public abstract <T> T find(Class<T> type, Integer id);
 	
 	public abstract <T> List<T> search(T entity);
 	
-	public abstract <T> List<T> search(String query);
+	public abstract <T> List<T> search(Class<T> type, String query);
 }
