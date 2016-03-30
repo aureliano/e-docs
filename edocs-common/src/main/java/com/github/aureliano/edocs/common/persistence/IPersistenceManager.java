@@ -1,9 +1,12 @@
 package com.github.aureliano.edocs.common.persistence;
 
+import java.sql.Connection;
 import java.util.List;
 
 public interface IPersistenceManager {
 
+	public abstract Connection getConnection();
+	
 	public abstract <T> T save(T entity);
 	
 	public abstract <T> void delete(T entity);

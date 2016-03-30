@@ -15,6 +15,12 @@ public class UserTest {
 		User u2 = new User();
 		assertTrue(u1.equals(u2));
 		
+		u1.withId(127);
+		assertFalse(u1.equals(u2));
+		
+		u2.withId(127);
+		assertTrue(u1.equals(u2));
+		
 		u1.withName("test");
 		assertFalse(u1.equals(u2));
 		

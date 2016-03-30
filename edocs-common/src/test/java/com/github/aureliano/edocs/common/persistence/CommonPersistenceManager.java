@@ -1,5 +1,6 @@
 package com.github.aureliano.edocs.common.persistence;
 
+import java.sql.Connection;
 import java.util.List;
 
 public class CommonPersistenceManager implements IPersistenceManager {
@@ -27,6 +28,11 @@ public class CommonPersistenceManager implements IPersistenceManager {
 
 	@Override
 	public <T> List<T> search(String query) {
+		return null;
+	}
+
+	@Override
+	public Connection getConnection() {
 		return null;
 	}
 }
