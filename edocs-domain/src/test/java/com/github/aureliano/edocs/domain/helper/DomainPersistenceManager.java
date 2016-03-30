@@ -1,0 +1,65 @@
+package com.github.aureliano.edocs.domain.helper;
+
+import java.sql.Connection;
+import java.util.List;
+
+import com.github.aureliano.edocs.common.persistence.IDao;
+import com.github.aureliano.edocs.common.persistence.IEntity;
+import com.github.aureliano.edocs.common.persistence.IPersistenceManager;
+import com.github.aureliano.edocs.common.persistence.PersistenceService;
+
+public class DomainPersistenceManager implements IPersistenceManager {
+
+	private Connection connection;
+	
+	public DomainPersistenceManager() {}
+	
+	@Override
+	public Connection getConnection() {
+		return this.connection;
+	}
+	
+	public void setConnection(Connection conn) {
+		this.connection = conn;
+	}
+
+	@Override
+	public <T> T save(T entity) {
+		return this.getDao(entity).save(entity);
+	}
+
+	@Override
+	public <T> void delete(T entity) {
+		this.getDao(entity).delete(entity);
+	}
+
+	@Override
+	public void delete(Class<? extends IEntity<?>> type, Integer id) {
+		this.getDao(type).delete(id);
+	}
+
+	@Override
+	public <T> T find(Class<T> type, Integer id) {
+		return this.getDao(type).find(id);
+	}
+
+	@Override
+	public <T> List<T> search(T entity) {
+		return this.getDao(entity).search(entity);
+	}
+
+	@Override
+	public <T> List<T> search(Class<T> type, String query) {
+		return this.getDao(type).search(query);
+	}
+	
+	@SuppressWarnings("unchecked")
+	private <T> IDao<T> getDao(T entity) {
+		return (IDao<T>) this.getDao(entity.getClass());
+	}
+	
+	@SuppressWarnings("unchecked")
+	private <T> IDao<T> getDao(Class<T> ctype) {
+		return (IDao<T>) PersistenceService.instance().createDao((Class<? extends IEntity<?>>) ctype);
+	}
+}
