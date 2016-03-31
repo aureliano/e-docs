@@ -2,6 +2,7 @@ package com.github.aureliano.edocs.domain.helper;
 
 import java.sql.Connection;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -14,8 +15,11 @@ import com.github.aureliano.edocs.common.persistence.PersistenceService;
 public class DomainPersistenceManager implements IPersistenceManager {
 
 	private Connection connection;
+	private Set<ContextMessage> messages;
 	
-	public DomainPersistenceManager() {}
+	public DomainPersistenceManager() {
+		this.messages = new HashSet<>();
+	}
 	
 	@Override
 	public Connection getConnection() {
@@ -58,19 +62,24 @@ public class DomainPersistenceManager implements IPersistenceManager {
 
 	@Override
 	public IPersistenceManager addContextMessage(ContextMessage message) {
-		return null;
+		this.messages.add(message);
+		return this;
 	}
 
 	@Override
-	public void setContextMessages(Collection<ContextMessage> messages) {}
+	public void setContextMessages(Collection<ContextMessage> messages) {
+		this.messages.addAll(messages);
+	}
 
 	@Override
 	public Set<ContextMessage> getContextMessages() {
-		return null;
+		return this.messages;
 	}
 
 	@Override
-	public void clearContextMessages() {}
+	public void clearContextMessages() {
+		this.messages.clear();
+	}
 	
 	@SuppressWarnings("unchecked")
 	private <T> IDao<T> getDao(T entity) {
