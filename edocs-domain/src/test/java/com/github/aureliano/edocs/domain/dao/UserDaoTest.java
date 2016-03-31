@@ -10,7 +10,12 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.github.aureliano.edocs.common.exception.ValidationException;
+import com.github.aureliano.edocs.common.message.ContextMessage;
+import com.github.aureliano.edocs.common.message.SeverityLevel;
 import com.github.aureliano.edocs.common.persistence.IDao;
+import com.github.aureliano.edocs.common.persistence.IPersistenceManager;
+import com.github.aureliano.edocs.common.persistence.PersistenceService;
 import com.github.aureliano.edocs.domain.entity.User;
 import com.github.aureliano.edocs.domain.helper.PersistenceHelper;
 
@@ -26,6 +31,12 @@ public class UserDaoTest {
 	@Before
 	public void beforeTest() throws SQLException {
 		PersistenceHelper.instance().executeUpdate("delete from users");
+	}
+	
+	@Test
+	public void testValidateSaveAction() {
+		this.checkInvalidName();
+		this.checkInvalidPassword();
 	}
 	
 	@Test
@@ -128,5 +139,42 @@ public class UserDaoTest {
 		
 		User user2 = data.get(0);		
 		assertEquals(user1, user2);
+	}
+	
+	private void checkInvalidName() {
+		User u = new User().withPassword("test123");
+		this.validateContextMessage(u, "Expected to find a not empty text for field name.");
+		
+		u.withName("1");
+		this.validateContextMessage(u, "Expected field name to have size between 3 and 25 but got 1.");
+		
+		u.withName("1234567890123456789012345");
+		this.validateContextMessage(u, "Expected field name to have size between 3 and 25 but got 1.");
+	}
+	
+	private void checkInvalidPassword() {
+		User u = new User().withName("caesar-augustus");
+		this.validateContextMessage(u, "Expected to find a not empty text for field password.");
+		
+		u.withPassword("1");
+		this.validateContextMessage(u, "Expected field password to have size between 3 and 25 but got 1.");
+		
+		u.withPassword("1234567890123456789012345");
+		this.validateContextMessage(u, "Expected field password to have size between 3 and 25 but got 1.");
+	}
+	
+	private void validateContextMessage(User user, String message) {
+		IPersistenceManager pm = PersistenceService.instance().getPersistenceManager();
+		pm.clearContextMessages();
+		
+		try {
+			this.dao.save(user);
+		} catch (ValidationException ex) {
+			assertEquals(1, pm.getContextMessages().size());
+			
+			ContextMessage m = pm.getContextMessages().iterator().next();
+			assertEquals(SeverityLevel.ERROR, m.getSeverityLevel());
+			assertEquals(message, m.getMessage());
+		}
 	}
 }
