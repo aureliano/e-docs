@@ -23,6 +23,10 @@ public abstract class AbstractDao<T> implements IDao<T> {
 
 	protected Connection connection;
 	
+	public AbstractDao() {
+		this.connection = PersistenceService.instance().getPersistenceManager().getConnection();
+	}
+	
 	protected void validateConfiguration(T entity) {
 		Set<ConstraintViolation> violations = ObjectValidator.instance().validate(entity);
 		if (violations.isEmpty()) {

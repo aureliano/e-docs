@@ -9,16 +9,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.github.aureliano.edocs.common.exception.EDocsException;
-import com.github.aureliano.edocs.common.persistence.PersistenceService;
 import com.github.aureliano.edocs.domain.entity.User;
 
 public class UserDao extends AbstractDao<User> {
 
 	private static final Logger logger = Logger.getLogger(UserDao.class.getName());
 	
-	public UserDao() {
-		super.connection = PersistenceService.instance().getPersistenceManager().getConnection();
-	}
+	public UserDao() {}
 
 	@Override
 	public User save(User entity) {
