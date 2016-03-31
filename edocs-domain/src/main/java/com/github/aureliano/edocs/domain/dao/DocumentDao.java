@@ -31,7 +31,7 @@ public class DocumentDao extends AbstractDao<Document> {
 
 	@Override
 	public void delete(Integer id) {
-		String sql = "delete from users where id = ?";
+		String sql = "delete from documents where id = ?";
 		super.delete(sql, id);
 	}
 
