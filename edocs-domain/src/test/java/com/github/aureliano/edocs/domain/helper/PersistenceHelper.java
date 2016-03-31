@@ -13,6 +13,7 @@ import com.github.aureliano.edocs.common.exception.EDocsException;
 import com.github.aureliano.edocs.common.helper.FileHelper;
 import com.github.aureliano.edocs.common.helper.StringHelper;
 import com.github.aureliano.edocs.common.persistence.PersistenceService;
+import com.github.aureliano.edocs.domain.dao.AttachmentDao;
 import com.github.aureliano.edocs.domain.dao.DocumentDao;
 import com.github.aureliano.edocs.domain.dao.UserDao;
 import com.github.aureliano.edocs.domain.entity.Attachment;
@@ -87,7 +88,7 @@ public final class PersistenceHelper {
 		PersistenceService.instance()
 			.mapEntity(User.class, UserDao.class)
 			.mapEntity(Document.class, DocumentDao.class)
-			.mapEntity(Attachment.class, null);
+			.mapEntity(Attachment.class, AttachmentDao.class);
 	}
 	
 	private void createSchema(Connection conn) {
