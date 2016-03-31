@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.github.aureliano.edocs.annotation.validation.AssertTrue;
+import com.github.aureliano.edocs.annotation.validation.NotEmpty;
+import com.github.aureliano.edocs.annotation.validation.NotNull;
+import com.github.aureliano.edocs.annotation.validation.Size;
 import com.github.aureliano.edocs.common.persistence.IEntity;
 
 public class Document implements IEntity<Document> {
@@ -27,6 +31,7 @@ public class Document implements IEntity<Document> {
 		return this;
 	}
 
+	@NotNull
 	public Category getCategory() {
 		return category;
 	}
@@ -36,6 +41,8 @@ public class Document implements IEntity<Document> {
 		return this;
 	}
 
+	@NotEmpty
+	@Size(min = 5, max = 1000)
 	public String getDescription() {
 		return description;
 	}
@@ -66,6 +73,11 @@ public class Document implements IEntity<Document> {
 	public Document attach(Attachment attachment) {
 		this.attachments.add(attachment);
 		return this;
+	}
+	
+	@AssertTrue
+	public boolean hasAttachment() {
+		return (this.attachments == null) ? false : !this.attachments.isEmpty();
 	}
 
 	@Override
