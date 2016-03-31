@@ -72,7 +72,27 @@ public abstract class AbstractDao<T> implements IDao<T> {
 		}
 	}
 	
+	protected T findEntity(String sql, Integer id) {
+		this.getLogger().fine("Find entity with id " + id);
+		this.getLogger().fine("Find user SQL: " + sql);
+		T entity = null;
+		
+		try(PreparedStatement ps = this.connection.prepareStatement(sql)) {
+			ps.setInt(1, id);
+			
+			ResultSet rs = ps.executeQuery();
+			entity = this.fillEntity(rs);
+		} catch (SQLException ex) {
+			this.getLogger().log(Level.SEVERE, ex.getMessage(), ex);
+			throw new EDocsException(ex);
+		}
+		
+		return entity;
+	}
+	
 	protected abstract PreparedStatement createPreparedStatement(T entity);
+	
+	protected abstract T fillEntity(ResultSet rs) throws SQLException;
 	
 	protected abstract Logger getLogger();
 	

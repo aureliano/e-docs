@@ -39,21 +39,7 @@ public class UserDao extends AbstractDao<User> {
 	@Override
 	public User find(Integer id) {
 		String sql = "select * from users where id = ?";
-		logger.fine("Find user with id " + id);
-		logger.fine("Find user SQL: " + sql);
-		User user = null;
-		
-		try(PreparedStatement ps = super.connection.prepareStatement(sql)) {
-			ps.setInt(1, id);
-			
-			ResultSet rs = ps.executeQuery();
-			user = this.fillUser(rs);
-		} catch (SQLException ex) {
-			logger.log(Level.SEVERE, ex.getMessage(), ex);
-			throw new EDocsException(ex);
-		}
-		
-		return user;
+		return super.findEntity(sql, id);
 	}
 
 	@Override
@@ -79,7 +65,7 @@ public class UserDao extends AbstractDao<User> {
 		try(PreparedStatement ps = super.connection.prepareStatement(query)) {
 			ResultSet rs = ps.executeQuery();
 			
-			return this.fillUsers(rs);
+			return this.fillEntities(rs);
 		} catch (SQLException ex) {
 			logger.log(Level.SEVERE, ex.getMessage(), ex);
 			throw new EDocsException(ex);
@@ -118,12 +104,12 @@ public class UserDao extends AbstractDao<User> {
 		}
 	}
 	
-	private User fillUser(ResultSet rs) throws SQLException {
-		List<User> data = this.fillUsers(rs);
+	protected User fillEntity(ResultSet rs) throws SQLException {
+		List<User> data = this.fillEntities(rs);
 		return (data.isEmpty()) ? null : data.get(0);
 	}
 	
-	private List<User> fillUsers(ResultSet rs) throws SQLException {
+	protected List<User> fillEntities(ResultSet rs) throws SQLException {
 		List<User> data = new ArrayList<>();
 		
 		while (rs.next()) {
