@@ -12,3 +12,11 @@ CREATE TABLE documents (
 	due_date DATE,
 	CONSTRAINT documents_pk PRIMARY KEY (id)
 );
+
+CREATE TABLE attachments (
+	id INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
+	name VARCHAR(250) NOT NULL,
+	upload_time TIMESTAMP,
+	document_fk INTEGER NOT NULL,
+	CONSTRAINT attachments_pk PRIMARY KEY (id)
+);
