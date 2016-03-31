@@ -1,8 +1,11 @@
 package com.github.aureliano.edocs.domain.helper;
 
 import java.sql.Connection;
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
+import com.github.aureliano.edocs.common.message.ContextMessage;
 import com.github.aureliano.edocs.common.persistence.IDao;
 import com.github.aureliano.edocs.common.persistence.IEntity;
 import com.github.aureliano.edocs.common.persistence.IPersistenceManager;
@@ -52,6 +55,22 @@ public class DomainPersistenceManager implements IPersistenceManager {
 	public <T> List<T> search(Class<T> type, String query) {
 		return this.getDao(type).search(query);
 	}
+
+	@Override
+	public IPersistenceManager addContextMessage(ContextMessage message) {
+		return null;
+	}
+
+	@Override
+	public void setContextMessages(Collection<ContextMessage> messages) {}
+
+	@Override
+	public Set<ContextMessage> getContextMessages() {
+		return null;
+	}
+
+	@Override
+	public void clearContextMessages() {}
 	
 	@SuppressWarnings("unchecked")
 	private <T> IDao<T> getDao(T entity) {

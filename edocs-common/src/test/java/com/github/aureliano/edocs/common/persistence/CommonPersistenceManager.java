@@ -1,7 +1,11 @@
 package com.github.aureliano.edocs.common.persistence;
 
 import java.sql.Connection;
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
+
+import com.github.aureliano.edocs.common.message.ContextMessage;
 
 public class CommonPersistenceManager implements IPersistenceManager {
 
@@ -35,4 +39,20 @@ public class CommonPersistenceManager implements IPersistenceManager {
 	public Connection getConnection() {
 		return null;
 	}
+
+	@Override
+	public IPersistenceManager addContextMessage(ContextMessage message) {
+		return null;
+	}
+
+	@Override
+	public void setContextMessages(Collection<ContextMessage> messages) {}
+
+	@Override
+	public Set<ContextMessage> getContextMessages() {
+		return null;
+	}
+
+	@Override
+	public void clearContextMessages() {}
 }

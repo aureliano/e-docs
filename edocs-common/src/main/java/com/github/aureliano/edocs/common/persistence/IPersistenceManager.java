@@ -1,7 +1,11 @@
 package com.github.aureliano.edocs.common.persistence;
 
 import java.sql.Connection;
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
+
+import com.github.aureliano.edocs.common.message.ContextMessage;
 
 public interface IPersistenceManager {
 
@@ -18,4 +22,12 @@ public interface IPersistenceManager {
 	public abstract <T> List<T> search(T entity);
 	
 	public abstract <T> List<T> search(Class<T> type, String query);
+	
+	public abstract IPersistenceManager addContextMessage(ContextMessage message);
+	
+	public abstract void setContextMessages(Collection<ContextMessage> messages);
+	
+	public abstract Set<ContextMessage> getContextMessages();
+	
+	public abstract void clearContextMessages();
 }

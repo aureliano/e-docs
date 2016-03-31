@@ -5,7 +5,11 @@ import java.util.Set;
 import com.github.aureliano.edocs.annotation.validation.apply.ConstraintViolation;
 import com.github.aureliano.edocs.annotation.validation.apply.ObjectValidator;
 import com.github.aureliano.edocs.common.exception.EDocsException;
+import com.github.aureliano.edocs.common.message.ContextMessage;
+import com.github.aureliano.edocs.common.message.SeverityLevel;
 import com.github.aureliano.edocs.common.persistence.IDao;
+import com.github.aureliano.edocs.common.persistence.IPersistenceManager;
+import com.github.aureliano.edocs.common.persistence.PersistenceService;
 
 public abstract class AbstractDao<T> implements IDao<T> {
 
@@ -15,11 +19,19 @@ public abstract class AbstractDao<T> implements IDao<T> {
 			return;
 		}
 		
+		IPersistenceManager pm = PersistenceService.instance().getPersistenceManager();
 		StringBuilder builder = new StringBuilder("Entity validation failed to " + entity.getClass().getName());
 		for (ConstraintViolation violation : violations) {
+			pm.addContextMessage(this.errorMessage(violation.getMessage()));
 			builder.append("\n - ").append(violation.getMessage());
 		}
 		
 		throw new EDocsException(builder.toString());
+	}
+	
+	private ContextMessage errorMessage(String msg) {
+		return new ContextMessage()
+			.withSeverityLevel(SeverityLevel.ERROR)
+			.withMessage(msg);
 	}
 }
