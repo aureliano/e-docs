@@ -88,15 +88,14 @@ public final class PersistenceHelper {
 	}
 	
 	private void createSchema(Connection conn) {
-		if (new File(DATABASE).exists()) {
-			return;
-		}
-		
 		String schemaCreate = FileHelper.readResource("schema-create.sql");
+		
 		try {
 			conn.prepareStatement(schemaCreate).executeUpdate();
 		} catch (SQLException ex) {
-			throw new EDocsException(ex);
+			if (!ex.getSQLState().equals("X0Y32")) {
+				throw new EDocsException(ex);
+			}
 		}
 	}
 	
