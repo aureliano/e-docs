@@ -11,7 +11,9 @@ import java.util.Properties;
 
 import com.github.aureliano.edocs.common.exception.EDocsException;
 import com.github.aureliano.edocs.common.helper.FileHelper;
+import com.github.aureliano.edocs.common.helper.StringHelper;
 import com.github.aureliano.edocs.common.persistence.PersistenceService;
+import com.github.aureliano.edocs.domain.dao.DocumentDao;
 import com.github.aureliano.edocs.domain.dao.UserDao;
 import com.github.aureliano.edocs.domain.entity.Attachment;
 import com.github.aureliano.edocs.domain.entity.Document;
@@ -46,6 +48,7 @@ public final class PersistenceHelper {
 		PreparedStatement ps = PersistenceService.instance().getPersistenceManager()
 				.getConnection().prepareStatement(sql);
 		ps.executeUpdate();
+		ps.close();
 	}
 	
 	public void prepareDatabase() {
@@ -83,7 +86,7 @@ public final class PersistenceHelper {
 	private void mapEntities() {
 		PersistenceService.instance()
 			.mapEntity(User.class, UserDao.class)
-			.mapEntity(Document.class, null)
+			.mapEntity(Document.class, DocumentDao.class)
 			.mapEntity(Attachment.class, null);
 	}
 	
@@ -91,7 +94,16 @@ public final class PersistenceHelper {
 		String schemaCreate = FileHelper.readResource("schema-create.sql");
 		
 		try {
-			conn.prepareStatement(schemaCreate).executeUpdate();
+			String[] commands = schemaCreate.split(";");
+			for (String command : commands) {
+				if (StringHelper.isEmpty(command)) {
+					continue;
+				}
+
+				PreparedStatement ps = conn.prepareStatement(command);
+				ps.executeUpdate();
+				ps.close();
+			}
 		} catch (SQLException ex) {
 			if (!ex.getSQLState().equals("X0Y32")) { // Table/View already exist.
 				throw new EDocsException(ex);
