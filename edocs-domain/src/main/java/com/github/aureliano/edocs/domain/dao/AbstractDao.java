@@ -4,7 +4,7 @@ import java.util.Set;
 
 import com.github.aureliano.edocs.annotation.validation.apply.ConstraintViolation;
 import com.github.aureliano.edocs.annotation.validation.apply.ObjectValidator;
-import com.github.aureliano.edocs.common.exception.EDocsException;
+import com.github.aureliano.edocs.common.exception.ValidationException;
 import com.github.aureliano.edocs.common.message.ContextMessage;
 import com.github.aureliano.edocs.common.message.SeverityLevel;
 import com.github.aureliano.edocs.common.persistence.IDao;
@@ -26,7 +26,7 @@ public abstract class AbstractDao<T> implements IDao<T> {
 			builder.append("\n - ").append(violation.getMessage());
 		}
 		
-		throw new EDocsException(builder.toString());
+		throw new ValidationException(builder.toString());
 	}
 	
 	private ContextMessage errorMessage(String msg) {
