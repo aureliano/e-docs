@@ -93,7 +93,7 @@ public final class PersistenceHelper {
 		try {
 			conn.prepareStatement(schemaCreate).executeUpdate();
 		} catch (SQLException ex) {
-			if (!ex.getSQLState().equals("X0Y32")) {
+			if (!ex.getSQLState().equals("X0Y32")) { // Table/View already exist.
 				throw new EDocsException(ex);
 			}
 		}
