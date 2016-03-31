@@ -10,11 +10,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.github.aureliano.edocs.common.exception.EDocsException;
-import com.github.aureliano.edocs.common.persistence.IDao;
 import com.github.aureliano.edocs.common.persistence.PersistenceService;
 import com.github.aureliano.edocs.domain.entity.User;
 
-public class UserDao implements IDao<User> {
+public class UserDao extends AbstractDao<User> {
 
 	private static final Logger logger = Logger.getLogger(UserDao.class.getName());
 	
@@ -26,6 +25,7 @@ public class UserDao implements IDao<User> {
 
 	@Override
 	public User save(User entity) {
+		super.validateConfiguration(entity);
 		PreparedStatement ps = this.createPreparedStatement(entity);
 		User user = null;
 		
