@@ -2,6 +2,7 @@ package com.github.aureliano.edocs.domain.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Set;
 import java.util.logging.Level;
@@ -37,6 +38,26 @@ public abstract class AbstractDao<T> implements IDao<T> {
 		throw new ValidationException(builder.toString());
 	}
 	
+	protected T saveEntity(T entity) {
+		this.validateConfiguration(entity);
+		T persistedEntity = null;
+		
+		try(PreparedStatement ps = this.createPreparedStatement(entity)) {
+			int res = ps.executeUpdate();
+			this.getLogger().fine("Number of records affected by this action " + res);
+			
+			ResultSet rs = ps.getGeneratedKeys();
+			if ((rs != null) && (rs.next())) {
+				persistedEntity = this.find(rs.getInt(1));
+			}
+		} catch (SQLException ex) {
+			this.getLogger().log(Level.SEVERE, ex.getMessage(), ex);
+			throw new EDocsException(ex);
+		}
+		
+		return persistedEntity;
+	}
+	
 	protected void delete(String sql, Integer id) {
 		this.getLogger().fine("Delete user SQL: " + sql);
 		
@@ -50,6 +71,8 @@ public abstract class AbstractDao<T> implements IDao<T> {
 			throw new EDocsException(ex);
 		}
 	}
+	
+	protected abstract PreparedStatement createPreparedStatement(T entity);
 	
 	protected abstract Logger getLogger();
 	

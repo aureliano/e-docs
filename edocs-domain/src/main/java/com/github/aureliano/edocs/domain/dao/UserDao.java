@@ -22,23 +22,7 @@ public class UserDao extends AbstractDao<User> {
 
 	@Override
 	public User save(User entity) {
-		super.validateConfiguration(entity);
-		User user = null;
-		
-		try(PreparedStatement ps = this.createPreparedStatement(entity)) {
-			int res = ps.executeUpdate();
-			logger.fine("Number of records affected by this action " + res);
-			
-			ResultSet rs = ps.getGeneratedKeys();
-			if ((rs != null) && (rs.next())) {
-				user = this.find(rs.getInt(1));
-			}
-		} catch (SQLException ex) {
-			logger.log(Level.SEVERE, ex.getMessage(), ex);
-			throw new EDocsException(ex);
-		}
-		
-		return user;
+		return super.saveEntity(entity);
 	}
 
 	@Override
@@ -107,7 +91,7 @@ public class UserDao extends AbstractDao<User> {
 		return logger;
 	}
 	
-	private PreparedStatement createPreparedStatement(User user) {
+	protected PreparedStatement createPreparedStatement(User user) {
 		String sql = this.getSaveQuery(user);
 		logger.fine("Save user SQL: " + sql);
 		
