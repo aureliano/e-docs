@@ -2,6 +2,9 @@ package com.github.aureliano.edocs.domain.entity;
 
 import java.util.Date;
 
+import com.github.aureliano.edocs.annotation.validation.NotEmpty;
+import com.github.aureliano.edocs.annotation.validation.NotNull;
+import com.github.aureliano.edocs.annotation.validation.Size;
 import com.github.aureliano.edocs.common.persistence.IEntity;
 
 public class Attachment implements IEntity<Attachment> {
@@ -22,6 +25,8 @@ public class Attachment implements IEntity<Attachment> {
 		return this;
 	}
 
+	@NotEmpty
+	@Size(min = 5, max = 250)
 	public String getName() {
 		return name;
 	}
@@ -31,6 +36,7 @@ public class Attachment implements IEntity<Attachment> {
 		return this;
 	}
 
+	@NotNull
 	public Date getUploadTime() {
 		return uploadTime;
 	}
@@ -39,7 +45,8 @@ public class Attachment implements IEntity<Attachment> {
 		this.uploadTime = uploadTime;
 		return this;
 	}
-	
+
+	@NotNull
 	public Document getDocument() {
 		return document;
 	}
