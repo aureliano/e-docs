@@ -60,23 +60,15 @@ public class UserDao extends AbstractDao<User> {
 
 	@Override
 	public List<User> search(String query) {
-		logger.fine("Find user SQL: " + query);
-		
-		try(PreparedStatement ps = super.connection.prepareStatement(query)) {
-			ResultSet rs = ps.executeQuery();
-			
-			return this.fillEntities(rs);
-		} catch (SQLException ex) {
-			logger.log(Level.SEVERE, ex.getMessage(), ex);
-			throw new EDocsException(ex);
-		}
+		return super.searchEntities(query);
 	}
 	
 	@Override
 	protected Logger getLogger() {
 		return logger;
 	}
-	
+
+	@Override
 	protected PreparedStatement createPreparedStatement(User user) {
 		String sql = this.getSaveQuery(user);
 		logger.fine("Save user SQL: " + sql);
@@ -95,20 +87,14 @@ public class UserDao extends AbstractDao<User> {
 			throw new EDocsException(ex);
 		}
 	}
-	
-	private String getSaveQuery(User user) {
-		if (user.getId() == null) {
-			return "insert into users(name, password) values(?, ?)";
-		} else {
-			return "update users set name = ?, password = ? where id = ?";
-		}
-	}
-	
+
+	@Override
 	protected User fillEntity(ResultSet rs) throws SQLException {
 		List<User> data = this.fillEntities(rs);
 		return (data.isEmpty()) ? null : data.get(0);
 	}
-	
+
+	@Override
 	protected List<User> fillEntities(ResultSet rs) throws SQLException {
 		List<User> data = new ArrayList<>();
 		
@@ -122,5 +108,13 @@ public class UserDao extends AbstractDao<User> {
 		
 		logger.fine("Found " + data.size() + " entities.");
 		return data;
+	}
+	
+	private String getSaveQuery(User user) {
+		if (user.getId() == null) {
+			return "insert into users(name, password) values(?, ?)";
+		} else {
+			return "update users set name = ?, password = ? where id = ?";
+		}
 	}
 }

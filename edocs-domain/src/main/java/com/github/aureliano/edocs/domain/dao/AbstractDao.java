@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -90,9 +91,24 @@ public abstract class AbstractDao<T> implements IDao<T> {
 		return entity;
 	}
 	
+	protected List<T> searchEntities(String query) {
+		this.getLogger().fine("Find user SQL: " + query);
+		
+		try(PreparedStatement ps = this.connection.prepareStatement(query)) {
+			ResultSet rs = ps.executeQuery();
+			
+			return this.fillEntities(rs);
+		} catch (SQLException ex) {
+			this.getLogger().log(Level.SEVERE, ex.getMessage(), ex);
+			throw new EDocsException(ex);
+		}
+	}
+	
 	protected abstract PreparedStatement createPreparedStatement(T entity);
 	
 	protected abstract T fillEntity(ResultSet rs) throws SQLException;
+	
+	protected abstract List<T> fillEntities(ResultSet rs) throws SQLException;
 	
 	protected abstract Logger getLogger();
 	
