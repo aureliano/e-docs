@@ -26,10 +26,9 @@ public class UserDao extends AbstractDao<User> {
 	@Override
 	public User save(User entity) {
 		super.validateConfiguration(entity);
-		PreparedStatement ps = this.createPreparedStatement(entity);
 		User user = null;
 		
-		try {
+		try(PreparedStatement ps = this.createPreparedStatement(entity)) {
 			int res = ps.executeUpdate();
 			logger.fine("Number of records affected by this action " + res);
 			
@@ -55,8 +54,7 @@ public class UserDao extends AbstractDao<User> {
 		String sql = "delete from users where id = ?";
 		logger.fine("Delete user SQL: " + sql);
 		
-		try {
-			PreparedStatement ps = this.connection.prepareStatement(sql);
+		try(PreparedStatement ps = this.connection.prepareStatement(sql)) {
 			ps.setInt(1, id);
 			
 			int res = ps.executeUpdate();
@@ -74,8 +72,7 @@ public class UserDao extends AbstractDao<User> {
 		logger.fine("Find user SQL: " + sql);
 		User user = null;
 		
-		try {
-			PreparedStatement ps = this.connection.prepareStatement(sql);
+		try(PreparedStatement ps = this.connection.prepareStatement(sql)) {
 			ps.setInt(1, id);
 			
 			ResultSet rs = ps.executeQuery();
@@ -108,8 +105,7 @@ public class UserDao extends AbstractDao<User> {
 	public List<User> search(String query) {
 		logger.fine("Find user SQL: " + query);
 		
-		try {
-			PreparedStatement ps = this.connection.prepareStatement(query);
+		try(PreparedStatement ps = this.connection.prepareStatement(query)) {
 			ResultSet rs = ps.executeQuery();
 			
 			return this.fillUsers(rs);
