@@ -49,17 +49,7 @@ public class UserDao extends AbstractDao<User> {
 	@Override
 	public void delete(Integer id) {
 		String sql = "delete from users where id = ?";
-		logger.fine("Delete user SQL: " + sql);
-		
-		try(PreparedStatement ps = super.connection.prepareStatement(sql)) {
-			ps.setInt(1, id);
-			
-			int res = ps.executeUpdate();
-			logger.fine("Number of records affected by this action " + res);
-		} catch (SQLException ex) {
-			logger.log(Level.SEVERE, ex.getMessage(), ex);
-			throw new EDocsException(ex);
-		}
+		super.delete(sql, id);
 	}
 
 	@Override
