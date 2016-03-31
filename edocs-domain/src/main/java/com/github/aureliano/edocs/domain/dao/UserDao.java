@@ -1,6 +1,5 @@
 package com.github.aureliano.edocs.domain.dao;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -17,10 +16,8 @@ public class UserDao extends AbstractDao<User> {
 
 	private static final Logger logger = Logger.getLogger(UserDao.class.getName());
 	
-	private Connection connection;
-	
 	public UserDao() {
-		this.connection = PersistenceService.instance().getPersistenceManager().getConnection();
+		super.connection = PersistenceService.instance().getPersistenceManager().getConnection();
 	}
 
 	@Override
@@ -54,7 +51,7 @@ public class UserDao extends AbstractDao<User> {
 		String sql = "delete from users where id = ?";
 		logger.fine("Delete user SQL: " + sql);
 		
-		try(PreparedStatement ps = this.connection.prepareStatement(sql)) {
+		try(PreparedStatement ps = super.connection.prepareStatement(sql)) {
 			ps.setInt(1, id);
 			
 			int res = ps.executeUpdate();
@@ -72,7 +69,7 @@ public class UserDao extends AbstractDao<User> {
 		logger.fine("Find user SQL: " + sql);
 		User user = null;
 		
-		try(PreparedStatement ps = this.connection.prepareStatement(sql)) {
+		try(PreparedStatement ps = super.connection.prepareStatement(sql)) {
 			ps.setInt(1, id);
 			
 			ResultSet rs = ps.executeQuery();
@@ -105,7 +102,7 @@ public class UserDao extends AbstractDao<User> {
 	public List<User> search(String query) {
 		logger.fine("Find user SQL: " + query);
 		
-		try(PreparedStatement ps = this.connection.prepareStatement(query)) {
+		try(PreparedStatement ps = super.connection.prepareStatement(query)) {
 			ResultSet rs = ps.executeQuery();
 			
 			return this.fillUsers(rs);
@@ -115,12 +112,17 @@ public class UserDao extends AbstractDao<User> {
 		}
 	}
 	
+	@Override
+	protected Logger getLogger() {
+		return logger;
+	}
+	
 	private PreparedStatement createPreparedStatement(User user) {
 		String sql = this.getSaveQuery(user);
 		logger.fine("Save user SQL: " + sql);
 		
 		try {
-			PreparedStatement ps = this.connection.prepareStatement(sql, new String[] {"ID"});
+			PreparedStatement ps = super.connection.prepareStatement(sql, new String[] {"ID"});
 			ps.setString(1, user.getName());
 			ps.setString(2, user.getPassword());
 			if (user.getId() != null) {

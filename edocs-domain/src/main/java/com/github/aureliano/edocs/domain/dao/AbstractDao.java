@@ -1,6 +1,8 @@
 package com.github.aureliano.edocs.domain.dao;
 
+import java.sql.Connection;
 import java.util.Set;
+import java.util.logging.Logger;
 
 import com.github.aureliano.edocs.annotation.validation.apply.ConstraintViolation;
 import com.github.aureliano.edocs.annotation.validation.apply.ObjectValidator;
@@ -13,6 +15,8 @@ import com.github.aureliano.edocs.common.persistence.PersistenceService;
 
 public abstract class AbstractDao<T> implements IDao<T> {
 
+	protected Connection connection;
+	
 	protected void validateConfiguration(T entity) {
 		Set<ConstraintViolation> violations = ObjectValidator.instance().validate(entity);
 		if (violations.isEmpty()) {
@@ -28,6 +32,8 @@ public abstract class AbstractDao<T> implements IDao<T> {
 		
 		throw new ValidationException(builder.toString());
 	}
+	
+	protected abstract Logger getLogger();
 	
 	private ContextMessage errorMessage(String msg) {
 		return new ContextMessage()
