@@ -63,12 +63,14 @@ public class UserDaoTest {
 		ResultSet rs = PersistenceHelper.instance().executeQuery("select count(id) from users where name = '" + name + "'");
 		rs.next();
 		assertEquals(1, rs.getInt(1));
+		rs.close();
 		
 		this.dao.delete(user);
 		
 		rs = PersistenceHelper.instance().executeQuery("select count(id) from users where name = '" + name + "'");
 		rs.next();
 		assertEquals(0, rs.getInt(1));
+		rs.close();
 	}
 	
 	@Test
@@ -83,12 +85,14 @@ public class UserDaoTest {
 		ResultSet rs = PersistenceHelper.instance().executeQuery("select count(id) from users where name = '" + name + "'");
 		rs.next();
 		assertEquals(1, rs.getInt(1));
+		rs.close();
 		
 		this.dao.delete(user.getId());
 		
 		rs = PersistenceHelper.instance().executeQuery("select count(id) from users where name = '" + name + "'");
 		rs.next();
 		assertEquals(0, rs.getInt(1));
+		rs.close();
 	}
 	
 	@Test
