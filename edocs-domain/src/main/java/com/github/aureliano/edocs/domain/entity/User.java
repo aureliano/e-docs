@@ -1,5 +1,7 @@
 package com.github.aureliano.edocs.domain.entity;
 
+import com.github.aureliano.edocs.annotation.validation.NotEmpty;
+import com.github.aureliano.edocs.annotation.validation.Size;
 import com.github.aureliano.edocs.common.persistence.IEntity;
 
 public class User implements IEntity<User> {
@@ -19,6 +21,8 @@ public class User implements IEntity<User> {
 		return this;
 	}
 	
+	@NotEmpty
+	@Size(min = 3, max = 25)
 	public String getName() {
 		return name;
 	}
@@ -28,6 +32,8 @@ public class User implements IEntity<User> {
 		return this;
 	}
 
+	@NotEmpty
+	@Size(min = 3, max = 25)
 	public String getPassword() {
 		return password;
 	}
