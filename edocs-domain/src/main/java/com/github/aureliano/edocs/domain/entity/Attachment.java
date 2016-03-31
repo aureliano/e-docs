@@ -9,6 +9,7 @@ public class Attachment implements IEntity<Attachment> {
 	private Integer id;
 	private String name;
 	private Date uploadTime;
+	private Document document;
 	
 	public Attachment() {}
 
@@ -36,6 +37,15 @@ public class Attachment implements IEntity<Attachment> {
 
 	public Attachment withUploadTime(Date uploadTime) {
 		this.uploadTime = uploadTime;
+		return this;
+	}
+	
+	public Document getDocument() {
+		return document;
+	}
+	
+	public Attachment withDocument(Document document) {
+		this.document = document;
 		return this;
 	}
 
