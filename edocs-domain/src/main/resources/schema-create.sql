@@ -2,7 +2,6 @@ CREATE TABLE users (
 	id INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
 	name VARCHAR(25) NOT NULL,
 	password VARCHAR(65),
-	owner_fk INTEGER,
 	CONSTRAINT users_pk PRIMARY KEY (id)
 );
 
@@ -11,6 +10,7 @@ CREATE TABLE documents (
 	category VARCHAR(25) NOT NULL,
 	description VARCHAR(1000),
 	due_date DATE,
+	owner_fk INTEGER,
 	CONSTRAINT documents_pk PRIMARY KEY (id)
 );
 

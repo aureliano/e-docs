@@ -11,6 +11,7 @@ import java.util.logging.Logger;
 import com.github.aureliano.edocs.common.exception.EDocsException;
 import com.github.aureliano.edocs.domain.entity.Category;
 import com.github.aureliano.edocs.domain.entity.Document;
+import com.github.aureliano.edocs.domain.entity.User;
 import com.github.aureliano.edocs.domain.helper.DataTypeHelper;
 
 public class DocumentDao extends AbstractDao<Document> {
@@ -43,7 +44,7 @@ public class DocumentDao extends AbstractDao<Document> {
 
 	@Override
 	public List<Document> search(Document entity) {
-		StringBuilder sql = new StringBuilder("select id, category, due_date from documents where");
+		StringBuilder sql = new StringBuilder("select id, category, due_date, owner_fk from documents where");
 		
 		if (entity.getId() != null) {
 			sql.append(" id = " + entity.getId());
@@ -73,9 +74,10 @@ public class DocumentDao extends AbstractDao<Document> {
 			ps.setString(1, document.getCategory().toString());
 			ps.setString(2, document.getDescription());
 			ps.setDate(3, DataTypeHelper.toSqlDate(document.getDueDate()));
+			ps.setObject(4, ((document.getOwner() == null) ? null : document.getOwner().getId()));
 			
 			if (document.getId() != null) {
-				ps.setInt(4, document.getId());
+				ps.setInt(5, document.getId());
 			}
 			
 			return ps;
@@ -99,9 +101,10 @@ public class DocumentDao extends AbstractDao<Document> {
 			Document e = new Document()
 				.withId(rs.getInt("id"))
 				.withCategory(Category.valueOf(rs.getString("category")))
-				.withDueDate(DataTypeHelper.toJavaDate(rs.getDate("due_date")));
+				.withDueDate(DataTypeHelper.toJavaDate(rs.getDate("due_date")))
+				.withOwner(new User().withId(rs.getInt("owner_fk")));
 			
-			if (rs.getMetaData().getColumnCount() == 4) {
+			if (rs.getMetaData().getColumnCount() == 5) {
 				e.withDescription(rs.getString("description"));
 			}
 			
@@ -119,9 +122,9 @@ public class DocumentDao extends AbstractDao<Document> {
 	
 	private String getSaveQuery(Document document) {
 		if (document.getId() == null) {
-			return "insert into documents(category, description, due_date) values(?, ?, ?)";
+			return "insert into documents(category, description, due_date, owner_fk) values(?, ?, ?, ?)";
 		} else {
-			return "update documents set category = ?, description = ?, due_date = ? where id = ?";
+			return "update documents set category = ?, description = ?, due_date = ?, owner_fk = ? where id = ?";
 		}
 	}
 }
