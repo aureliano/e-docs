@@ -25,6 +25,7 @@ public final class PersistenceHelper {
 	private static PersistenceHelper instance;
 	private static final String DATABASE = new File("").getAbsolutePath() + File.separator + "target" + File.separator + "edocs";
 	
+	private Connection connection;
 	private boolean initialized;
 	
 	private PersistenceHelper() {
@@ -57,10 +58,9 @@ public final class PersistenceHelper {
 			return;
 		}
 		
-		Connection conn = this.prepareConnection();
-		this.registerPersistenceManager(conn);
+		this.connection = this.prepareConnection();
 		this.mapEntities();
-		this.createSchema(conn);
+		this.createSchema(this.connection);
 		
 		this.initialized = true;
 	}
@@ -84,10 +84,8 @@ public final class PersistenceHelper {
 		return conn;
 	}
 	
-	private void registerPersistenceManager(Connection conn) {
-		DomainPersistenceManager pm = new DomainPersistenceManager();
-		pm.setConnection(conn);
-		PersistenceService.instance().registerPersistenceManager(pm);
+	public Connection getConnection() {
+		return this.connection;
 	}
 	
 	private void mapEntities() {

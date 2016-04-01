@@ -23,6 +23,7 @@ import com.github.aureliano.edocs.domain.entity.Attachment;
 import com.github.aureliano.edocs.domain.entity.Category;
 import com.github.aureliano.edocs.domain.entity.Document;
 import com.github.aureliano.edocs.domain.entity.User;
+import com.github.aureliano.edocs.domain.helper.DomainPersistenceManager;
 import com.github.aureliano.edocs.domain.helper.PersistenceHelper;
 
 public class DocumentDaoTest {
@@ -31,6 +32,15 @@ public class DocumentDaoTest {
 	
 	public DocumentDaoTest() {
 		PersistenceHelper.instance().prepareDatabase();
+		
+		PersistenceService ps = PersistenceService.instance();
+		if (ps.getPersistenceManager() == null) {
+			DomainPersistenceManager pm = new DomainPersistenceManager();
+			pm.setConnection(PersistenceHelper.instance().getConnection());
+			PersistenceService.instance().registerPersistenceManager(pm);
+		}
+		
+		
 		this.dao = new DocumentDao();
 	}
 
