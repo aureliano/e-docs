@@ -4,7 +4,7 @@ public enum Algorithm {
 
 	MD5("MD5"),
 	SHA_1("SHA-1"),
-	SHA_2("SHA-2");
+	SHA_2("SHA-256");
 	
 	private String label;
 	

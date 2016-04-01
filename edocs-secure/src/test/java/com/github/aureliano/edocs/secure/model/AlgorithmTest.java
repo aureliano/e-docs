@@ -10,6 +10,6 @@ public class AlgorithmTest {
 	public void testGetLabel() {
 		assertEquals("MD5", Algorithm.MD5.getLabel());
 		assertEquals("SHA-1", Algorithm.SHA_1.getLabel());
-		assertEquals("SHA-2", Algorithm.SHA_2.getLabel());
+		assertEquals("SHA-256", Algorithm.SHA_2.getLabel());
 	}
 }
