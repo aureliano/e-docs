@@ -16,6 +16,7 @@ public class Document implements IEntity<Document> {
 	private Category category;
 	private String description;
 	private Date dueDate;
+	private User owner;
 	private List<Attachment> attachments;
 	
 	public Document() {
@@ -58,6 +59,15 @@ public class Document implements IEntity<Document> {
 
 	public Document withDueDate(Date dueDate) {
 		this.dueDate = dueDate;
+		return this;
+	}
+	
+	public User getOwner() {
+		return owner;
+	}
+	
+	public Document withOwner(User owner) {
+		this.owner = owner;
 		return this;
 	}
 
