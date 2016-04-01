@@ -43,6 +43,7 @@
 		<module>edocs-common</module>
 		<module>edocs-annotation</module>
 		<module>edocs-domain</module>
+		<module>edocs-secure</module>
 	</modules>
 	
 	<dependencyManagement>
