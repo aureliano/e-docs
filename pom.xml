@@ -44,6 +44,7 @@
 		<module>edocs-annotation</module>
 		<module>edocs-domain</module>
 		<module>edocs-secure</module>
+		<module>edocs-service</module>
 	</modules>
 	
 	<dependencyManagement>
