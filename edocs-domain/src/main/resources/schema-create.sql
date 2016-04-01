@@ -11,7 +11,8 @@ CREATE TABLE documents (
 	description VARCHAR(1000),
 	due_date DATE,
 	owner_fk INTEGER,
-	CONSTRAINT documents_pk PRIMARY KEY (id)
+	CONSTRAINT documents_pk PRIMARY KEY (id),
+	CONSTRAINT document_owner_fk FOREIGN KEY (owner_fk) REFERENCES users(id)
 );
 
 CREATE TABLE attachments (
@@ -19,5 +20,6 @@ CREATE TABLE attachments (
 	name VARCHAR(250) NOT NULL,
 	upload_time TIMESTAMP,
 	document_fk INTEGER NOT NULL,
-	CONSTRAINT attachments_pk PRIMARY KEY (id)
+	CONSTRAINT attachments_pk PRIMARY KEY (id),
+	CONSTRAINT document_attachments_fk FOREIGN KEY (document_fk) REFERENCES documents(id)
 );
