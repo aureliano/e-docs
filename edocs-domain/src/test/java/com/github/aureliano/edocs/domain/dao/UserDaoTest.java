@@ -9,11 +9,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.github.aureliano.edocs.common.exception.EDocsException;
 import com.github.aureliano.edocs.common.exception.ValidationException;
 import com.github.aureliano.edocs.common.message.ContextMessage;
 import com.github.aureliano.edocs.common.message.SeverityLevel;
