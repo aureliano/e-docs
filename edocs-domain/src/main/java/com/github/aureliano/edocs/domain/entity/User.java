@@ -9,6 +9,7 @@ public class User implements IEntity<User> {
 	private Integer id;
 	private String name;
 	private String password;
+	private Boolean dbUser;
 	
 	public User() {}
 
@@ -40,6 +41,15 @@ public class User implements IEntity<User> {
 
 	public User withPassword(String password) {
 		this.password = password;
+		return this;
+	}
+	
+	public Boolean getDbUser() {
+		return dbUser;
+	}
+	
+	public User withDbUser(Boolean dbUser) {
+		this.dbUser = dbUser;
 		return this;
 	}
 
