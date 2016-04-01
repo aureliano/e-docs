@@ -9,7 +9,7 @@ public class AlgorithmTest {
 	@Test
 	public void testGetLabel() {
 		assertEquals("MD5", Algorithm.MD5.getLabel());
-		assertEquals("SHA", Algorithm.SHA.getLabel());
 		assertEquals("SHA-1", Algorithm.SHA_1.getLabel());
+		assertEquals("SHA-2", Algorithm.SHA_2.getLabel());
 	}
 }

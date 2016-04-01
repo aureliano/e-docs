@@ -3,8 +3,8 @@ package com.github.aureliano.edocs.secure.model;
 public enum Algorithm {
 
 	MD5("MD5"),
-	SHA("SHA"),
-	SHA_1("SHA-1");
+	SHA_1("SHA-1"),
+	SHA_2("SHA-2");
 	
 	private String label;
 	
