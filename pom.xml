@@ -8,7 +8,7 @@
 	<groupId>com.github.aureliano</groupId>
 	<artifactId>e-docs</artifactId>
 	<packaging>pom</packaging>
-	<version>${project.release}</version>
+	<version>0.1.0</version>
 	<name>edocs</name>
 	
 	<build>
@@ -50,13 +50,13 @@
 			<dependency>
 				<groupId>com.github.aureliano</groupId>
 				<artifactId>edocs-common</artifactId>
-				<version>${project.release}</version>
+				<version>0.1.0</version>
 			</dependency>
 			
 			<dependency>
 				<groupId>com.github.aureliano</groupId>
 				<artifactId>edocs-annotation</artifactId>
-				<version>${project.release}</version>
+				<version>0.1.0</version>
 			</dependency>
 		
 			<dependency>
@@ -77,6 +77,5 @@
 	
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.release>0.1.0-BETA-00</project.release>
 	</properties>
 </project>

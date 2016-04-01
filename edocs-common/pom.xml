@@ -8,7 +8,7 @@
 	<parent>
 		<groupId>com.github.aureliano</groupId>
 		<artifactId>e-docs</artifactId>
-		<version>${project.release}</version>
+		<version>0.1.0</version>
 	</parent>
 
 	<artifactId>edocs-common</artifactId>
