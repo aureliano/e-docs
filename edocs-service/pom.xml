@@ -20,6 +20,12 @@
 			<groupId>com.github.aureliano</groupId>
 			<artifactId>edocs-domain</artifactId>
 		</dependency>
+		
+		<dependency>
+			<groupId>org.apache.derby</groupId>
+			<artifactId>derby</artifactId>
+			<scope>provided</scope>
+		</dependency>
 	
 		<dependency>
 			<groupId>junit</groupId>
