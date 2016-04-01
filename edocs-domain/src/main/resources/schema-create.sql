@@ -3,7 +3,8 @@ CREATE TABLE users (
 	name VARCHAR(25) NOT NULL,
 	password VARCHAR(65),
 	db_user BOOLEAN DEFAULT FALSE,
-	CONSTRAINT users_pk PRIMARY KEY (id)
+	CONSTRAINT users_pk PRIMARY KEY (id),
+	CONSTRAINT unique_name UNIQUE (name)
 );
 
 CREATE TABLE documents (

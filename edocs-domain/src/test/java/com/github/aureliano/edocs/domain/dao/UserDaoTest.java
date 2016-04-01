@@ -9,9 +9,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.github.aureliano.edocs.common.exception.EDocsException;
 import com.github.aureliano.edocs.common.exception.ValidationException;
 import com.github.aureliano.edocs.common.message.ContextMessage;
 import com.github.aureliano.edocs.common.message.SeverityLevel;
@@ -61,6 +63,22 @@ public class UserDaoTest {
 		
 		user = this.dao.save(u);
 		assertTrue(user.getDbUser());
+	}
+	
+	@Test
+	public void testSaveErrorUniqueName() {
+		User u = new User()
+			.withName("agustine")
+			.withPassword("test123")
+			.withDbUser(null);
+		
+		this.dao.save(u);
+		try {
+			String sql = "insert into users(name, password) values('augustine', 'test123')";
+			PersistenceHelper.instance().executeUpdate(sql);
+		} catch (SQLException ex) {
+			assertEquals("23505", ex.getSQLState());
+		}
 	}
 	
 	@Test
