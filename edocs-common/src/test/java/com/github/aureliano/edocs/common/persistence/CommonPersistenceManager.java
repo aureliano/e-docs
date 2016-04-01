@@ -18,7 +18,7 @@ public class CommonPersistenceManager implements IPersistenceManager {
 	public <T> void delete(T entity) {}
 
 	@Override
-	public void delete(Class<? extends IEntity<?>> type, Integer id) {}
+	public void delete(Class<? extends IEntity> type, Integer id) {}
 
 	@Override
 	public <T> T find(Class<T> type, Integer id) {

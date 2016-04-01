@@ -7,7 +7,7 @@ import com.github.aureliano.edocs.annotation.validation.NotNull;
 import com.github.aureliano.edocs.annotation.validation.Size;
 import com.github.aureliano.edocs.common.persistence.IEntity;
 
-public class Attachment implements IEntity<Attachment> {
+public class Attachment implements IEntity {
 
 	private Integer id;
 	private String name;

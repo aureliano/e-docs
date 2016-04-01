@@ -1,6 +1,6 @@
 package com.github.aureliano.edocs.common.persistence;
 
-public class CommonEntity implements IEntity<CommonEntity> {
+public class CommonEntity implements IEntity {
 
 	@Override
 	public Integer getId() {

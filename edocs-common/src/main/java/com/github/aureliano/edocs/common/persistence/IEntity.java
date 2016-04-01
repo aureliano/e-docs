@@ -1,8 +1,8 @@
 package com.github.aureliano.edocs.common.persistence;
 
-public interface IEntity<T> {
+public interface IEntity {
 
 	public abstract Integer getId();
 	
-	public abstract T withId(Integer id);
+	public abstract IEntity withId(Integer id);
 }

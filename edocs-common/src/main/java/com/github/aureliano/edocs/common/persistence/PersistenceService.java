@@ -11,7 +11,7 @@ public final class PersistenceService {
 	private static PersistenceService instance;
 	
 	private IPersistenceManager persistenceManager;
-	private Map<Class<? extends IEntity<?>>, Class<? extends IDao<?>>> entityMap;
+	private Map<Class<? extends IEntity>, Class<? extends IDao<?>>> entityMap;
 	
 	private PersistenceService() {
 		this.entityMap = new HashMap<>();
@@ -33,12 +33,12 @@ public final class PersistenceService {
 		return this.persistenceManager;
 	}
 	
-	public PersistenceService mapEntity(Class<? extends IEntity<?>> entity, Class<? extends IDao<?>> dao) {
+	public PersistenceService mapEntity(Class<? extends IEntity> entity, Class<? extends IDao<?>> dao) {
 		this.entityMap.put(entity, dao);
 		return this;
 	}
 	
-	public IDao<?> createDao(Class<? extends IEntity<?>> entity) {
+	public IDao<?> createDao(Class<? extends IEntity> entity) {
 		Class<? extends IDao<?>> dao = this.entityMap.get(entity);
 		if (dao == null) {
 			throw new EDocsException("Entity " + entity.getName() + " is not mapped.");

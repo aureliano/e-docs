@@ -10,7 +10,7 @@ import com.github.aureliano.edocs.annotation.validation.NotNull;
 import com.github.aureliano.edocs.annotation.validation.Size;
 import com.github.aureliano.edocs.common.persistence.IEntity;
 
-public class Document implements IEntity<Document> {
+public class Document implements IEntity {
 
 	private Integer id;
 	private Category category;

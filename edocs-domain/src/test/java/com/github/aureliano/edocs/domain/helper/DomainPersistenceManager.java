@@ -41,7 +41,7 @@ public class DomainPersistenceManager implements IPersistenceManager {
 	}
 
 	@Override
-	public void delete(Class<? extends IEntity<?>> type, Integer id) {
+	public void delete(Class<? extends IEntity> type, Integer id) {
 		this.getDao(type).delete(id);
 	}
 
@@ -88,6 +88,6 @@ public class DomainPersistenceManager implements IPersistenceManager {
 	
 	@SuppressWarnings("unchecked")
 	private <T> IDao<T> getDao(Class<T> ctype) {
-		return (IDao<T>) PersistenceService.instance().createDao((Class<? extends IEntity<?>>) ctype);
+		return (IDao<T>) PersistenceService.instance().createDao((Class<? extends IEntity>) ctype);
 	}
 }
