@@ -1,7 +1,9 @@
 package com.github.aureliano.edocs.domain.dao;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -43,12 +45,22 @@ public class UserDaoTest {
 	public void testSave() {
 		User u = new User()
 			.withName("agustine")
-			.withPassword("test123");
+			.withPassword("test123")
+			.withDbUser(null);
 		
 		User user = this.dao.save(u);
 		assertNotNull(user.getId());
 		assertEquals(u.getName(), user.getName());
 		assertEquals(u.getPassword(), user.getPassword());
+		assertFalse(user.getDbUser());
+		
+		u = new User()
+			.withName("alfonse")
+			.withPassword("test123")
+			.withDbUser(true);
+		
+		user = this.dao.save(u);
+		assertTrue(user.getDbUser());
 	}
 	
 	@Test

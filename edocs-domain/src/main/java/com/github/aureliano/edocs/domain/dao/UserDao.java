@@ -74,8 +74,9 @@ public class UserDao extends AbstractDao<User> {
 			PreparedStatement ps = super.connection.prepareStatement(sql, new String[] {"ID"});
 			ps.setString(1, user.getName());
 			ps.setString(2, user.getPassword());
+			ps.setObject(3, user.getDbUser());
 			if (user.getId() != null) {
-				ps.setInt(3, user.getId());
+				ps.setInt(4, user.getId());
 			}
 			
 			return ps;
@@ -99,7 +100,8 @@ public class UserDao extends AbstractDao<User> {
 			User e = new User()
 				.withId(rs.getInt("id"))
 				.withName(rs.getString("name"))
-				.withPassword(rs.getString("password"));
+				.withPassword(rs.getString("password"))
+				.withDbUser(rs.getBoolean("db_user"));
 			data.add(e);
 		}
 		
@@ -109,9 +111,9 @@ public class UserDao extends AbstractDao<User> {
 	
 	private String getSaveQuery(User user) {
 		if (user.getId() == null) {
-			return "insert into users(name, password) values(?, ?)";
+			return "insert into users(name, password, db_user) values(?, ?, ?)";
 		} else {
-			return "update users set name = ?, password = ? where id = ?";
+			return "update users set name = ?, password = ?, db_user = ? where id = ?";
 		}
 	}
 }
