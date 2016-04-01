@@ -60,6 +60,12 @@
 				<artifactId>edocs-annotation</artifactId>
 				<version>0.1.0</version>
 			</dependency>
+			
+			<dependency>
+				<groupId>com.github.aureliano</groupId>
+				<artifactId>edocs-domain</artifactId>
+				<version>0.1.0</version>
+			</dependency>
 		
 			<dependency>
 				<groupId>org.apache.derby</groupId>
