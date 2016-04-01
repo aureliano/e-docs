@@ -22,6 +22,7 @@ import com.github.aureliano.edocs.common.persistence.PersistenceService;
 import com.github.aureliano.edocs.domain.entity.Attachment;
 import com.github.aureliano.edocs.domain.entity.Category;
 import com.github.aureliano.edocs.domain.entity.Document;
+import com.github.aureliano.edocs.domain.entity.User;
 import com.github.aureliano.edocs.domain.helper.PersistenceHelper;
 
 public class DocumentDaoTest {
@@ -35,7 +36,7 @@ public class DocumentDaoTest {
 
 	@Before
 	public void beforeTest() throws SQLException {
-		PersistenceHelper.instance().executeUpdate("delete from documents");
+		PersistenceHelper.instance().deleteAllRecords();;
 	}
 	
 	@Test
@@ -51,13 +52,20 @@ public class DocumentDaoTest {
 			.withCategory(Category.AGREEMENT)
 			.withDescription(this.getValidDescription())
 			.withAttachments(Arrays.asList(new Attachment()))
-			.withDueDate(this.getToday());
+			.withDueDate(this.getToday())
+			.withOwner(this.getValidUser());
 		
 		Document document = this.dao.save(d);
 		assertNotNull(document.getId());
 		assertEquals(d.getCategory(), document.getCategory());
 		assertEquals(d.getDescription(), document.getDescription());
 		assertEquals(d.getDueDate(), document.getDueDate());
+	}
+	
+	private User getValidUser() {
+		return new User()
+			.withName("agustine")
+			.withPassword("test123");
 	}
 	
 	@Test

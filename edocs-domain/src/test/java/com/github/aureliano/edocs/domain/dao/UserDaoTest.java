@@ -30,7 +30,7 @@ public class UserDaoTest {
 
 	@Before
 	public void beforeTest() throws SQLException {
-		PersistenceHelper.instance().executeUpdate("delete from users");
+		PersistenceHelper.instance().deleteAllRecords();;
 	}
 	
 	@Test

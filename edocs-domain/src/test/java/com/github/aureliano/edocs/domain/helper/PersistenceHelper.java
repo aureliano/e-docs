@@ -65,6 +65,12 @@ public final class PersistenceHelper {
 		this.initialized = true;
 	}
 	
+	public void deleteAllRecords() throws SQLException {
+		executeUpdate("delete from attachments");
+		executeUpdate("delete from documents");
+		executeUpdate("delete from users");
+	}
+	
 	private Connection prepareConnection() {
 		Connection conn = null;
 		

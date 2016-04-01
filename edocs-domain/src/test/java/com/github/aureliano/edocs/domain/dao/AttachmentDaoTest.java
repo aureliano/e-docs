@@ -35,7 +35,7 @@ public class AttachmentDaoTest {
 
 	@Before
 	public void beforeTest() throws SQLException {
-		PersistenceHelper.instance().executeUpdate("delete from attachments");
+		PersistenceHelper.instance().deleteAllRecords();;
 	}
 	
 	@Test
