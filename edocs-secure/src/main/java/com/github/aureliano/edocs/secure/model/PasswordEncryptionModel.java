@@ -3,7 +3,7 @@ package com.github.aureliano.edocs.secure.model;
 public final class PasswordEncryptionModel {
 
 	private static final Integer DEFAULT_HASH_ITERATIONS = 25;
-	private static final Algorithm DEFAULT_ALGORITHM = Algorithm.SHA;
+	private static final Algorithm DEFAULT_ALGORITHM = Algorithm.SHA_1;
 	
 	private String password;
 	private String salt;
