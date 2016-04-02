@@ -19,7 +19,7 @@ public interface IPersistenceManager {
 	
 	public abstract <T> T find(Class<T> type, Integer id);
 	
-	public abstract <T> List<T> search(T entity);
+	public abstract <T> List<T> search(DataPagination<T> dataPagination);
 	
 	public abstract <T> List<T> search(Class<T> type, String query);
 	

@@ -26,7 +26,7 @@ public class CommonPersistenceManager implements IPersistenceManager {
 	}
 
 	@Override
-	public <T> List<T> search(T entity) {
+	public <T> List<T> search(DataPagination<T> dp) {
 		return null;
 	}
 

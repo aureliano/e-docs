@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.github.aureliano.edocs.common.message.ContextMessage;
+import com.github.aureliano.edocs.common.persistence.DataPagination;
 import com.github.aureliano.edocs.common.persistence.IDao;
 import com.github.aureliano.edocs.common.persistence.IEntity;
 import com.github.aureliano.edocs.common.persistence.IPersistenceManager;
@@ -51,8 +52,8 @@ public class DomainPersistenceManager implements IPersistenceManager {
 	}
 
 	@Override
-	public <T> List<T> search(T entity) {
-		return this.getDao(entity).search(entity);
+	public <T> List<T> search(DataPagination<T> dataPagination) {
+		return this.getDao(dataPagination.getEntity()).search(dataPagination);
 	}
 
 	@Override
