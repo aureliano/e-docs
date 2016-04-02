@@ -9,6 +9,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.github.aureliano.edocs.common.exception.EDocsException;
+import com.github.aureliano.edocs.common.persistence.DataPagination;
 import com.github.aureliano.edocs.domain.entity.User;
 
 public class UserDao extends AbstractDao<User> {
@@ -40,8 +41,9 @@ public class UserDao extends AbstractDao<User> {
 	}
 
 	@Override
-	public List<User> search(User entity) {
+	public List<User> search(DataPagination<User> dataPagination) {
 		StringBuilder sql = new StringBuilder("select * from users where");
+		User entity = dataPagination.getEntity();
 		
 		if (entity.getId() != null) {
 			sql.append(" id = " + entity.getId());

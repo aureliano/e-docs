@@ -9,6 +9,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.github.aureliano.edocs.common.exception.EDocsException;
+import com.github.aureliano.edocs.common.persistence.DataPagination;
 import com.github.aureliano.edocs.domain.entity.Category;
 import com.github.aureliano.edocs.domain.entity.Document;
 import com.github.aureliano.edocs.domain.entity.User;
@@ -43,8 +44,9 @@ public class DocumentDao extends AbstractDao<Document> {
 	}
 
 	@Override
-	public List<Document> search(Document entity) {
+	public List<Document> search(DataPagination<Document> dataPagination) {
 		StringBuilder sql = new StringBuilder("select id, category, due_date, owner_fk from documents where");
+		Document entity = dataPagination.getEntity();
 		
 		if (entity.getId() != null) {
 			sql.append(" id = " + entity.getId());

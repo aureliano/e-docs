@@ -9,6 +9,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.github.aureliano.edocs.common.exception.EDocsException;
+import com.github.aureliano.edocs.common.persistence.DataPagination;
 import com.github.aureliano.edocs.domain.entity.Attachment;
 import com.github.aureliano.edocs.domain.entity.Document;
 import com.github.aureliano.edocs.domain.helper.DataTypeHelper;
@@ -42,8 +43,9 @@ public class AttachmentDao extends AbstractDao<Attachment> {
 	}
 
 	@Override
-	public List<Attachment> search(Attachment entity) {
+	public List<Attachment> search(DataPagination<Attachment> dataPagination) {
 		StringBuilder sql = new StringBuilder("select * from attachments where");
+		Attachment entity = dataPagination.getEntity();
 		
 		if (entity.getId() != null) {
 			sql.append(" id = " + entity.getId());

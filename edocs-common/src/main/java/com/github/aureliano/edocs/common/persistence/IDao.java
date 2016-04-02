@@ -13,7 +13,7 @@ public interface IDao<IEntity> {
 	
 	public abstract IEntity find(Integer id);
 	
-	public abstract List<IEntity> search(IEntity entity);
+	public abstract List<IEntity> search(DataPagination<IEntity> dataPagination);
 	
 	public abstract List<IEntity> search(String query);
 }

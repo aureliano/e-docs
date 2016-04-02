@@ -16,6 +16,7 @@ import org.junit.Test;
 import com.github.aureliano.edocs.common.exception.ValidationException;
 import com.github.aureliano.edocs.common.message.ContextMessage;
 import com.github.aureliano.edocs.common.message.SeverityLevel;
+import com.github.aureliano.edocs.common.persistence.DataPagination;
 import com.github.aureliano.edocs.common.persistence.IDao;
 import com.github.aureliano.edocs.common.persistence.IPersistenceManager;
 import com.github.aureliano.edocs.common.persistence.PersistenceService;
@@ -141,7 +142,7 @@ public class AttachmentDaoTest {
 			.withName("different-one")
 			.withUploadTime(this.getToday()));
 		
-		List<Attachment> data = this.dao.search(attachment1);
+		List<Attachment> data = this.dao.search(new DataPagination<Attachment>().withEntity(attachment1));
 		
 		assertEquals(1, data.size());
 		

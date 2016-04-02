@@ -16,6 +16,7 @@ import org.junit.Test;
 import com.github.aureliano.edocs.common.exception.ValidationException;
 import com.github.aureliano.edocs.common.message.ContextMessage;
 import com.github.aureliano.edocs.common.message.SeverityLevel;
+import com.github.aureliano.edocs.common.persistence.DataPagination;
 import com.github.aureliano.edocs.common.persistence.IDao;
 import com.github.aureliano.edocs.common.persistence.IPersistenceManager;
 import com.github.aureliano.edocs.common.persistence.PersistenceService;
@@ -150,7 +151,7 @@ public class DocumentDaoTest {
 			.withDescription(this.getValidDescription())
 			.withAttachments(Arrays.asList(new Attachment())));
 		
-		List<Document> data = this.dao.search(doc1);
+		List<Document> data = this.dao.search(new DataPagination<Document>().withEntity(doc1));
 		
 		assertEquals(1, data.size());
 		

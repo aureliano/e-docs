@@ -15,6 +15,7 @@ import org.junit.Test;
 import com.github.aureliano.edocs.common.exception.ValidationException;
 import com.github.aureliano.edocs.common.message.ContextMessage;
 import com.github.aureliano.edocs.common.message.SeverityLevel;
+import com.github.aureliano.edocs.common.persistence.DataPagination;
 import com.github.aureliano.edocs.common.persistence.IDao;
 import com.github.aureliano.edocs.common.persistence.IPersistenceManager;
 import com.github.aureliano.edocs.common.persistence.PersistenceService;
@@ -155,7 +156,7 @@ public class UserDaoTest {
 				.withName("maria")
 				.withPassword("test12345"));
 		
-		List<User> data = this.dao.search(user1);
+		List<User> data = this.dao.search(new DataPagination<User>().withEntity(user1));
 		
 		assertEquals(1, data.size());
 		
