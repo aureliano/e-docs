@@ -151,7 +151,7 @@ public class DocumentDaoTest {
 			.withDescription(this.getValidDescription())
 			.withAttachments(Arrays.asList(new Attachment())));
 		
-		List<Document> data = this.dao.search(new DataPagination<Document>().withEntity(doc1));
+		List<Document> data = this.dao.search(new DataPagination<Document>().withEntity(d));
 		
 		assertEquals(1, data.size());
 		
