@@ -2,31 +2,31 @@ package com.github.aureliano.edocs.common.persistence;
 
 import java.util.List;
 
-public class CommonDao implements IDao<CommonDao> {
+public class CommonDao implements IDao<CommonEntity> {
 
 	@Override
-	public CommonDao save(CommonDao entity) {
+	public CommonEntity save(CommonEntity entity) {
 		return null;
 	}
 
 	@Override
-	public void delete(CommonDao entity) {}
+	public void delete(CommonEntity entity) {}
 
 	@Override
 	public void delete(Integer id) {}
 
 	@Override
-	public CommonDao find(Integer id) {
+	public CommonEntity find(Integer id) {
 		return null;
 	}
 
 	@Override
-	public List<CommonDao> search(CommonDao entity) {
+	public List<CommonEntity> search(DataPagination<CommonEntity> dp) {
 		return null;
 	}
 
 	@Override
-	public List<CommonDao> search(String query) {
+	public List<CommonEntity> search(String query) {
 		return null;
 	}
 }
