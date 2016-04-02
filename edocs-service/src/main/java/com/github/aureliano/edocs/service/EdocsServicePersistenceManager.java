@@ -11,12 +11,6 @@ import com.github.aureliano.edocs.common.persistence.IDao;
 import com.github.aureliano.edocs.common.persistence.IEntity;
 import com.github.aureliano.edocs.common.persistence.IPersistenceManager;
 import com.github.aureliano.edocs.common.persistence.PersistenceService;
-import com.github.aureliano.edocs.domain.dao.AttachmentDao;
-import com.github.aureliano.edocs.domain.dao.DocumentDao;
-import com.github.aureliano.edocs.domain.dao.UserDao;
-import com.github.aureliano.edocs.domain.entity.Attachment;
-import com.github.aureliano.edocs.domain.entity.Document;
-import com.github.aureliano.edocs.domain.entity.User;
 
 public final class EdocsServicePersistenceManager implements IPersistenceManager {
 
@@ -25,12 +19,15 @@ public final class EdocsServicePersistenceManager implements IPersistenceManager
 	
 	public EdocsServicePersistenceManager() {
 		this.messages = new HashSet<>();
-		this.configurePersistenceManager();
 	}
 	
 	@Override
 	public Connection getConnection() {
 		return this.connection;
+	}
+	
+	public void setConnection(Connection connection) {
+		this.connection = connection;
 	}
 
 	@Override
@@ -82,14 +79,6 @@ public final class EdocsServicePersistenceManager implements IPersistenceManager
 	@Override
 	public void clearContextMessages() {
 		this.messages.clear();
-	}
-
-	private void configurePersistenceManager() {
-		PersistenceService ps = PersistenceService.instance()
-			.mapEntity(User.class, UserDao.class)
-			.mapEntity(Document.class, DocumentDao.class)
-			.mapEntity(Attachment.class, AttachmentDao.class);
-		ps.registerPersistenceManager(this);
 	}
 	
 	@SuppressWarnings("unchecked")
