@@ -142,7 +142,7 @@ public class AttachmentDaoTest {
 			.withName("different-one")
 			.withUploadTime(this.getToday()));
 		
-		List<Attachment> data = this.dao.search(new DataPagination<Attachment>().withEntity(attachment1));
+		List<Attachment> data = this.dao.search(new DataPagination<Attachment>().withEntity(a));
 		
 		assertEquals(1, data.size());
 		
