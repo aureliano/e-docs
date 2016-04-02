@@ -28,7 +28,8 @@ public class UserServiceBean implements IServiceBean {
 		throw new ServiceException("Not implemented yet.");
 	}
 	
-	public void deleteUser(User user) {try {
+	public void deleteUser(User user) {
+		try {
 			this.pm.getConnection().setAutoCommit(false);
 			this.pm.delete(user);
 			this.pm.getConnection().commit();
@@ -44,6 +45,6 @@ public class UserServiceBean implements IServiceBean {
 	}
 	
 	public User findUserById(Integer id) {
-		throw new ServiceException("Not implemented yet.");
+		return this.pm.find(User.class, id);
 	}
 }

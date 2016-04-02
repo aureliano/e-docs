@@ -17,6 +17,8 @@ import com.github.aureliano.edocs.service.EdocsServicePersistenceManager;
 
 public class UserServiceBeanTest {
 
+	private UserServiceBean bean;
+	
 	public UserServiceBeanTest() {
 		PersistenceHelper.instance().prepareDatabase();
 		PersistenceService ps = PersistenceService.instance();
@@ -26,6 +28,8 @@ public class UserServiceBeanTest {
 			pm.setConnection(PersistenceHelper.instance().getConnection());
 			ps.registerPersistenceManager(pm);
 		}
+		
+		this.bean = new UserServiceBean();
 	}
 
 	@Before
@@ -49,12 +53,23 @@ public class UserServiceBeanTest {
 		assertEquals(1, rs.getInt(1));
 		rs.close();
 		
-		UserServiceBean bean = new UserServiceBean();
-		bean.deleteUser(user);
+		this.bean.deleteUser(user);
 		
 		rs = conn.prepareStatement("select count(id) from users where name = '" + name + "'").executeQuery();
 		rs.next();
 		assertEquals(0, rs.getInt(1));
 		rs.close();
+	}
+	
+	@Test
+	public void testFindUserById() {
+		User u = new User()
+			.withName("iacopo")
+			.withPassword("test123");
+		
+		User user1 = new UserDao().save(u); // TODO: Replace by service bean method.
+		User user2 = this.bean.findUserById(user1.getId());
+		
+		assertEquals(user1, user2);
 	}
 }
