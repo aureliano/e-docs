@@ -54,6 +54,7 @@ public class UserDao extends AbstractDao<User> {
 			sql.append(" name = " + entity.getName());
 		}
 		
+		super.setPaginationParams(dataPagination, sql);
 		return this.search(sql.toString());
 	}
 
