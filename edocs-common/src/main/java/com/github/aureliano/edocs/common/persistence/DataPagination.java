@@ -21,15 +21,17 @@ public class DataPagination<T> {
 		return offset;
 	}
 
-	public void setOffset(Integer offset) {
+	public DataPagination<T> withOffset(Integer offset) {
 		this.offset = offset;
+		return this;
 	}
 
 	public Integer getLimit() {
 		return limit;
 	}
 
-	public void setLimit(Integer limit) {
+	public DataPagination<T> withLimit(Integer limit) {
 		this.limit = limit;
+		return this;
 	}
 }
