@@ -55,7 +55,8 @@ public class AttachmentDao extends AbstractDao<Attachment> {
 		if (entity.getDocument() != null) {
 			sql.append(" document_fk = " + entity.getDocument().getId());
 		}
-		
+
+		super.setPaginationParams(dataPagination, sql);
 		return this.search(sql.toString());
 	}
 
