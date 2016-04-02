@@ -2,17 +2,17 @@ package com.github.aureliano.edocs.common.persistence;
 
 public class DataPagination<T> {
 
-	private IEntity entity;
+	private T entity;
 	private Integer offset;
 	private Integer limit;
 	
 	public DataPagination() {}
 
-	public IEntity getEntity() {
+	public T getEntity() {
 		return entity;
 	}
 
-	public DataPagination<T> withEntity(IEntity entity) {
+	public DataPagination<T> withEntity(T entity) {
 		this.entity = entity;
 		return this;
 	}
