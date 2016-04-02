@@ -115,7 +115,7 @@ public abstract class AbstractDao<T> implements IDao<T> {
 		}
 		
 		if (dp.getLimit() != null) {
-			sql.append("fetch next " + dp.getLimit() + " rows only");
+			sql.append(" fetch next " + dp.getLimit() + " rows only");
 		}
 	}
 	
