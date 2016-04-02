@@ -56,7 +56,8 @@ public class DocumentDao extends AbstractDao<Document> {
 		if (entity.getCategory() != null) {
 			sql.append(" category = " + entity.getCategory());
 		}
-		
+
+		super.setPaginationParams(dataPagination, sql);
 		return this.search(sql.toString());
 	}
 
