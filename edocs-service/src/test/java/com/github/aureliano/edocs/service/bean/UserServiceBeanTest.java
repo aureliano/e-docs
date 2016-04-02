@@ -13,11 +13,19 @@ import com.github.aureliano.edocs.common.persistence.PersistenceService;
 import com.github.aureliano.edocs.domain.dao.UserDao;
 import com.github.aureliano.edocs.domain.entity.User;
 import com.github.aureliano.edocs.domain.helper.PersistenceHelper;
+import com.github.aureliano.edocs.service.EdocsServicePersistenceManager;
 
 public class UserServiceBeanTest {
 
 	public UserServiceBeanTest() {
 		PersistenceHelper.instance().prepareDatabase();
+		PersistenceService ps = PersistenceService.instance();
+		
+		if (ps.getPersistenceManager() == null) {
+			EdocsServicePersistenceManager pm = new EdocsServicePersistenceManager();
+			pm.setConnection(PersistenceHelper.instance().getConnection());
+			ps.registerPersistenceManager(pm);
+		}
 	}
 
 	@Before
@@ -31,7 +39,7 @@ public class UserServiceBeanTest {
 		User u = new User()
 			.withName(name)
 			.withPassword("test123");
-		new UserDao().save(u);
+		User user = new UserDao().save(u);
 		
 		Connection conn = PersistenceService.instance().getPersistenceManager().getConnection();
 		conn.setAutoCommit(true);
@@ -42,7 +50,7 @@ public class UserServiceBeanTest {
 		rs.close();
 		
 		UserServiceBean bean = new UserServiceBean();
-		bean.deleteUser(u);
+		bean.deleteUser(user);
 		
 		rs = conn.prepareStatement("select count(id) from users where name = '" + name + "'").executeQuery();
 		rs.next();
