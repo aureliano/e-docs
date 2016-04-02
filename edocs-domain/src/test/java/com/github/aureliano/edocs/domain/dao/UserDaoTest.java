@@ -156,7 +156,7 @@ public class UserDaoTest {
 				.withName("maria")
 				.withPassword("test12345"));
 		
-		List<User> data = this.dao.search(new DataPagination<User>().withEntity(user1));
+		List<User> data = this.dao.search(new DataPagination<User>().withEntity(u));
 		
 		assertEquals(1, data.size());
 		
