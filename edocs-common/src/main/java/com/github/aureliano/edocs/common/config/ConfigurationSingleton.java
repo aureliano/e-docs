@@ -22,15 +22,19 @@ public final class ConfigurationSingleton {
 		this.configuration = configuration;
 	}
 	
-	public AppConfiguration getAppConfiguration() {
-		if (this.configuration == null) {
-			this.loadDefaultAppConfiguration();
+	public AppConfiguration getAppConfiguration(boolean loadDefault) {
+		if ((this.configuration == null) && (loadDefault)) {
+			this.configuration = this.loadDefaultAppConfiguration();
 		}
 		
 		return this.configuration;
 	}
 	
-	public void loadDefaultAppConfiguration() {
-		this.configuration = ConfigurationHelper.parseConfiguration();
+	public AppConfiguration getAppConfiguration() {
+		return this.getAppConfiguration(false);
+	}
+	
+	public AppConfiguration loadDefaultAppConfiguration() {
+		return ConfigurationHelper.parseConfiguration();
 	}
 }
