@@ -1,6 +1,8 @@
 package com.github.aureliano.edocs.service.bean;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -9,10 +11,14 @@ import java.sql.SQLException;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.github.aureliano.edocs.common.config.AppConfiguration;
+import com.github.aureliano.edocs.common.config.ConfigurationSingleton;
+import com.github.aureliano.edocs.common.helper.ConfigurationHelper;
 import com.github.aureliano.edocs.common.persistence.PersistenceService;
 import com.github.aureliano.edocs.domain.dao.UserDao;
 import com.github.aureliano.edocs.domain.entity.User;
 import com.github.aureliano.edocs.domain.helper.PersistenceHelper;
+import com.github.aureliano.edocs.secure.hash.PasswordHashGenerator;
 import com.github.aureliano.edocs.service.EdocsServicePersistenceManager;
 
 public class UserServiceBeanTest {
@@ -27,6 +33,12 @@ public class UserServiceBeanTest {
 			EdocsServicePersistenceManager pm = new EdocsServicePersistenceManager();
 			pm.setConnection(PersistenceHelper.instance().getConnection());
 			ps.registerPersistenceManager(pm);
+		}
+		
+		if (ConfigurationSingleton.instance().getAppConfiguration() == null) {
+			String path = "src/test/resources/conf/service-app-configuration.properties";
+			AppConfiguration configuration = ConfigurationHelper.parseConfiguration(path);
+			ConfigurationSingleton.instance().setAppConfiguration(configuration);
 		}
 		
 		this.bean = new UserServiceBean();
@@ -71,5 +83,25 @@ public class UserServiceBeanTest {
 		User user2 = this.bean.findUserById(user1.getId());
 		
 		assertEquals(user1, user2);
+	}
+	
+	@Test
+	public void testIsValidCredential() {
+		String password = "test123";
+		String hash = PasswordHashGenerator.generateFromAppConfiguration(password);
+		
+		User u = new User()
+			.withName("constantinvs")
+			.withPassword(hash);
+		
+		new UserDao().save(u); // TODO: Replace by service bean method.
+		boolean validated = this.bean.isValidCredential(u.getName(), null);
+		assertFalse(validated);
+		
+		validated = this.bean.isValidCredential(u.getName(), "invalidPass");
+		assertFalse(validated);
+		
+		validated = this.bean.isValidCredential(u.getName(), password);
+		assertTrue(validated);
 	}
 }

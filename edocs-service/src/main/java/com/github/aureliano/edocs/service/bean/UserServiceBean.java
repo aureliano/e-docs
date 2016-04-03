@@ -1,12 +1,15 @@
 package com.github.aureliano.edocs.service.bean;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import com.github.aureliano.edocs.common.exception.EDocsException;
 import com.github.aureliano.edocs.common.exception.ServiceException;
+import com.github.aureliano.edocs.common.persistence.DataPagination;
 import com.github.aureliano.edocs.common.persistence.IPersistenceManager;
 import com.github.aureliano.edocs.common.persistence.PersistenceService;
 import com.github.aureliano.edocs.domain.entity.User;
+import com.github.aureliano.edocs.secure.hash.PasswordHashGenerator;
 
 public class UserServiceBean implements IServiceBean {
 
@@ -25,7 +28,18 @@ public class UserServiceBean implements IServiceBean {
 	}
 	
 	public boolean isValidCredential(String name, String password) {
-		throw new ServiceException("Not implemented yet.");
+		List<User> res = this.pm.search(
+			new DataPagination<User>()
+				.withEntity(new User().withName(name)));
+		
+		if (res.isEmpty()) {
+			return false;
+		}
+		
+		User user = res.get(0);
+		String hash = PasswordHashGenerator.generateFromAppConfiguration(password);
+		
+		return user.getPassword().equals(hash);
 	}
 	
 	public void deleteUser(User user) {
