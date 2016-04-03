@@ -24,7 +24,7 @@ public class UserServiceBean implements IServiceBean {
 		throw new ServiceException("Not implemented yet.");
 	}
 	
-	public boolean isValidCredential(String name, String passwor) {
+	public boolean isValidCredential(String name, String password) {
 		throw new ServiceException("Not implemented yet.");
 	}
 	
