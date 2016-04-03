@@ -6,6 +6,10 @@ import java.security.NoSuchAlgorithmException;
 
 import javax.xml.bind.DatatypeConverter;
 
+import com.github.aureliano.edocs.common.config.AppConfiguration;
+import com.github.aureliano.edocs.common.config.ConfigurationSingleton;
+import com.github.aureliano.edocs.common.config.SecureConfiguration;
+import com.github.aureliano.edocs.secure.model.Algorithm;
 import com.github.aureliano.edocs.secure.model.PasswordEncryptionModel;
 
 public final class PasswordHashGenerator {
@@ -24,6 +28,17 @@ public final class PasswordHashGenerator {
 		}
 		
 		return text;
+	}
+	
+	public static final String generateFromAppConfiguration(String password) {
+		AppConfiguration appConfiguration = ConfigurationSingleton.instance().getAppConfiguration();
+		SecureConfiguration configuration = appConfiguration.getSecureConfiguration();
+		
+		return PasswordHashGenerator.generate(new PasswordEncryptionModel()
+			.withAlgorithm(Algorithm.valueOf(configuration.getAlgorithm()))
+			.withHashIterations(configuration.getHashIterations())
+			.withSalt(configuration.getSalt())
+			.withPassword(password));
 	}
 	
 	private static String hash(String text, String algorithm) throws NoSuchAlgorithmException, UnsupportedEncodingException {
