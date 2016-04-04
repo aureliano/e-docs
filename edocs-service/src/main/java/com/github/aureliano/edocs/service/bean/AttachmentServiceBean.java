@@ -34,4 +34,11 @@ public class AttachmentServiceBean implements IServiceBean {
 		
 		return ServiceHelper.executeActionInsideTransaction(attachment, true);
 	}
+	
+	public void deleteTempAttachment(Attachment attachment) {
+		if (!Boolean.TRUE.equals(attachment.getTemp())) {
+			throw new ServiceException("You cannot delete a non temporary file.");
+		}
+		ServiceHelper.executeActionInsideTransaction(attachment, false);
+	}
 }

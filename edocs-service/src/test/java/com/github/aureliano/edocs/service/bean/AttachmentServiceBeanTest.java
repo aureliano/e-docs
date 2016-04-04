@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -14,6 +15,7 @@ import org.junit.Test;
 
 import com.github.aureliano.edocs.common.config.AppConfiguration;
 import com.github.aureliano.edocs.common.config.ConfigurationSingleton;
+import com.github.aureliano.edocs.common.exception.ServiceException;
 import com.github.aureliano.edocs.common.helper.ConfigurationHelper;
 import com.github.aureliano.edocs.common.persistence.PersistenceService;
 import com.github.aureliano.edocs.domain.dao.DocumentDao;
@@ -64,7 +66,7 @@ public class AttachmentServiceBeanTest {
 	@Test
 	public void testSaveAttachment() {
 		Attachment attachment = new Attachment()
-			.withName("save-temp-file")
+			.withName("save-file")
 			.withTemp(false)
 			.withUploadTime(new Date())
 			.withDocument(this.getValidDocument());
@@ -74,6 +76,35 @@ public class AttachmentServiceBeanTest {
 		assertEquals(attachment.getName(), attachment1.getName());
 		assertEquals(attachment.getDocument().getId(), attachment1.getDocument().getId());
 		assertEquals(this.removeTime(attachment.getUploadTime()), this.removeTime(attachment1.getUploadTime()));
+	}
+	
+	@Test(expected = ServiceException.class)
+	public void testDeleteNonTemporaryAttachment() {
+		Attachment attachment = new Attachment()
+			.withName("delete-non-temp-file")
+			.withTemp(false)
+			.withUploadTime(new Date())
+			.withDocument(this.getValidDocument());
+		
+		Attachment attachment1 = this.bean.saveAttachment(attachment);
+		this.bean.deleteTempAttachment(attachment1);
+	}
+	
+	@Test
+	public void testDeleteTempAttachment() throws SQLException {
+		Attachment attachment = this.bean.createTemporaryAttachment("delete-temp-file");
+		
+		ResultSet rs = PersistenceHelper.instance().executeQuery("select count(id) from attachments where id = " + attachment.getId());
+		rs.next();
+		assertEquals(1, rs.getInt(1));
+		rs.close();
+		
+		this.bean.deleteTempAttachment(attachment);
+		
+		rs = PersistenceHelper.instance().executeQuery("select count(id) from attachments where id = " + attachment.getId());
+		rs.next();
+		assertEquals(0, rs.getInt(1));
+		rs.close();
 	}
 	
 	private Document getValidDocument() {
