@@ -21,7 +21,7 @@ CREATE TABLE attachments (
 	id INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
 	name VARCHAR(250) NOT NULL,
 	upload_time TIMESTAMP,
-	document_fk INTEGER NOT NULL,
+	document_fk INTEGER,
 	temp BOOLEAN NOT NULL,
 	CONSTRAINT attachments_pk PRIMARY KEY (id),
 	CONSTRAINT document_attachments_fk FOREIGN KEY (document_fk) REFERENCES documents(id)
