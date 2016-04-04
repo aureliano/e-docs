@@ -41,4 +41,8 @@ public class AttachmentServiceBean implements IServiceBean {
 		}
 		ServiceHelper.executeActionInsideTransaction(attachment, false);
 	}
+	
+	public Attachment findAttachmentById(Integer id) {
+		return this.pm.find(Attachment.class, id);
+	}
 }

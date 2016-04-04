@@ -107,6 +107,14 @@ public class AttachmentServiceBeanTest {
 		rs.close();
 	}
 	
+	@Test
+	public void testFindAttachmentById() {
+		Attachment attachment1 = this.bean.createTemporaryAttachment("test-finding");
+		Attachment attachment2 = this.bean.findAttachmentById(attachment1.getId());
+		
+		assertEquals(attachment1, attachment2);
+	}
+	
 	private Document getValidDocument() {
 		Document d = new Document()
 			.withCategory(Category.AGREEMENT)
