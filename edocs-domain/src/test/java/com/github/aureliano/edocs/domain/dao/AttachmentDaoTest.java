@@ -52,7 +52,6 @@ public class AttachmentDaoTest {
 	public void testValidateSaveAction() {
 		this.checkInvalidName();
 		this.checkInvalidUploadTime();
-		this.checkInvalidDocument();
 		this.checkInvalidTemp();
 	}
 	
@@ -207,14 +206,6 @@ public class AttachmentDaoTest {
 			.withUploadTime(new Date())
 			.withDocument(new Document());
 		this.validateContextMessage(a, "Expected to find a not null value for field temp.");
-	}
-
-	private void checkInvalidDocument() {
-		Attachment a = new Attachment()
-			.withName(this.getValidName())
-			.withTemp(false)
-			.withUploadTime(new Date());
-		this.validateContextMessage(a, "Expected to find a not null value for field document.");
 	}
 
 	private void validateContextMessage(Attachment attachment, String message) {

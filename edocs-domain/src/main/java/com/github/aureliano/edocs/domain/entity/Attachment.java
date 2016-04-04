@@ -57,7 +57,6 @@ public class Attachment implements IEntity {
 		return this;
 	}
 
-	@NotNull
 	public Document getDocument() {
 		return document;
 	}
