@@ -1,15 +1,13 @@
 package com.github.aureliano.edocs.service.bean;
 
-import java.sql.SQLException;
 import java.util.List;
 
-import com.github.aureliano.edocs.common.exception.EDocsException;
-import com.github.aureliano.edocs.common.exception.ServiceException;
 import com.github.aureliano.edocs.common.persistence.DataPagination;
 import com.github.aureliano.edocs.common.persistence.IPersistenceManager;
 import com.github.aureliano.edocs.common.persistence.PersistenceService;
 import com.github.aureliano.edocs.domain.entity.User;
 import com.github.aureliano.edocs.secure.hash.PasswordHashGenerator;
+import com.github.aureliano.edocs.service.helper.ServiceHelper;
 
 public class UserServiceBean implements IServiceBean {
 
@@ -31,7 +29,7 @@ public class UserServiceBean implements IServiceBean {
 	public User saveUser(User user) {
 		String hash = PasswordHashGenerator.generateFromAppConfiguration(user.getPassword());
 		user.withPassword(hash);
-		User entity = this.executeInsideTransaction(user, true);
+		User entity = ServiceHelper.executeActionInsideTransaction(user, true);
 		
 		return entity;
 	}
@@ -52,34 +50,10 @@ public class UserServiceBean implements IServiceBean {
 	}
 	
 	public void deleteUser(User user) {
-		this.executeInsideTransaction(user, false);
+		ServiceHelper.executeActionInsideTransaction(user, false);
 	}
 	
 	public User findUserById(Integer id) {
 		return this.pm.find(User.class, id);
-	}
-	
-	private User executeInsideTransaction(User user, boolean saveAction) {
-		User entity = null;
-		
-		try {
-			this.pm.getConnection().setAutoCommit(false);
-			if (saveAction) {
-				entity = this.pm.save(user);
-			} else {
-				this.pm.delete(user);
-			}
-			this.pm.getConnection().commit();
-		} catch (EDocsException ex) {
-			try {
-				this.pm.getConnection().rollback();
-			} catch (SQLException ex2) {
-				throw new ServiceException(ex2);
-			}
-		} catch (SQLException ex) {
-			throw new ServiceException(ex);
-		}
-		
-		return entity;
 	}
 }
