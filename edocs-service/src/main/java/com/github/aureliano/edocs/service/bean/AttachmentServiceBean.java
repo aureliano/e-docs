@@ -1,11 +1,14 @@
 package com.github.aureliano.edocs.service.bean;
 
 import java.util.Date;
+import java.util.List;
 
 import com.github.aureliano.edocs.common.exception.ServiceException;
+import com.github.aureliano.edocs.common.persistence.DataPagination;
 import com.github.aureliano.edocs.common.persistence.IPersistenceManager;
 import com.github.aureliano.edocs.common.persistence.PersistenceService;
 import com.github.aureliano.edocs.domain.entity.Attachment;
+import com.github.aureliano.edocs.domain.entity.Document;
 import com.github.aureliano.edocs.service.helper.ServiceHelper;
 
 public class AttachmentServiceBean implements IServiceBean {
@@ -44,5 +47,10 @@ public class AttachmentServiceBean implements IServiceBean {
 	
 	public Attachment findAttachmentById(Integer id) {
 		return this.pm.find(Attachment.class, id);
+	}
+	
+	public List<Attachment> findAttachmentsByDocument(Document document) {
+		Attachment attachment = new Attachment().withDocument(document);
+		return this.pm.search(new DataPagination<Attachment>().withEntity(attachment));
 	}
 }

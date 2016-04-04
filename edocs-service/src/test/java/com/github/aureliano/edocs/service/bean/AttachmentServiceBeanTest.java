@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -17,7 +18,9 @@ import com.github.aureliano.edocs.common.config.AppConfiguration;
 import com.github.aureliano.edocs.common.config.ConfigurationSingleton;
 import com.github.aureliano.edocs.common.exception.ServiceException;
 import com.github.aureliano.edocs.common.helper.ConfigurationHelper;
+import com.github.aureliano.edocs.common.persistence.DataPagination;
 import com.github.aureliano.edocs.common.persistence.PersistenceService;
+import com.github.aureliano.edocs.domain.dao.AttachmentDao;
 import com.github.aureliano.edocs.domain.dao.DocumentDao;
 import com.github.aureliano.edocs.domain.entity.Attachment;
 import com.github.aureliano.edocs.domain.entity.Category;
@@ -113,6 +116,38 @@ public class AttachmentServiceBeanTest {
 		Attachment attachment2 = this.bean.findAttachmentById(attachment1.getId());
 		
 		assertEquals(attachment1, attachment2);
+	}
+	
+	@Test
+	public void testFindAttachmentsByDocument() {
+		Document document = this.getValidDocument();
+		int totalAttachments = 4;
+		
+		for (byte i = 0; i < totalAttachments; i++) {
+			this.createAttachment(document);
+		}
+		
+		int totalOtherAttachments = 2;
+		for (byte i = 0; i < totalOtherAttachments; i++) {
+			this.createAttachment(this.getValidDocument());
+		}
+		
+		List<Attachment> res = this.bean.findAttachmentsByDocument(document);
+		assertEquals(totalAttachments, res.size());
+		
+		res = new AttachmentDao().search(
+				new DataPagination<Attachment>().withEntity(new Attachment()));
+		assertEquals((totalAttachments + totalOtherAttachments), res.size());
+	}
+	
+	private Attachment createAttachment(Document document) {
+		Attachment attachment = new Attachment()
+			.withName("attachment-dummy")
+			.withTemp(false)
+			.withUploadTime(new Date())
+			.withDocument(document);
+		
+		return this.bean.saveAttachment(attachment);
 	}
 	
 	private Document getValidDocument() {
