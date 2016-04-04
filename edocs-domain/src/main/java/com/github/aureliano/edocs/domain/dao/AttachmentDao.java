@@ -83,7 +83,8 @@ public class AttachmentDao extends AbstractDao<Attachment> {
 			ps.setString(1, attachment.getName());
 			ps.setDate(2, DataTypeHelper.toSqlDate(attachment.getUploadTime()));
 			ps.setBoolean(3, attachment.getTemp());
-			ps.setInt(4, attachment.getDocument().getId());
+			Integer documentId = (attachment.getDocument() != null) ? attachment.getDocument().getId() : null;
+			ps.setObject(4, documentId);
 			
 			if (attachment.getId() != null) {
 				ps.setInt(5, attachment.getId());
