@@ -20,7 +20,12 @@ public class UserServiceBean implements IServiceBean {
 	}
 	
 	public User createDatabaseUser(String name, String password) {
-		throw new ServiceException("Not implemented yet.");
+		User user = new User()
+			.withDbUser(true)
+			.withName(name)
+			.withPassword(password);
+		
+		return this.saveUser(user);
 	}
 	
 	public User saveUser(User user) {

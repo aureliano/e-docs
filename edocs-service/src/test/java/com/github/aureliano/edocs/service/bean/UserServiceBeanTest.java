@@ -114,4 +114,13 @@ public class UserServiceBeanTest {
 		
 		assertEquals(user1, user2);
 	}
+	
+	@Test
+	public void testCreateDatabaseUser() {
+		User user1 = this.bean.createDatabaseUser("constantinvs", "test123");
+		User user2 = this.bean.findUserById(user1.getId());
+		
+		assertEquals(user1, user2);
+		assertTrue(user1.getDbUser());
+	}
 }
