@@ -12,6 +12,7 @@ public class Attachment implements IEntity {
 	private Integer id;
 	private String name;
 	private Date uploadTime;
+	private Boolean temp;
 	private Document document;
 	
 	public Attachment() {}
@@ -43,6 +44,16 @@ public class Attachment implements IEntity {
 
 	public Attachment withUploadTime(Date uploadTime) {
 		this.uploadTime = uploadTime;
+		return this;
+	}
+	
+	@NotNull
+	public Boolean getTemp() {
+		return temp;
+	}
+	
+	public Attachment withTemp(Boolean temporary) {
+		this.temp = temporary;
 		return this;
 	}
 

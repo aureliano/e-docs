@@ -40,7 +40,6 @@ public class AttachmentDaoTest {
 			PersistenceService.instance().registerPersistenceManager(pm);
 		}
 		
-		
 		this.dao = new AttachmentDao();
 	}
 
@@ -54,6 +53,7 @@ public class AttachmentDaoTest {
 		this.checkInvalidName();
 		this.checkInvalidUploadTime();
 		this.checkInvalidDocument();
+		this.checkInvalidTemp();
 	}
 	
 	@Test
@@ -61,6 +61,7 @@ public class AttachmentDaoTest {
 		Attachment a = new Attachment()
 			.withDocument(this.getValidDocument())
 			.withName(this.getValidName())
+			.withTemp(false)
 			.withUploadTime(this.getToday());
 		
 		Attachment attachment = this.dao.save(a);
@@ -76,6 +77,7 @@ public class AttachmentDaoTest {
 		Attachment a = new Attachment()
 				.withDocument(this.getValidDocument())
 				.withName(name)
+				.withTemp(false)
 				.withUploadTime(this.getToday());
 		
 		Attachment attachment = this.dao.save(a);
@@ -99,6 +101,7 @@ public class AttachmentDaoTest {
 		Attachment a = new Attachment()
 				.withDocument(this.getValidDocument())
 				.withName(name)
+				.withTemp(false)
 				.withUploadTime(this.getToday());
 		
 		Attachment attachment = this.dao.save(a);
@@ -121,6 +124,7 @@ public class AttachmentDaoTest {
 		Attachment a = new Attachment()
 			.withDocument(this.getValidDocument())
 			.withName(this.getValidName())
+			.withTemp(false)
 			.withUploadTime(this.getToday());
 		
 		Attachment attachment1 = this.dao.save(a);
@@ -134,12 +138,14 @@ public class AttachmentDaoTest {
 		Attachment a = new Attachment()
 			.withDocument(this.getValidDocument())
 			.withName(this.getValidName())
+			.withTemp(false)
 			.withUploadTime(this.getToday());
 		
 		Attachment attachment1 = this.dao.save(a);
 		this.dao.save(new Attachment()
 			.withDocument(this.getValidDocument())
 			.withName("different-one")
+			.withTemp(false)
 			.withUploadTime(this.getToday()));
 		
 		List<Attachment> data = this.dao.search(new DataPagination<Attachment>().withEntity(a));
@@ -155,12 +161,14 @@ public class AttachmentDaoTest {
 		Attachment a = new Attachment()
 			.withDocument(this.getValidDocument())
 			.withName(this.getValidName())
+			.withTemp(false)
 			.withUploadTime(this.getToday());
 		
 		Attachment attachment1 = this.dao.save(a);
 		this.dao.save(new Attachment()
 			.withDocument(this.getValidDocument())
 			.withName("different-one")
+			.withTemp(false)
 			.withUploadTime(this.getToday()));
 		
 		List<Attachment> data = this.dao.search("select * from attachments where name = '" + this.getValidName() + "'");
@@ -174,6 +182,7 @@ public class AttachmentDaoTest {
 	private void checkInvalidName() {
 		Attachment a = new Attachment()
 			.withDocument(new Document())
+			.withTemp(false)
 			.withUploadTime(new Date());
 		this.validateContextMessage(a, "Expected to find a not empty text for field name.");
 		
@@ -187,13 +196,23 @@ public class AttachmentDaoTest {
 	private void checkInvalidUploadTime() {
 		Attachment a = new Attachment()
 			.withName(this.getValidName())
+			.withTemp(false)
 			.withDocument(new Document());
 		this.validateContextMessage(a, "Expected to find a not null value for field uploadTime.");
+	}
+
+	private void checkInvalidTemp() {
+		Attachment a = new Attachment()
+			.withName(this.getValidName())
+			.withUploadTime(new Date())
+			.withDocument(new Document());
+		this.validateContextMessage(a, "Expected to find a not null value for field temp.");
 	}
 
 	private void checkInvalidDocument() {
 		Attachment a = new Attachment()
 			.withName(this.getValidName())
+			.withTemp(false)
 			.withUploadTime(new Date());
 		this.validateContextMessage(a, "Expected to find a not null value for field document.");
 	}

@@ -52,7 +52,14 @@ public class AttachmentDao extends AbstractDao<Attachment> {
 			return this.search(sql.toString());
 		}
 		
+		if (entity.getTemp() != null) {
+			sql.append(" temp = " + entity.getTemp());
+		}
+		
 		if (entity.getDocument() != null) {
+			if (!sql.toString().endsWith("where")) {
+				sql.append(" and");
+			}
 			sql.append(" document_fk = " + entity.getDocument().getId());
 		}
 
@@ -75,10 +82,11 @@ public class AttachmentDao extends AbstractDao<Attachment> {
 			
 			ps.setString(1, attachment.getName());
 			ps.setDate(2, DataTypeHelper.toSqlDate(attachment.getUploadTime()));
-			ps.setInt(3, attachment.getDocument().getId());
+			ps.setBoolean(3, attachment.getTemp());
+			ps.setInt(4, attachment.getDocument().getId());
 			
 			if (attachment.getId() != null) {
-				ps.setInt(4, attachment.getId());
+				ps.setInt(5, attachment.getId());
 			}
 			
 			return ps;
@@ -103,6 +111,7 @@ public class AttachmentDao extends AbstractDao<Attachment> {
 				.withId(rs.getInt("id"))
 				.withName(rs.getString("name"))
 				.withUploadTime(DataTypeHelper.toJavaDate(rs.getDate("upload_time")))
+				.withTemp(rs.getBoolean("temp"))
 				.withDocument(new Document().withId(rs.getInt("document_fk")));
 			
 			data.add(e);
@@ -119,9 +128,9 @@ public class AttachmentDao extends AbstractDao<Attachment> {
 	
 	private String getSaveQuery(Attachment attachment) {
 		if (attachment.getId() == null) {
-			return "insert into attachments(name, upload_time, document_fk) values(?, ?, ?)";
+			return "insert into attachments(name, upload_time, temp, document_fk) values(?, ?, ?, ?)";
 		} else {
-			return "update attachments set name = ?, upload_time = ?, document_fk = ? where id = ?";
+			return "update attachments set name = ?, upload_time = ?, temp = ?, document_fk = ? where id = ?";
 		}
 	}
 }
