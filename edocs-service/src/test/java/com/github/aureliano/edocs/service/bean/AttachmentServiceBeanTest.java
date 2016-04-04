@@ -5,6 +5,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -15,7 +16,10 @@ import com.github.aureliano.edocs.common.config.AppConfiguration;
 import com.github.aureliano.edocs.common.config.ConfigurationSingleton;
 import com.github.aureliano.edocs.common.helper.ConfigurationHelper;
 import com.github.aureliano.edocs.common.persistence.PersistenceService;
+import com.github.aureliano.edocs.domain.dao.DocumentDao;
 import com.github.aureliano.edocs.domain.entity.Attachment;
+import com.github.aureliano.edocs.domain.entity.Category;
+import com.github.aureliano.edocs.domain.entity.Document;
 import com.github.aureliano.edocs.domain.helper.PersistenceHelper;
 import com.github.aureliano.edocs.service.EdocsServicePersistenceManager;
 
@@ -55,6 +59,29 @@ public class AttachmentServiceBeanTest {
 		assertEquals("new-temp-file", attachment.getName());
 		assertEquals(this.getToday(), this.removeTime(attachment.getUploadTime()));
 		assertTrue(attachment.getTemp());
+	}
+	
+	@Test
+	public void testSaveAttachment() {
+		Attachment attachment = new Attachment()
+			.withName("save-temp-file")
+			.withTemp(false)
+			.withUploadTime(new Date())
+			.withDocument(this.getValidDocument());
+		
+		Attachment attachment1 = this.bean.saveAttachment(attachment);
+		assertNotNull(attachment1.getId());
+		assertEquals(attachment.getName(), attachment1.getName());
+		assertEquals(attachment.getDocument().getId(), attachment1.getDocument().getId());
+		assertEquals(this.removeTime(attachment.getUploadTime()), this.removeTime(attachment1.getUploadTime()));
+	}
+	
+	private Document getValidDocument() {
+		Document d = new Document()
+			.withCategory(Category.AGREEMENT)
+			.withDescription("description")
+			.withAttachments(Arrays.asList(new Attachment()));
+		return new DocumentDao().save(d);
 	}
 
 	private Date getToday() {
