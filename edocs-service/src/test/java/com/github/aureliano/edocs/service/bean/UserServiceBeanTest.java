@@ -79,7 +79,7 @@ public class UserServiceBeanTest {
 			.withName("iacopo")
 			.withPassword("test123");
 		
-		User user1 = new UserDao().save(u); // TODO: Replace by service bean method.
+		User user1 = this.bean.saveUser(u);
 		User user2 = this.bean.findUserById(user1.getId());
 		
 		assertEquals(user1, user2);
@@ -88,13 +88,12 @@ public class UserServiceBeanTest {
 	@Test
 	public void testIsValidCredential() {
 		String password = "test123";
-		String hash = PasswordHashGenerator.generateFromAppConfiguration(password);
 		
 		User u = new User()
 			.withName("constantinvs")
-			.withPassword(hash);
+			.withPassword(password);
 		
-		new UserDao().save(u); // TODO: Replace by service bean method.
+		this.bean.saveUser(u);
 		boolean validated = this.bean.isValidCredential(u.getName(), null);
 		assertFalse(validated);
 		
@@ -103,5 +102,17 @@ public class UserServiceBeanTest {
 		
 		validated = this.bean.isValidCredential(u.getName(), password);
 		assertTrue(validated);
+	}
+	
+	@Test
+	public void testSave() {
+		User u = new User()
+			.withName("iacopo")
+			.withPassword("test123");
+		
+		User user1 = this.bean.saveUser(u);
+		User user2 = this.bean.findUserById(user1.getId());
+		
+		assertEquals(user1, user2);
 	}
 }

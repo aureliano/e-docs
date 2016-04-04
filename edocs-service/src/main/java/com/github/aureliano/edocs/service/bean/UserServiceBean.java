@@ -24,7 +24,11 @@ public class UserServiceBean implements IServiceBean {
 	}
 	
 	public User saveUser(User user) {
-		throw new ServiceException("Not implemented yet.");
+		String hash = PasswordHashGenerator.generateFromAppConfiguration(user.getPassword());
+		user.withPassword(hash);
+		User entity = this.executeInsideTransaction(user, true);
+		
+		return entity;
 	}
 	
 	public boolean isValidCredential(String name, String password) {
@@ -43,9 +47,23 @@ public class UserServiceBean implements IServiceBean {
 	}
 	
 	public void deleteUser(User user) {
+		this.executeInsideTransaction(user, false);
+	}
+	
+	public User findUserById(Integer id) {
+		return this.pm.find(User.class, id);
+	}
+	
+	private User executeInsideTransaction(User user, boolean saveAction) {
+		User entity = null;
+		
 		try {
 			this.pm.getConnection().setAutoCommit(false);
-			this.pm.delete(user);
+			if (saveAction) {
+				entity = this.pm.save(user);
+			} else {
+				this.pm.delete(user);
+			}
 			this.pm.getConnection().commit();
 		} catch (EDocsException ex) {
 			try {
@@ -56,9 +74,7 @@ public class UserServiceBean implements IServiceBean {
 		} catch (SQLException ex) {
 			throw new ServiceException(ex);
 		}
-	}
-	
-	public User findUserById(Integer id) {
-		return this.pm.find(User.class, id);
+		
+		return entity;
 	}
 }
