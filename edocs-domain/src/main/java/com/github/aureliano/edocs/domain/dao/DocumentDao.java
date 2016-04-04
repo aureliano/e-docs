@@ -57,6 +57,13 @@ public class DocumentDao extends AbstractDao<Document> {
 			if (entity.getCategory() != null) {
 				sql.append(" category = '" + entity.getCategory() + "'");
 			}
+			
+			if (entity.getOwner() != null) {
+				if (!sql.toString().endsWith("where")) {
+					sql.append(" and");
+				}
+				sql.append(" owner_fk = " + entity.getOwner().getId());
+			}
 		}
 
 		if (sql.toString().endsWith("where")) {
