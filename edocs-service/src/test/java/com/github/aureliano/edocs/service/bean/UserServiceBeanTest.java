@@ -18,7 +18,6 @@ import com.github.aureliano.edocs.common.persistence.PersistenceService;
 import com.github.aureliano.edocs.domain.dao.UserDao;
 import com.github.aureliano.edocs.domain.entity.User;
 import com.github.aureliano.edocs.domain.helper.PersistenceHelper;
-import com.github.aureliano.edocs.secure.hash.PasswordHashGenerator;
 import com.github.aureliano.edocs.service.EdocsServicePersistenceManager;
 
 public class UserServiceBeanTest {
