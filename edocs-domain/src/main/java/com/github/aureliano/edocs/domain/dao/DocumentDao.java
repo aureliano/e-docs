@@ -48,13 +48,19 @@ public class DocumentDao extends AbstractDao<Document> {
 		StringBuilder sql = new StringBuilder("select id, category, due_date, owner_fk from documents where");
 		Document entity = dataPagination.getEntity();
 		
-		if (entity.getId() != null) {
-			sql.append(" id = " + entity.getId());
-			return this.search(sql.toString());
+		if (entity != null) {
+			if (entity.getId() != null) {
+				sql.append(" id = " + entity.getId());
+				return this.search(sql.toString());
+			}
+			
+			if (entity.getCategory() != null) {
+				sql.append(" category = '" + entity.getCategory() + "'");
+			}
 		}
-		
-		if (entity.getCategory() != null) {
-			sql.append(" category = '" + entity.getCategory() + "'");
+
+		if (sql.toString().endsWith("where")) {
+			sql.delete(sql.indexOf("where"), sql.length() - 1);
 		}
 
 		super.setPaginationParams(dataPagination, sql);

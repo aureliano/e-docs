@@ -45,13 +45,19 @@ public class UserDao extends AbstractDao<User> {
 		StringBuilder sql = new StringBuilder("select * from users where");
 		User entity = dataPagination.getEntity();
 		
-		if (entity.getId() != null) {
-			sql.append(" id = " + entity.getId());
-			return this.search(sql.toString());
+		if (entity != null) {
+			if (entity.getId() != null) {
+				sql.append(" id = " + entity.getId());
+				return this.search(sql.toString());
+			}
+			
+			if (entity.getName() != null) {
+				sql.append(" name = '" + entity.getName() + "'");
+			}
 		}
-		
-		if (entity.getName() != null) {
-			sql.append(" name = '" + entity.getName() + "'");
+
+		if (sql.toString().endsWith("where")) {
+			sql.delete(sql.indexOf("where"), sql.length() - 1);
 		}
 		
 		super.setPaginationParams(dataPagination, sql);

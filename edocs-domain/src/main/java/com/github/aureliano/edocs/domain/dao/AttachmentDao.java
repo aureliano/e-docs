@@ -47,22 +47,28 @@ public class AttachmentDao extends AbstractDao<Attachment> {
 		StringBuilder sql = new StringBuilder("select * from attachments where");
 		Attachment entity = dataPagination.getEntity();
 		
-		if (entity.getId() != null) {
-			sql.append(" id = " + entity.getId());
-			return this.search(sql.toString());
-		}
-		
-		if (entity.getTemp() != null) {
-			sql.append(" temp = " + entity.getTemp());
-		}
-		
-		if (entity.getDocument() != null) {
-			if (!sql.toString().endsWith("where")) {
-				sql.append(" and");
+		if (entity != null) {
+			if (entity.getId() != null) {
+				sql.append(" id = " + entity.getId());
+				return this.search(sql.toString());
 			}
-			sql.append(" document_fk = " + entity.getDocument().getId());
+			
+			if (entity.getTemp() != null) {
+				sql.append(" temp = " + entity.getTemp());
+			}
+			
+			if (entity.getDocument() != null) {
+				if (!sql.toString().endsWith("where")) {
+					sql.append(" and");
+				}
+				sql.append(" document_fk = " + entity.getDocument().getId());
+			}
 		}
 
+		if (sql.toString().endsWith("where")) {
+			sql.delete(sql.indexOf("where"), sql.length() - 1);
+		}
+		
 		super.setPaginationParams(dataPagination, sql);
 		return this.search(sql.toString());
 	}
