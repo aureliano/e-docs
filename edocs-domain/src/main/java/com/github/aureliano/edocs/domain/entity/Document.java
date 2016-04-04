@@ -16,6 +16,7 @@ public class Document implements IEntity {
 	private Category category;
 	private String description;
 	private Date dueDate;
+	private Boolean deleted;
 	private User owner;
 	private List<Attachment> attachments;
 	
@@ -59,6 +60,16 @@ public class Document implements IEntity {
 
 	public Document withDueDate(Date dueDate) {
 		this.dueDate = dueDate;
+		return this;
+	}
+	
+	@NotNull
+	public Boolean getDeleted() {
+		return deleted;
+	}
+	
+	public Document withDeleted(Boolean deleted) {
+		this.deleted = deleted;
 		return this;
 	}
 	

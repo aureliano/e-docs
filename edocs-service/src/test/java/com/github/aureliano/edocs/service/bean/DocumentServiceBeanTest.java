@@ -90,6 +90,7 @@ public class DocumentServiceBeanTest {
 			.withCategory(Category.AGREEMENT)
 			.withDescription("description")
 			.withOwner(owner)
+			.withDeleted(false)
 			.withAttachments(Arrays.asList(new Attachment()));
 		return new DocumentDao().save(d);
 	}

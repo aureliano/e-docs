@@ -227,6 +227,7 @@ public class AttachmentDaoTest {
 		Document d = new Document()
 			.withCategory(Category.AGREEMENT)
 			.withDescription("description")
+			.withDeleted(false)
 			.withAttachments(Arrays.asList(new Attachment()));
 		return new DocumentDao().save(d);
 	}

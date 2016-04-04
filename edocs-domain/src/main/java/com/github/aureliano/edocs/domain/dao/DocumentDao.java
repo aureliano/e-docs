@@ -45,7 +45,7 @@ public class DocumentDao extends AbstractDao<Document> {
 
 	@Override
 	public List<Document> search(DataPagination<Document> dataPagination) {
-		StringBuilder sql = new StringBuilder("select id, category, due_date, owner_fk from documents where");
+		StringBuilder sql = new StringBuilder("select id, category, due_date, deleted, owner_fk from documents where");
 		Document entity = dataPagination.getEntity();
 		
 		if (entity != null) {
@@ -56,6 +56,13 @@ public class DocumentDao extends AbstractDao<Document> {
 			
 			if (entity.getCategory() != null) {
 				sql.append(" category = '" + entity.getCategory() + "'");
+			}
+			
+			if (entity.getDeleted() != null) {
+				if (!sql.toString().endsWith("where")) {
+					sql.append(" and");
+				}
+				sql.append(" deleted = " + entity.getDeleted());
 			}
 			
 			if (entity.getOwner() != null) {
@@ -90,10 +97,11 @@ public class DocumentDao extends AbstractDao<Document> {
 			ps.setString(1, document.getCategory().toString());
 			ps.setString(2, document.getDescription());
 			ps.setDate(3, DataTypeHelper.toSqlDate(document.getDueDate()));
-			ps.setObject(4, ((document.getOwner() == null) ? null : document.getOwner().getId()));
+			ps.setBoolean(4, document.getDeleted());
+			ps.setObject(5, ((document.getOwner() == null) ? null : document.getOwner().getId()));
 			
 			if (document.getId() != null) {
-				ps.setInt(5, document.getId());
+				ps.setInt(6, document.getId());
 			}
 			
 			return ps;
@@ -118,9 +126,10 @@ public class DocumentDao extends AbstractDao<Document> {
 				.withId(rs.getInt("id"))
 				.withCategory(Category.valueOf(rs.getString("category")))
 				.withDueDate(DataTypeHelper.toJavaDate(rs.getDate("due_date")))
+				.withDeleted(rs.getBoolean("deleted"))
 				.withOwner(new User().withId(rs.getInt("owner_fk")));
 			
-			if (rs.getMetaData().getColumnCount() == 5) {
+			if (rs.getMetaData().getColumnCount() == 6) {
 				e.withDescription(rs.getString("description"));
 			}
 			
@@ -138,9 +147,9 @@ public class DocumentDao extends AbstractDao<Document> {
 	
 	private String getSaveQuery(Document document) {
 		if (document.getId() == null) {
-			return "insert into documents(category, description, due_date, owner_fk) values(?, ?, ?, ?)";
+			return "insert into documents(category, description, due_date, deleted, owner_fk) values(?, ?, ?, ?, ?)";
 		} else {
-			return "update documents set category = ?, description = ?, due_date = ?, owner_fk = ? where id = ?";
+			return "update documents set category = ?, description = ?, due_date = ?, deleted = ?, owner_fk = ? where id = ?";
 		}
 	}
 }

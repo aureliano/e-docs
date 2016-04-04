@@ -12,6 +12,7 @@ CREATE TABLE documents (
 	category VARCHAR(25) NOT NULL,
 	description VARCHAR(1000),
 	due_date DATE,
+	deleted BOOLEAN NOT NULL,
 	owner_fk INTEGER,
 	CONSTRAINT documents_pk PRIMARY KEY (id),
 	CONSTRAINT document_owner_fk FOREIGN KEY (owner_fk) REFERENCES users(id)
