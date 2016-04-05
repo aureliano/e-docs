@@ -46,7 +46,7 @@ public class DocumentServiceBean implements IServiceBean {
 		ServiceHelper.executeActionInsideTransaction(entity, true);
 	}
 	
-	public void physicalDeletion(Document document) {
+	public void deletePhysically(Document document) {
 		Document entity = this.findDocumentById(document.getId());
 		if (!entity.getDeleted()) {
 			throw new ServiceException("You cannot delete a document before a logical deletion.");

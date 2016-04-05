@@ -87,11 +87,11 @@ public class DocumentServiceBeanTest {
 	@Test(expected = ServiceException.class)
 	public void testPhysicalDeletionError() {
 		Document document = this.createDocumentSample(false);
-		this.bean.physicalDeletion(document);
+		this.bean.deletePhysically(document);
 	}
 	
 	@Test
-	public void testPhysicalDeletion() throws SQLException {
+	public void testDeletePhysically() throws SQLException {
 		Document document = this.createDocumentSample(true);
 		int totalAttachments = 5;
 		
@@ -107,7 +107,7 @@ public class DocumentServiceBeanTest {
 		rs.next();
 		assertEquals(totalAttachments, rs.getInt(1));
 		
-		this.bean.physicalDeletion(document);
+		this.bean.deletePhysically(document);
 		rs = PersistenceHelper.instance().executeQuery("select count(id) from documents");
 		rs.next();
 		assertEquals(0, rs.getInt(1));
