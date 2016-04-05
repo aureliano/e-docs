@@ -76,4 +76,42 @@ public class DocumentServiceBean implements IServiceBean {
 			throw new ServiceException(ex);
 		}
 	}
+	
+	public Document createDocument(Document document) {
+		Document entity = null;
+		this.applyValidation(document);
+		
+		try {
+			this.pm.getConnection().setAutoCommit(false);
+			
+			AttachmentDao attachmentDao = new AttachmentDao();
+			for (Attachment attachment : document.getAttachments()) {
+				attachmentDao.save(attachment.withDocument(document).withTemp(false));
+			}
+			
+			entity = new DocumentDao().save(document.withDeleted(false));
+			this.pm.getConnection().commit();
+		} catch (EDocsException ex) {
+			try {
+				pm.getConnection().rollback();
+			} catch (SQLException ex2) {
+				throw new ServiceException(ex2);
+			}
+			
+			logger.severe(ex.getMessage());
+			logger.warning("Transaction rolled back!");
+		} catch (SQLException ex) {
+			throw new ServiceException(ex);
+		}
+		
+		return entity;
+	}
+	
+	private void applyValidation(Document document) {
+		if (document.getId() != null) {
+			throw new ServiceException("Document id must be null.");
+		} else if ((document.getAttachments() == null) || (document.getAttachments().isEmpty())) {
+			throw new ServiceException("Document must have at least one file.");
+		}
+	}
 }

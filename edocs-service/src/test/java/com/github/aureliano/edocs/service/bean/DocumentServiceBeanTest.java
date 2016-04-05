@@ -117,6 +117,57 @@ public class DocumentServiceBeanTest {
 		assertEquals(0, rs.getInt(1));
 	}
 	
+	@Test(expected = ServiceException.class)
+	public void testCreateDocumentErrorIdNotNull() {
+		Document document = new Document()
+			.withId(1)
+			.withAttachments(Arrays.asList(new Attachment()));
+		this.bean.createDocument(document);
+	}
+	
+	@Test(expected = ServiceException.class)
+	public void testCreateDocumentErrorAttachmentsNull() {
+		Document document = new Document()
+			.withId(null)
+			.withAttachments(null);
+		this.bean.createDocument(document);
+	}
+	
+	@Test(expected = ServiceException.class)
+	public void testCreateDocumentErrorAttachmentsEmpty() {
+		Document document = new Document()
+			.withId(null);
+		this.bean.createDocument(document);
+	}
+	
+	@Test
+	public void testCreateDocument() throws SQLException {
+		Document document = new Document()
+			.withCategory(Category.AGREEMENT)
+			.withDescription("description")
+			.withOwner(this.createUserSample())
+			.withDeleted(false);
+		
+		int totalAttachments = 5;
+		AttachmentServiceBean attachmentServiceBean = new AttachmentServiceBean();
+		for (byte i = 0; i < totalAttachments; i++) {
+			document.attach(attachmentServiceBean.createTemporaryAttachment("test-" + (i + 1)));
+		}
+		
+		document = this.bean.createDocument(document);
+		assertEquals(document, this.bean.findDocumentById(document.getId()));
+		assertFalse(document.getDeleted());
+		
+		ResultSet rs = PersistenceHelper.instance().executeQuery("select count(id) from attachments");
+		rs.next();
+		assertEquals(totalAttachments, rs.getInt(1));
+		
+		List<Attachment> attachments = attachmentServiceBean.findAttachmentsByDocument(document);
+		for (Attachment attachment : attachments) {
+			assertFalse(attachment.getTemp());
+		}
+	}
+	
 	private Document createDocumentSample() {
 		return this.createDocumentSample(this.createUserSample("mariae"));
 	}
