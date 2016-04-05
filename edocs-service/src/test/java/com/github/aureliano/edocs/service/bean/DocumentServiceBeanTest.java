@@ -224,6 +224,20 @@ public class DocumentServiceBeanTest {
 		assertEquals(expectedSize, savedDocument.getAttachments().size());
 	}
 	
+	@Test
+	public void testUndeleteLogically() throws SQLException {
+		Document document = this.createDocumentSample(true);
+		assertTrue(document.getDeleted());
+		
+		Integer id = document.getId();
+		document = this.bean.findDocumentById(id);
+		assertTrue(document.getDeleted());
+		
+		this.bean.undeleteLogically(document);
+		document = this.bean.findDocumentById(id);
+		assertFalse(document.getDeleted());
+	}
+	
 	private Document prepareDocumentToSave(int totalAttachments) {
 		Document document = new Document()
 			.withCategory(Category.AGREEMENT)

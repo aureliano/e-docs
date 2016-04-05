@@ -144,6 +144,17 @@ public class DocumentServiceBean implements IServiceBean {
 		return entity;
 	}
 	
+	public void undeleteLogically(Document document) {
+		Document entity = this.findDocumentById(document.getId());
+		if (!entity.getDeleted()) {
+			logger.warning("Ignoring logical undeletion of document " + entity.getId() + " because it is not delete.");
+			return;
+		}
+		
+		entity.withDeleted(false);
+		ServiceHelper.executeActionInsideTransaction(entity, true);
+	}
+	
 	private void validateDocumentCreateAction(Document document) {
 		if (document.getId() != null) {
 			throw new ServiceException("Document id must be null.");
