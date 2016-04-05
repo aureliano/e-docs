@@ -4,8 +4,10 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import org.junit.Assert;
@@ -14,6 +16,7 @@ import org.junit.Test;
 
 import com.github.aureliano.edocs.common.config.AppConfiguration;
 import com.github.aureliano.edocs.common.config.ConfigurationSingleton;
+import com.github.aureliano.edocs.common.exception.ServiceException;
 import com.github.aureliano.edocs.common.helper.ConfigurationHelper;
 import com.github.aureliano.edocs.common.persistence.DataPagination;
 import com.github.aureliano.edocs.common.persistence.PersistenceService;
@@ -98,16 +101,57 @@ public class DocumentServiceBeanTest {
 		assertTrue(document.getDeleted());
 	}
 	
+	@Test(expected = ServiceException.class)
+	public void testPhysicalDeletionError() {
+		Document document = this.createDocumentSample(false);
+		this.bean.physicalDeletion(document);
+	}
+	
+	@Test
+	public void testPhysicalDeletion() throws SQLException {
+		Document document = this.createDocumentSample(true);
+		int totalAttachments = 5;
+		
+		for (byte i = 0; i < totalAttachments; i++) {
+			this.createAttachment(document);
+		}
+		
+		ResultSet rs = PersistenceHelper.instance().executeQuery("select count(id) from documents");
+		rs.next();
+		assertEquals(1, rs.getInt(1));
+		
+		rs = PersistenceHelper.instance().executeQuery("select count(id) from attachments");
+		rs.next();
+		assertEquals(totalAttachments, rs.getInt(1));
+		
+		this.bean.physicalDeletion(document);
+		rs = PersistenceHelper.instance().executeQuery("select count(id) from documents");
+		rs.next();
+		assertEquals(0, rs.getInt(1));
+		
+		rs = PersistenceHelper.instance().executeQuery("select count(id) from attachments");
+		rs.next();
+		assertEquals(0, rs.getInt(1));
+	}
+	
 	private Document createDocumentSample() {
 		return this.createDocumentSample(this.createUserSample("mariae"));
 	}
 	
+	private Document createDocumentSample(boolean deleted) {
+		return this.createDocumentSample(this.createUserSample("mariae"), deleted);
+	}
+	
 	private Document createDocumentSample(User owner) {
+		return this.createDocumentSample(owner, false);
+	}
+	
+	private Document createDocumentSample(User owner, boolean deleted) {
 		Document d = new Document()
 			.withCategory(Category.AGREEMENT)
 			.withDescription("description")
 			.withOwner(owner)
-			.withDeleted(false)
+			.withDeleted(deleted)
 			.withAttachments(Arrays.asList(new Attachment()));
 		
 		Document document = new DocumentDao().save(d);
@@ -129,5 +173,15 @@ public class DocumentServiceBeanTest {
 			.withName("maria")
 			.withPassword("test123");
 		return new UserDao().save(user);
+	}
+	
+	private Attachment createAttachment(Document document) {
+		Attachment attachment = new Attachment()
+			.withName("attachment-dummy")
+			.withTemp(false)
+			.withUploadTime(new Date())
+			.withDocument(document);
+		
+		return new AttachmentServiceBean().saveAttachment(attachment);
 	}
 }
