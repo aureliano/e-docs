@@ -6,8 +6,6 @@ import static org.junit.Assert.assertTrue;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -17,10 +15,9 @@ import org.junit.Test;
 import com.github.aureliano.edocs.common.exception.ServiceException;
 import com.github.aureliano.edocs.common.persistence.DataPagination;
 import com.github.aureliano.edocs.domain.dao.AttachmentDao;
-import com.github.aureliano.edocs.domain.dao.DocumentDao;
 import com.github.aureliano.edocs.domain.entity.Attachment;
-import com.github.aureliano.edocs.domain.entity.Category;
 import com.github.aureliano.edocs.domain.entity.Document;
+import com.github.aureliano.edocs.domain.entity.User;
 import com.github.aureliano.edocs.domain.helper.PersistenceHelper;
 import com.github.aureliano.edocs.service.TestHelper;
 
@@ -44,7 +41,7 @@ public class AttachmentServiceBeanTest {
 		
 		assertNotNull(attachment.getId());
 		assertEquals("new-temp-file", attachment.getName());
-		assertEquals(this.getToday(), this.removeTime(attachment.getUploadTime()));
+		assertEquals(TestHelper.getToday(), TestHelper.removeTime(attachment.getUploadTime()));
 		assertTrue(attachment.getTemp());
 	}
 	
@@ -54,13 +51,16 @@ public class AttachmentServiceBeanTest {
 			.withName("save-file")
 			.withTemp(false)
 			.withUploadTime(new Date())
-			.withDocument(this.getValidDocument());
+			.withDocument(TestHelper.createDocumentSample());
 		
 		Attachment attachment1 = this.bean.saveAttachment(attachment);
 		assertNotNull(attachment1.getId());
 		assertEquals(attachment.getName(), attachment1.getName());
 		assertEquals(attachment.getDocument().getId(), attachment1.getDocument().getId());
-		assertEquals(this.removeTime(attachment.getUploadTime()), this.removeTime(attachment1.getUploadTime()));
+		assertEquals(
+			TestHelper.removeTime(attachment.getUploadTime()),
+			TestHelper.removeTime(attachment1.getUploadTime())
+		);
 	}
 	
 	@Test(expected = ServiceException.class)
@@ -69,7 +69,7 @@ public class AttachmentServiceBeanTest {
 			.withName("delete-non-temp-file")
 			.withTemp(false)
 			.withUploadTime(new Date())
-			.withDocument(this.getValidDocument());
+			.withDocument(TestHelper.createDocumentSample());
 		
 		Attachment attachment1 = this.bean.saveAttachment(attachment);
 		this.bean.deleteTempAttachment(attachment1);
@@ -102,16 +102,17 @@ public class AttachmentServiceBeanTest {
 	
 	@Test
 	public void testFindAttachmentsByDocument() {
-		Document document = this.getValidDocument();
+		Document document = TestHelper.createDocumentSample();
 		int totalAttachments = 4;
 		
 		for (byte i = 0; i < totalAttachments; i++) {
-			this.createAttachment(document);
+			TestHelper.createAttachment(document);
 		}
 		
 		int totalOtherAttachments = 2;
+		User owner = TestHelper.createUserSample("user-test");
 		for (byte i = 0; i < totalOtherAttachments; i++) {
-			this.createAttachment(this.getValidDocument());
+			TestHelper.createAttachment(TestHelper.createDocumentSample(owner));
 		}
 		
 		List<Attachment> res = this.bean.findAttachmentsByDocument(document);
@@ -120,41 +121,5 @@ public class AttachmentServiceBeanTest {
 		res = new AttachmentDao().search(
 				new DataPagination<Attachment>().withEntity(new Attachment()));
 		assertEquals((totalAttachments + totalOtherAttachments), res.size());
-	}
-	
-	private Attachment createAttachment(Document document) {
-		Attachment attachment = new Attachment()
-			.withName("attachment-dummy")
-			.withTemp(false)
-			.withUploadTime(new Date())
-			.withDocument(document);
-		
-		return this.bean.saveAttachment(attachment);
-	}
-	
-	private Document getValidDocument() {
-		Document d = new Document()
-			.withCategory(Category.AGREEMENT)
-			.withDescription("description")
-			.withDeleted(false)
-			.withAttachments(Arrays.asList(new Attachment()));
-		return new DocumentDao().save(d);
-	}
-
-	private Date getToday() {
-		Calendar c = Calendar.getInstance();
-		return this.removeTime(c.getTime());
-	}
-	
-	private Date removeTime(Date date) {
-		Calendar c = Calendar.getInstance();
-		c.setTime(date);
-		
-		c.set(Calendar.HOUR_OF_DAY, 0);
-		c.set(Calendar.MINUTE, 0);
-		c.set(Calendar.SECOND, 0);
-		c.set(Calendar.MILLISECOND, 0);
-		
-		return c.getTime();
 	}
 }

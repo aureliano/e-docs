@@ -8,18 +8,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import com.github.aureliano.edocs.common.exception.ServiceException;
 import com.github.aureliano.edocs.common.persistence.DataPagination;
-import com.github.aureliano.edocs.common.persistence.PersistenceService;
 import com.github.aureliano.edocs.domain.dao.DocumentDao;
-import com.github.aureliano.edocs.domain.dao.UserDao;
 import com.github.aureliano.edocs.domain.entity.Attachment;
 import com.github.aureliano.edocs.domain.entity.Category;
 import com.github.aureliano.edocs.domain.entity.Document;
@@ -43,7 +39,7 @@ public class DocumentServiceBeanTest {
 	
 	@Test
 	public void testFindDocumentById() {
-		Document document1 = this.createDocumentSample();
+		Document document1 = TestHelper.createDocumentSample();
 		Document document2 = this.bean.findDocumentById(document1.getId());
 		
 		assertEquals(document1, document2);
@@ -51,16 +47,16 @@ public class DocumentServiceBeanTest {
 	
 	@Test
 	public void testFindAttachmentsByDocument() {
-		User owner = this.createUserSample();
+		User owner = TestHelper.createUserSample();
 		int totalDocuments = 4;
 		
 		for (byte i = 0; i < totalDocuments; i++) {
-			this.createDocumentSample(owner);
+			TestHelper.createDocumentSample(owner);
 		}
 		
 		int totalOtherDocuments = 2;
 		for (byte i = 0; i < totalOtherDocuments; i++) {
-			this.createDocumentSample(null);
+			TestHelper.createDocumentSample(null);
 		}
 		
 		List<Document> res = this.bean.findDocumentsByOwner(owner);
@@ -73,7 +69,7 @@ public class DocumentServiceBeanTest {
 	
 	@Test
 	public void testDeleteLogically() throws SQLException {
-		Document document = this.createDocumentSample();
+		Document document = TestHelper.createDocumentSample();
 		assertFalse(document.getDeleted());
 		
 		Integer id = document.getId();
@@ -87,17 +83,17 @@ public class DocumentServiceBeanTest {
 	
 	@Test(expected = ServiceException.class)
 	public void testPhysicalDeletionError() {
-		Document document = this.createDocumentSample(false);
+		Document document = TestHelper.createDocumentSample(false);
 		this.bean.deletePhysically(document);
 	}
 	
 	@Test
 	public void testDeletePhysically() throws SQLException {
-		Document document = this.createDocumentSample(true);
+		Document document = TestHelper.createDocumentSample(true);
 		int totalAttachments = 5;
 		
 		for (byte i = 0; i < totalAttachments; i++) {
-			this.createAttachment(document);
+			TestHelper.createAttachment(document);
 		}
 		
 		ResultSet rs = PersistenceHelper.instance().executeQuery("select count(id) from documents");
@@ -146,7 +142,7 @@ public class DocumentServiceBeanTest {
 		Document document = new Document()
 			.withCategory(Category.AGREEMENT)
 			.withDescription("description")
-			.withOwner(this.createUserSample())
+			.withOwner(TestHelper.createUserSample())
 			.withDeleted(false);
 		
 		int totalAttachments = 5;
@@ -186,7 +182,7 @@ public class DocumentServiceBeanTest {
 	
 	@Test(expected = ServiceException.class)
 	public void testSaveDocumentAttachmentError() {
-		Document document = this.prepareDocumentToSave(5);
+		Document document = TestHelper.prepareDocumentToSave(5);
 		document = this.bean.createDocument(document);
 		document.withAttachments(new AttachmentServiceBean().findAttachmentsByDocument(document));
 		
@@ -196,7 +192,7 @@ public class DocumentServiceBeanTest {
 	@Test
 	public void testSaveDocument() {
 		int totalAttachments = 5;
-		Document document = this.prepareDocumentToSave(totalAttachments);
+		Document document = TestHelper.prepareDocumentToSave(totalAttachments);
 		document = this.bean.createDocument(document);
 		
 		AttachmentServiceBean attachmentServiceBean = new AttachmentServiceBean();
@@ -226,7 +222,7 @@ public class DocumentServiceBeanTest {
 	
 	@Test
 	public void testUndeleteLogically() throws SQLException {
-		Document document = this.createDocumentSample(true);
+		Document document = TestHelper.createDocumentSample(true);
 		assertTrue(document.getDeleted());
 		
 		Integer id = document.getId();
@@ -236,71 +232,5 @@ public class DocumentServiceBeanTest {
 		this.bean.undeleteLogically(document);
 		document = this.bean.findDocumentById(id);
 		assertFalse(document.getDeleted());
-	}
-	
-	private Document prepareDocumentToSave(int totalAttachments) {
-		Document document = new Document()
-			.withCategory(Category.AGREEMENT)
-			.withDescription("description")
-			.withOwner(this.createUserSample())
-			.withDeleted(false);
-		
-		AttachmentServiceBean attachmentServiceBean = new AttachmentServiceBean();
-		for (byte i = 0; i < totalAttachments; i++) {
-			document.attach(attachmentServiceBean.createTemporaryAttachment("test-" + (i + 1)));
-		}
-		
-		return document;
-	}
-	
-	private Document createDocumentSample() {
-		return this.createDocumentSample(this.createUserSample("mariae"));
-	}
-	
-	private Document createDocumentSample(boolean deleted) {
-		return this.createDocumentSample(this.createUserSample("mariae"), deleted);
-	}
-	
-	private Document createDocumentSample(User owner) {
-		return this.createDocumentSample(owner, false);
-	}
-	
-	private Document createDocumentSample(User owner, boolean deleted) {
-		Document d = new Document()
-			.withCategory(Category.AGREEMENT)
-			.withDescription("description")
-			.withOwner(owner)
-			.withDeleted(deleted)
-			.withAttachments(Arrays.asList(new Attachment()));
-		
-		Document document = new DocumentDao().save(d);
-		try {
-			PersistenceService.instance().getPersistenceManager().getConnection().commit();
-		} catch (SQLException ex) {
-			Assert.fail(ex.getMessage());
-		}
-		return document;
-	}
-	
-	private User createUserSample() {
-		return this.createUserSample("maria");
-	}
-	
-	private User createUserSample(String name) {
-		User user = new User()
-			.withDbUser(false)
-			.withName("maria")
-			.withPassword("test123");
-		return new UserDao().save(user);
-	}
-	
-	private Attachment createAttachment(Document document) {
-		Attachment attachment = new Attachment()
-			.withName("attachment-dummy")
-			.withTemp(false)
-			.withUploadTime(new Date())
-			.withDocument(document);
-		
-		return new AttachmentServiceBean().saveAttachment(attachment);
 	}
 }
