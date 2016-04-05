@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.github.aureliano.edocs.annotation.validation.AssertTrue;
 import com.github.aureliano.edocs.annotation.validation.NotEmpty;
 import com.github.aureliano.edocs.annotation.validation.NotNull;
 import com.github.aureliano.edocs.annotation.validation.Size;
@@ -94,11 +93,6 @@ public class Document implements IEntity {
 	public Document attach(Attachment attachment) {
 		this.attachments.add(attachment);
 		return this;
-	}
-	
-	@AssertTrue
-	public boolean hasAttachment() {
-		return (this.attachments == null) ? false : !this.attachments.isEmpty();
 	}
 
 	@Override

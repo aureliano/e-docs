@@ -5,7 +5,6 @@ import static org.junit.Assert.assertNotNull;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -20,7 +19,6 @@ import com.github.aureliano.edocs.common.persistence.DataPagination;
 import com.github.aureliano.edocs.common.persistence.IDao;
 import com.github.aureliano.edocs.common.persistence.IPersistenceManager;
 import com.github.aureliano.edocs.common.persistence.PersistenceService;
-import com.github.aureliano.edocs.domain.entity.Attachment;
 import com.github.aureliano.edocs.domain.entity.Category;
 import com.github.aureliano.edocs.domain.entity.Document;
 import com.github.aureliano.edocs.domain.entity.User;
@@ -55,7 +53,6 @@ public class DocumentDaoTest {
 		this.checkInvalidCategory();
 		this.checkInvalidDescription();
 		this.checkInvalidDeleted();
-		this.checkInvalidAttachments();
 	}
 	
 	@Test
@@ -63,7 +60,6 @@ public class DocumentDaoTest {
 		Document d = new Document()
 			.withCategory(Category.AGREEMENT)
 			.withDescription(this.getValidDescription())
-			.withAttachments(Arrays.asList(new Attachment()))
 			.withDueDate(this.getToday())
 			.withDeleted(false)
 			.withOwner(this.getValidUser());
@@ -87,8 +83,7 @@ public class DocumentDaoTest {
 		Document d = new Document()
 			.withCategory(category)
 			.withDescription(this.getValidDescription())
-			.withDeleted(false)
-			.withAttachments(Arrays.asList(new Attachment()));
+			.withDeleted(false);
 		
 		Document document = this.dao.save(d);
 		
@@ -111,8 +106,7 @@ public class DocumentDaoTest {
 		Document d = new Document()
 			.withCategory(category)
 			.withDescription(this.getValidDescription())
-			.withDeleted(false)
-			.withAttachments(Arrays.asList(new Attachment()));
+			.withDeleted(false);
 		
 		Document document = this.dao.save(d);
 		
@@ -134,8 +128,7 @@ public class DocumentDaoTest {
 		Document d = new Document()
 			.withCategory(Category.INVOICE)
 			.withDescription(this.getValidDescription())
-			.withDeleted(false)
-			.withAttachments(Arrays.asList(new Attachment()));
+			.withDeleted(false);
 		
 		Document doc1 = this.dao.save(d);
 		Document doc2 = this.dao.find(doc1.getId());
@@ -148,15 +141,13 @@ public class DocumentDaoTest {
 		Document d = new Document()
 			.withCategory(Category.AGREEMENT)
 			.withDescription(this.getValidDescription())
-			.withDeleted(false)
-			.withAttachments(Arrays.asList(new Attachment()));
+			.withDeleted(false);
 		
 		Document doc1 = this.dao.save(d);
 		this.dao.save(new Document()
 			.withCategory(Category.CHECK)
 			.withDescription(this.getValidDescription())
-			.withDeleted(false)
-			.withAttachments(Arrays.asList(new Attachment())));
+			.withDeleted(false));
 		
 		List<Document> data = this.dao.search(new DataPagination<Document>().withEntity(d));
 		
@@ -171,15 +162,13 @@ public class DocumentDaoTest {
 		Document d = new Document()
 			.withCategory(Category.AGREEMENT)
 			.withDescription(this.getValidDescription())
-			.withDeleted(false)
-			.withAttachments(Arrays.asList(new Attachment()));
+			.withDeleted(false);
 		
 		Document doc1 = this.dao.save(d);
 		this.dao.save(new Document()
 			.withCategory(Category.CHECK)
 			.withDeleted(false)
-			.withDescription(this.getValidDescription())
-			.withAttachments(Arrays.asList(new Attachment())));
+			.withDescription(this.getValidDescription()));
 		
 		List<Document> data = this.dao.search("select * from documents where category = 'AGREEMENT'");
 		
@@ -192,16 +181,14 @@ public class DocumentDaoTest {
 	private void checkInvalidCategory() {
 		Document d = new Document()
 			.withDescription(this.getValidDescription())
-			.withDeleted(false)
-			.withAttachments(Arrays.asList(new Attachment()));
+			.withDeleted(false);
 		this.validateContextMessage(d, "Expected to find a not null value for field category.");
 	}
 
 	private void checkInvalidDescription() {
 		Document d = new Document()
 			.withCategory(Category.AGREEMENT)
-			.withDeleted(false)
-			.withAttachments(Arrays.asList(new Attachment()));
+			.withDeleted(false);
 		this.validateContextMessage(d, "Expected to find a not empty text for field description.");
 		
 		d.withDescription("1");
@@ -214,17 +201,8 @@ public class DocumentDaoTest {
 	private void checkInvalidDeleted() {
 		Document d = new Document()
 			.withCategory(Category.AGREEMENT)
-			.withAttachments(Arrays.asList(new Attachment()))
 			.withDescription(this.getValidDescription());
 		this.validateContextMessage(d, "Expected to find a not null value for field deleted.");
-	}
-	
-	private void checkInvalidAttachments() {
-		Document d = new Document()
-			.withCategory(Category.AGREEMENT)
-			.withDeleted(false)
-			.withDescription(this.getValidDescription());
-		this.validateContextMessage(d, "Expected field hasAttachment to be true but got false.");
 	}
 
 	private String getValidDescription() {
