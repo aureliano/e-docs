@@ -1,6 +1,7 @@
 package com.github.aureliano.edocs.service.bean;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 import com.github.aureliano.edocs.common.persistence.DataPagination;
 import com.github.aureliano.edocs.common.persistence.IPersistenceManager;
@@ -11,6 +12,8 @@ import com.github.aureliano.edocs.service.helper.ServiceHelper;
 
 public class DocumentServiceBean implements IServiceBean {
 
+	private static final Logger logger = Logger.getLogger(DocumentServiceBean.class.getName());
+	
 	private IPersistenceManager pm;
 	
 	public DocumentServiceBean() {
@@ -27,7 +30,13 @@ public class DocumentServiceBean implements IServiceBean {
 	}
 	
 	public void logicalDeletion(Document document) {
-		Document entity = this.findDocumentById(document.getId()).withDeleted(true);
+		Document entity = this.findDocumentById(document.getId());
+		if (entity.getDeleted()) {
+			logger.warning("Ignoring logical deletion of document " + entity.getId() + " because it is already logically deleted.");
+			return;
+		}
+		
+		entity.withDeleted(true);
 		ServiceHelper.executeActionInsideTransaction(entity, true);
 	}
 }
