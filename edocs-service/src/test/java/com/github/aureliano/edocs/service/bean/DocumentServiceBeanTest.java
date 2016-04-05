@@ -14,10 +14,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.github.aureliano.edocs.common.config.AppConfiguration;
-import com.github.aureliano.edocs.common.config.ConfigurationSingleton;
 import com.github.aureliano.edocs.common.exception.ServiceException;
-import com.github.aureliano.edocs.common.helper.ConfigurationHelper;
 import com.github.aureliano.edocs.common.persistence.DataPagination;
 import com.github.aureliano.edocs.common.persistence.PersistenceService;
 import com.github.aureliano.edocs.domain.dao.DocumentDao;
@@ -27,28 +24,14 @@ import com.github.aureliano.edocs.domain.entity.Category;
 import com.github.aureliano.edocs.domain.entity.Document;
 import com.github.aureliano.edocs.domain.entity.User;
 import com.github.aureliano.edocs.domain.helper.PersistenceHelper;
-import com.github.aureliano.edocs.service.EdocsServicePersistenceManager;
+import com.github.aureliano.edocs.service.TestHelper;
 
 public class DocumentServiceBeanTest {
 
 	private DocumentServiceBean bean;
 	
 	public DocumentServiceBeanTest() {
-		PersistenceHelper.instance().prepareDatabase();
-		PersistenceService ps = PersistenceService.instance();
-		
-		if (ps.getPersistenceManager() == null) {
-			EdocsServicePersistenceManager pm = new EdocsServicePersistenceManager();
-			pm.setConnection(PersistenceHelper.instance().getConnection());
-			ps.registerPersistenceManager(pm);
-		}
-		
-		if (ConfigurationSingleton.instance().getAppConfiguration() == null) {
-			String path = "src/test/resources/conf/service-app-configuration.properties";
-			AppConfiguration configuration = ConfigurationHelper.parseConfiguration(path);
-			ConfigurationSingleton.instance().setAppConfiguration(configuration);
-		}
-		
+		TestHelper.initiliazeTestEnvironment();
 		this.bean = new DocumentServiceBean();
 	}
 
