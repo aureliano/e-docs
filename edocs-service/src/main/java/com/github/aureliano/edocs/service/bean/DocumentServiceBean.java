@@ -1,5 +1,7 @@
 package com.github.aureliano.edocs.service.bean;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Logger;
@@ -79,17 +81,18 @@ public class DocumentServiceBean implements IServiceBean {
 	
 	public Document createDocument(Document document) {
 		Document entity = null;
-		this.applyValidation(document);
+		this.validateDocumentCreateAction(document);
 		
 		try {
 			this.pm.getConnection().setAutoCommit(false);
 			
+			entity = new DocumentDao().save(document.withDeleted(false));
+			
 			AttachmentDao attachmentDao = new AttachmentDao();
 			for (Attachment attachment : document.getAttachments()) {
-				attachmentDao.save(attachment.withDocument(document).withTemp(false));
+				attachmentDao.save(attachment.withDocument(entity).withTemp(false));
 			}
 			
-			entity = new DocumentDao().save(document.withDeleted(false));
 			this.pm.getConnection().commit();
 		} catch (EDocsException ex) {
 			try {
@@ -107,11 +110,75 @@ public class DocumentServiceBean implements IServiceBean {
 		return entity;
 	}
 	
-	private void applyValidation(Document document) {
+	public Document saveDocument(Document document, List<Attachment> inserted, List<Attachment> deleted) {
+		Document entity = null;
+		this.validateDocumentSaveAction(document, inserted.size(), deleted.size());
+		
+		try {
+			this.pm.getConnection().setAutoCommit(false);
+			
+			AttachmentDao attachmentDao = new AttachmentDao();
+			for (Attachment attachment : deleted) {
+				attachmentDao.delete(attachment);
+			}
+			
+			for (Attachment attachment : inserted) {
+				attachmentDao.save(attachment.withDocument(document).withTemp(false));
+			}
+			
+			entity = new DocumentDao().save(document);
+			this.pm.getConnection().commit();
+		} catch (EDocsException ex) {
+			try {
+				pm.getConnection().rollback();
+			} catch (SQLException ex2) {
+				throw new ServiceException(ex2);
+			}
+			
+			logger.severe(ex.getMessage());
+			logger.warning("Transaction rolled back!");
+		} catch (SQLException ex) {
+			throw new ServiceException(ex);
+		}
+		
+		return entity;
+	}
+	
+	private void validateDocumentCreateAction(Document document) {
 		if (document.getId() != null) {
 			throw new ServiceException("Document id must be null.");
 		} else if ((document.getAttachments() == null) || (document.getAttachments().isEmpty())) {
-			throw new ServiceException("Document must have at least one file.");
+			throw new ServiceException("Document must have at least one attachment.");
+		}
+	}
+	
+	private void validateDocumentSaveAction(Document document, int insertions, int deletions) {
+		if (document.getId() == null) {
+			throw new ServiceException("Document id must not be null.");
+		} else if (document.getDeleted()) {
+			throw new ServiceException("Cannot save a deleted document.");
+		}
+		
+		int totalAttachments = this.getAttachmentsCount(document.getId());
+		
+		if ((totalAttachments + insertions) <= deletions) {
+			throw new ServiceException("Document must have at least one attachment.");
+		}
+	}
+	
+	private int getAttachmentsCount(Integer documentId) {
+		String sql = "select count(id) from attachments where document_fk = ?";
+		try {
+			PreparedStatement ps = pm.getConnection().prepareStatement(sql);
+			ps.setInt(1, documentId);
+			
+			ResultSet rs = ps.executeQuery();
+			rs.next();
+			
+			return rs.getInt(1);
+		} catch (SQLException ex) {
+			logger.severe("Validation failed when counting document's attachments. " + ex.getMessage());
+			throw new ServiceException(ex);
 		}
 	}
 }

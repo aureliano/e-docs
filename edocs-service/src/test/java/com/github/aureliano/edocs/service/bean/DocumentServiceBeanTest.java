@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -158,7 +159,7 @@ public class DocumentServiceBeanTest {
 		assertEquals(document, this.bean.findDocumentById(document.getId()));
 		assertFalse(document.getDeleted());
 		
-		ResultSet rs = PersistenceHelper.instance().executeQuery("select count(id) from attachments");
+		ResultSet rs = PersistenceHelper.instance().executeQuery("select count(id) from attachments where document_fk = " + document.getId());
 		rs.next();
 		assertEquals(totalAttachments, rs.getInt(1));
 		
@@ -166,6 +167,76 @@ public class DocumentServiceBeanTest {
 		for (Attachment attachment : attachments) {
 			assertFalse(attachment.getTemp());
 		}
+	}
+	
+	@Test(expected = ServiceException.class)
+	public void testSaveDocumentIdNull() {
+		Document document = new Document()
+			.withId(null);
+		this.bean.saveDocument(document, Arrays.asList(new Attachment()), Arrays.asList(new Attachment()));
+	}
+	
+	@Test(expected = ServiceException.class)
+	public void testSaveDocumentDeleted() {
+		Document document = new Document()
+			.withId(1)
+			.withDeleted(true);
+		this.bean.saveDocument(document, Arrays.asList(new Attachment()), Arrays.asList(new Attachment()));
+	}
+	
+	@Test(expected = ServiceException.class)
+	public void testSaveDocumentAttachmentError() {
+		Document document = this.prepareDocumentToSave(5);
+		document = this.bean.createDocument(document);
+		document.withAttachments(new AttachmentServiceBean().findAttachmentsByDocument(document));
+		
+		this.bean.saveDocument(document, new ArrayList<Attachment>(), document.getAttachments());
+	}
+	
+	@Test
+	public void testSaveDocument() {
+		int totalAttachments = 5;
+		Document document = this.prepareDocumentToSave(totalAttachments);
+		document = this.bean.createDocument(document);
+		
+		AttachmentServiceBean attachmentServiceBean = new AttachmentServiceBean();
+		document.withAttachments(attachmentServiceBean.findAttachmentsByDocument(document));
+		
+		int totalInserted = 2;
+		List<Attachment> inserted = new ArrayList<>();
+		for (byte i = 0; i < totalInserted; i++) {
+			inserted.add(attachmentServiceBean.createTemporaryAttachment("test-" + (i + 1)));
+		}
+		
+		int totalDeleted = 4;
+		List<Attachment> deleted = new ArrayList<>();
+		for (byte i = 0; i < totalDeleted; i++) {
+			deleted.add(document.getAttachments().get(i));
+		}
+		
+		document.withCategory(Category.PAYCHECK).withDescription("Something else to test.");
+		Document savedDocument = this.bean.saveDocument(document, inserted, deleted);
+		
+		assertEquals(document, savedDocument);
+		
+		savedDocument.withAttachments(attachmentServiceBean.findAttachmentsByDocument(savedDocument));
+		int expectedSize = (totalAttachments + totalInserted - totalDeleted);
+		assertEquals(expectedSize, savedDocument.getAttachments().size());
+	}
+	
+	private Document prepareDocumentToSave(int totalAttachments) {
+		Document document = new Document()
+			.withCategory(Category.AGREEMENT)
+			.withDescription("description")
+			.withOwner(this.createUserSample())
+			.withDeleted(false);
+		
+		AttachmentServiceBean attachmentServiceBean = new AttachmentServiceBean();
+		for (byte i = 0; i < totalAttachments; i++) {
+			document.attach(attachmentServiceBean.createTemporaryAttachment("test-" + (i + 1)));
+		}
+		
+		return document;
 	}
 	
 	private Document createDocumentSample() {
