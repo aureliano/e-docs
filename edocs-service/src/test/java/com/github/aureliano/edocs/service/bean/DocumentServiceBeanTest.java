@@ -190,7 +190,7 @@ public class DocumentServiceBeanTest {
 		
 		Document document = new DocumentDao().save(d);
 		try {
-			PersistenceService.instance().getPersistenceManager().getConnection().commit(); // TODO: Use service method.
+			PersistenceService.instance().getPersistenceManager().getConnection().commit();
 		} catch (SQLException ex) {
 			Assert.fail(ex.getMessage());
 		}
