@@ -1,11 +1,14 @@
 package com.github.aureliano.edocs.service.bean;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -70,7 +73,7 @@ public class DocumentServiceBeanTest {
 		
 		int totalOtherDocuments = 2;
 		for (byte i = 0; i < totalOtherDocuments; i++) {
-			this.createDocumentSample();
+			this.createDocumentSample(null);
 		}
 		
 		List<Document> res = this.bean.findDocumentsByOwner(owner);
@@ -81,8 +84,22 @@ public class DocumentServiceBeanTest {
 		assertEquals((totalDocuments + totalOtherDocuments), res.size());
 	}
 	
+	@Test
+	public void testLogicalDeletion() throws SQLException {
+		Document document = this.createDocumentSample();
+		assertFalse(document.getDeleted());
+		
+		Integer id = document.getId();
+		document = this.bean.findDocumentById(id);
+		assertFalse(document.getDeleted());
+		
+		this.bean.logicalDeletion(document);
+		document = this.bean.findDocumentById(id);
+		assertTrue(document.getDeleted());
+	}
+	
 	private Document createDocumentSample() {
-		return this.createDocumentSample(null);
+		return this.createDocumentSample(this.createUserSample("mariae"));
 	}
 	
 	private Document createDocumentSample(User owner) {
@@ -92,10 +109,21 @@ public class DocumentServiceBeanTest {
 			.withOwner(owner)
 			.withDeleted(false)
 			.withAttachments(Arrays.asList(new Attachment()));
-		return new DocumentDao().save(d);
+		
+		Document document = new DocumentDao().save(d);
+		try {
+			PersistenceService.instance().getPersistenceManager().getConnection().commit(); // TODO: Use service method.
+		} catch (SQLException ex) {
+			Assert.fail(ex.getMessage());
+		}
+		return document;
 	}
 	
 	private User createUserSample() {
+		return this.createUserSample("maria");
+	}
+	
+	private User createUserSample(String name) {
 		User user = new User()
 			.withDbUser(false)
 			.withName("maria")
