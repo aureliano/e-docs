@@ -71,7 +71,7 @@ public class DocumentServiceBeanTest {
 	}
 	
 	@Test
-	public void testLogicalDeletion() throws SQLException {
+	public void testDeleteLogically() throws SQLException {
 		Document document = this.createDocumentSample();
 		assertFalse(document.getDeleted());
 		
@@ -79,7 +79,7 @@ public class DocumentServiceBeanTest {
 		document = this.bean.findDocumentById(id);
 		assertFalse(document.getDeleted());
 		
-		this.bean.logicalDeletion(document);
+		this.bean.deleteLogically(document);
 		document = this.bean.findDocumentById(id);
 		assertTrue(document.getDeleted());
 	}

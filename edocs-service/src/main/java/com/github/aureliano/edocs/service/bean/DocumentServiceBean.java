@@ -35,7 +35,7 @@ public class DocumentServiceBean implements IServiceBean {
 		return this.pm.search(new DataPagination<Document>().withEntity(document));
 	}
 	
-	public void logicalDeletion(Document document) {
+	public void deleteLogically(Document document) {
 		Document entity = this.findDocumentById(document.getId());
 		if (entity.getDeleted()) {
 			logger.warning("Ignoring logical deletion of document " + entity.getId() + " because it is already logically deleted.");
