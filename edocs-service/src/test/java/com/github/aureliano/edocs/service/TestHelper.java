@@ -41,6 +41,16 @@ public class TestHelper {
 		}
 	}
 	
+	public static void checkExceptionThrown(IEmbeddedExecutor executor, Class<? extends Exception> et, String message) {
+		try {
+			executor.execute();
+			Assert.fail("Expected an exception of type " + et.getName() + " but nothing was caught.");
+		} catch (Exception ex) {
+			Assert.assertEquals(ex.getClass(), et);
+			Assert.assertEquals(message, ex.getMessage());
+		}
+	}
+	
 	public static Document prepareDocumentToSave(int totalAttachments) {
 		Document document = new Document()
 			.withCategory(Category.AGREEMENT)

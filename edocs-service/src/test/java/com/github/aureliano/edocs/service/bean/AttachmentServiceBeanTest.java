@@ -19,6 +19,7 @@ import com.github.aureliano.edocs.domain.entity.Attachment;
 import com.github.aureliano.edocs.domain.entity.Document;
 import com.github.aureliano.edocs.domain.entity.User;
 import com.github.aureliano.edocs.domain.helper.PersistenceHelper;
+import com.github.aureliano.edocs.service.IEmbeddedExecutor;
 import com.github.aureliano.edocs.service.TestHelper;
 
 public class AttachmentServiceBeanTest {
@@ -63,16 +64,22 @@ public class AttachmentServiceBeanTest {
 		);
 	}
 	
-	@Test(expected = ServiceException.class)
+	@Test
 	public void testDeleteNonTemporaryAttachment() {
-		Attachment attachment = new Attachment()
-			.withName("delete-non-temp-file")
-			.withTemp(false)
-			.withUploadTime(new Date())
-			.withDocument(TestHelper.createDocumentSample());
-		
-		Attachment attachment1 = this.bean.saveAttachment(attachment);
-		this.bean.deleteTempAttachment(attachment1);
+		IEmbeddedExecutor executor = new IEmbeddedExecutor() {
+			public void execute() {
+				Attachment attachment = new Attachment()
+					.withName("delete-non-temp-file")
+					.withTemp(false)
+					.withUploadTime(new Date())
+					.withDocument(TestHelper.createDocumentSample());
+				
+				Attachment attachment1 = bean.saveAttachment(attachment);
+				bean.deleteTempAttachment(attachment1);
+			}
+		};
+	
+		TestHelper.checkExceptionThrown(executor, ServiceException.class, "You cannot delete a non temporary file.");
 	}
 	
 	@Test

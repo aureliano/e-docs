@@ -21,6 +21,7 @@ import com.github.aureliano.edocs.domain.entity.Category;
 import com.github.aureliano.edocs.domain.entity.Document;
 import com.github.aureliano.edocs.domain.entity.User;
 import com.github.aureliano.edocs.domain.helper.PersistenceHelper;
+import com.github.aureliano.edocs.service.IEmbeddedExecutor;
 import com.github.aureliano.edocs.service.TestHelper;
 
 public class DocumentServiceBeanTest {
@@ -81,10 +82,16 @@ public class DocumentServiceBeanTest {
 		assertTrue(document.getDeleted());
 	}
 	
-	@Test(expected = ServiceException.class)
+	@Test
 	public void testPhysicalDeletionError() {
-		Document document = TestHelper.createDocumentSample(false);
-		this.bean.deletePhysically(document);
+		IEmbeddedExecutor executor = new IEmbeddedExecutor() {
+			public void execute() {
+				Document document = TestHelper.createDocumentSample(false);
+				bean.deletePhysically(document);
+			}
+		};
+		
+		TestHelper.checkExceptionThrown(executor, ServiceException.class, "You cannot delete a document before a logical deletion.");
 	}
 	
 	@Test
@@ -114,27 +121,45 @@ public class DocumentServiceBeanTest {
 		assertEquals(0, rs.getInt(1));
 	}
 	
-	@Test(expected = ServiceException.class)
+	@Test
 	public void testCreateDocumentErrorIdNotNull() {
-		Document document = new Document()
-			.withId(1)
-			.withAttachments(Arrays.asList(new Attachment()));
-		this.bean.createDocument(document);
+		IEmbeddedExecutor executor = new IEmbeddedExecutor() {
+			public void execute() {
+				Document document = new Document()
+					.withId(1)
+					.withAttachments(Arrays.asList(new Attachment()));
+				bean.createDocument(document);
+			}
+		};
+		
+		TestHelper.checkExceptionThrown(executor, ServiceException.class, "Document id must be null.");
 	}
 	
-	@Test(expected = ServiceException.class)
+	@Test
 	public void testCreateDocumentErrorAttachmentsNull() {
-		Document document = new Document()
-			.withId(null)
-			.withAttachments(null);
-		this.bean.createDocument(document);
+		IEmbeddedExecutor executor = new IEmbeddedExecutor() {
+			public void execute() {
+				Document document = new Document()
+					.withId(null)
+					.withAttachments(null);
+				bean.createDocument(document);
+			}
+		};
+		
+		TestHelper.checkExceptionThrown(executor, ServiceException.class, "Document must have at least one attachment.");
 	}
 	
-	@Test(expected = ServiceException.class)
+	@Test
 	public void testCreateDocumentErrorAttachmentsEmpty() {
-		Document document = new Document()
-			.withId(null);
-		this.bean.createDocument(document);
+		IEmbeddedExecutor executor = new IEmbeddedExecutor() {
+			public void execute() {
+				Document document = new Document()
+					.withId(null);
+				bean.createDocument(document);
+			}
+		};
+		
+		TestHelper.checkExceptionThrown(executor, ServiceException.class, "Document must have at least one attachment.");
 	}
 	
 	@Test
@@ -165,28 +190,45 @@ public class DocumentServiceBeanTest {
 		}
 	}
 	
-	@Test(expected = ServiceException.class)
+	@Test
 	public void testSaveDocumentIdNull() {
-		Document document = new Document()
-			.withId(null);
-		this.bean.saveDocument(document, Arrays.asList(new Attachment()), Arrays.asList(new Attachment()));
-	}
-	
-	@Test(expected = ServiceException.class)
-	public void testSaveDocumentDeleted() {
-		Document document = new Document()
-			.withId(1)
-			.withDeleted(true);
-		this.bean.saveDocument(document, Arrays.asList(new Attachment()), Arrays.asList(new Attachment()));
-	}
-	
-	@Test(expected = ServiceException.class)
-	public void testSaveDocumentAttachmentError() {
-		Document document = TestHelper.prepareDocumentToSave(5);
-		document = this.bean.createDocument(document);
-		document.withAttachments(new AttachmentServiceBean().findAttachmentsByDocument(document));
+		IEmbeddedExecutor executor = new IEmbeddedExecutor() {
+			public void execute() {
+				Document document = new Document()
+					.withId(null);
+				bean.saveDocument(document, Arrays.asList(new Attachment()), Arrays.asList(new Attachment()));
+			}
+		};
 		
-		this.bean.saveDocument(document, new ArrayList<Attachment>(), document.getAttachments());
+		TestHelper.checkExceptionThrown(executor, ServiceException.class, "Document id must not be null.");
+	}
+	
+	@Test
+	public void testSaveDocumentDeleted() {
+		IEmbeddedExecutor executor = new IEmbeddedExecutor() {
+			public void execute() {
+				Document document = new Document()
+					.withId(1)
+					.withDeleted(true);
+				bean.saveDocument(document, Arrays.asList(new Attachment()), Arrays.asList(new Attachment()));
+			}
+		};
+		
+		TestHelper.checkExceptionThrown(executor, ServiceException.class, "Cannot save a deleted document.");
+	}
+	
+	public void testSaveDocumentAttachmentError() {
+		IEmbeddedExecutor executor = new IEmbeddedExecutor() {
+			public void execute() {
+				Document document = TestHelper.prepareDocumentToSave(5);
+				document = bean.createDocument(document);
+				document.withAttachments(new AttachmentServiceBean().findAttachmentsByDocument(document));
+				
+				bean.saveDocument(document, new ArrayList<Attachment>(), document.getAttachments());
+			}
+		};
+		
+		TestHelper.checkExceptionThrown(executor, ServiceException.class, "Document must have at least one attachment.");
 	}
 	
 	@Test
