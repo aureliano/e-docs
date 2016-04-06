@@ -3,10 +3,15 @@ package com.github.aureliano.edocs.service.helper;
 import java.sql.SQLException;
 import java.util.logging.Logger;
 
+import com.github.aureliano.edocs.common.config.AppConfiguration;
+import com.github.aureliano.edocs.common.config.ConfigurationSingleton;
 import com.github.aureliano.edocs.common.exception.EDocsException;
 import com.github.aureliano.edocs.common.exception.ServiceException;
 import com.github.aureliano.edocs.common.persistence.IPersistenceManager;
 import com.github.aureliano.edocs.common.persistence.PersistenceService;
+import com.github.aureliano.edocs.file.repository.IRepository;
+import com.github.aureliano.edocs.file.repository.RepositoryFactory;
+import com.github.aureliano.edocs.file.repository.RepositoryType;
 
 public final class ServiceHelper {
 	
@@ -40,5 +45,12 @@ public final class ServiceHelper {
 		}
 		
 		return entity;
+	}
+	
+	public static IRepository createRepository() {
+		AppConfiguration configuration = ConfigurationSingleton.instance().getAppConfiguration();
+		String repositoryType = configuration.getFileRepositoryConfiguration().getRepositoryType();
+		
+		return RepositoryFactory.createRepository(RepositoryType.valueOf(repositoryType));
 	}
 }

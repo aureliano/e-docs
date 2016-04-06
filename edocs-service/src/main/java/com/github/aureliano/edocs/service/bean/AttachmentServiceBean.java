@@ -6,8 +6,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
 
-import com.github.aureliano.edocs.common.config.AppConfiguration;
-import com.github.aureliano.edocs.common.config.ConfigurationSingleton;
 import com.github.aureliano.edocs.common.exception.EDocsException;
 import com.github.aureliano.edocs.common.exception.ServiceException;
 import com.github.aureliano.edocs.common.persistence.DataPagination;
@@ -16,8 +14,6 @@ import com.github.aureliano.edocs.common.persistence.PersistenceService;
 import com.github.aureliano.edocs.domain.entity.Attachment;
 import com.github.aureliano.edocs.domain.entity.Document;
 import com.github.aureliano.edocs.file.repository.IRepository;
-import com.github.aureliano.edocs.file.repository.RepositoryFactory;
-import com.github.aureliano.edocs.file.repository.RepositoryType;
 import com.github.aureliano.edocs.service.helper.ServiceHelper;
 
 public class AttachmentServiceBean implements IServiceBean {
@@ -29,10 +25,7 @@ public class AttachmentServiceBean implements IServiceBean {
 	
 	public AttachmentServiceBean() {
 		this.pm = PersistenceService.instance().getPersistenceManager();
-		
-		AppConfiguration configuration = ConfigurationSingleton.instance().getAppConfiguration();
-		String repositoryType = configuration.getFileRepositoryConfiguration().getRepositoryType();
-		this.repository = RepositoryFactory.createRepository(RepositoryType.valueOf(repositoryType));
+		this.repository = ServiceHelper.createRepository();
 	}
 	
 	public Attachment createTemporaryAttachment(File file) {
