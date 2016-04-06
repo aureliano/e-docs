@@ -63,17 +63,21 @@ public final class FileHelper {
 		}
 	}
 	
-	public static void deleteAllFiles(File directory) {
+	public static int deleteAllFiles(File directory) {
+		int count = 0;
 		File[] files = directory.listFiles();
 		if (files == null) {
-			return;
+			return count;
 		}
 		
 		for (File file : files) {
 			if (!file.isDirectory()) {
 				delete(file);
+				count++;
 			}
 		}
+		
+		return count;
 	}
 	
 	public static void deleteAllFiles(File directory, long timeSeed, final String regex) {
