@@ -95,6 +95,7 @@ public class DocumentServiceBean implements IServiceBean {
 			AttachmentDao attachmentDao = new AttachmentDao();
 			for (Attachment attachment : document.getAttachments()) {
 				attachmentDao.save(attachment.withDocument(entity).withTemp(false));
+				this.repository.saveFile(attachment);
 			}
 			
 			this.pm.getConnection().commit();
