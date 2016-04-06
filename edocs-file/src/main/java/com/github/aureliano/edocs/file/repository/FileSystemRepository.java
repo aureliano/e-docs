@@ -75,13 +75,8 @@ public class FileSystemRepository implements IRepository {
 	@Override
 	public String saveFile(IEntity entity) {
 		String fileName = entity.getId().toString();
-		String hash = HashGenerator.md5(fileName);
-		
-		String parentDir = hash.substring(0, 2);
-		String dir = hash.substring(2, 4);
-		
 		File srcFile = FileHelper.buildFile(this.configuration.getLimboPath(), fileName);
-		File destFile = FileHelper.buildFile(this.configuration.getRootPath(), parentDir, dir, fileName);
+		File destFile = FileHelper.buildFile(this.configuration.getRootPath(), this.getDirs(fileName), fileName);
 		
 		logger.info("Copying file " + srcFile.getAbsolutePath() + " to " + destFile.getAbsolutePath());
 		FileHelper.copyFile(srcFile, destFile, true);
@@ -93,11 +88,7 @@ public class FileSystemRepository implements IRepository {
 	@Override
 	public void deleteFile(IEntity entity) {
 		String fileName = entity.getId().toString();
-		String hash = HashGenerator.md5(fileName);
-		
-		String parentDir = hash.substring(0, 2);
-		String dir = hash.substring(2, 4);
-		File file = FileHelper.buildFile(this.configuration.getRootPath(), parentDir, dir, fileName);
+		File file = FileHelper.buildFile(this.configuration.getRootPath(), this.getDirs(fileName), fileName);
 		
 		if (!file.exists()) {
 			throw new FileRepositoryException("File " + file.getAbsolutePath() + " does not exist.");
@@ -115,5 +106,14 @@ public class FileSystemRepository implements IRepository {
 		
 		int count = FileHelper.deleteAllFiles(limbo);
 		logger.info(count + " files were deleted from " + limbo.getAbsolutePath());
+	}
+	
+	private String getDirs(String fileName) {
+		String hash = HashGenerator.md5(fileName);
+		
+		String parentDir = hash.substring(0, 2);
+		String dir = hash.substring(2, 4);
+		
+		return FileHelper.buildPath(parentDir, dir);
 	}
 }
