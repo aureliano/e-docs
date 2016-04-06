@@ -125,10 +125,12 @@ public class DocumentServiceBean implements IServiceBean {
 			AttachmentDao attachmentDao = new AttachmentDao();
 			for (Attachment attachment : deleted) {
 				attachmentDao.delete(attachment);
+				this.repository.deleteFile(attachment);
 			}
 			
 			for (Attachment attachment : inserted) {
 				attachmentDao.save(attachment.withDocument(document).withTemp(false));
+				this.repository.saveFile(attachment);
 			}
 			
 			entity = new DocumentDao().save(document);
