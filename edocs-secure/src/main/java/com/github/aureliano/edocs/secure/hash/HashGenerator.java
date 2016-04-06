@@ -21,6 +21,10 @@ public final class HashGenerator {
 		return generateHash(text, Algorithm.SHA_1.getLabel());
 	}
 	
+	public static String sha2(String text) {
+		return generateHash(text, Algorithm.SHA_2.getLabel());
+	}
+	
 	public static String generateHash(String text, String algorithm) {
 		MessageDigest md = null;
 		
