@@ -29,6 +29,7 @@ public class ConfigurationHelperTest {
 		
 		assertNull(frc.getRootPath());
 		assertNull(frc.getLimboPath());
+		assertNull(frc.getRepositoryType());
 	}
 	
 	@Test
@@ -43,5 +44,6 @@ public class ConfigurationHelperTest {
 		
 		assertEquals("target/repository/file", frc.getRootPath());
 		assertEquals("target/repository/limbo", frc.getLimboPath());
+		assertEquals("FILE_SYSTEM", frc.getRepositoryType());
 	}
 }

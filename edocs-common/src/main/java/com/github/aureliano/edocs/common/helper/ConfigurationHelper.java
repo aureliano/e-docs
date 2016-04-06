@@ -42,6 +42,7 @@ public final class ConfigurationHelper {
 	
 	private static FileRepositoryConfiguration buildFileRepositoryModel(Properties properties) {
 		FileRepositoryConfiguration conf = new FileRepositoryConfiguration()
+			.withRepositoryType(properties.getProperty("app.repository.type"))
 			.withRootPath(properties.getProperty("app.repository.file.path"))
 			.withLimboPath(properties.getProperty("app.repository.limbo.path"));
 		
