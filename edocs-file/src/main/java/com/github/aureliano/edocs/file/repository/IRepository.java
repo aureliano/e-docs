@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface IRepository {
 
-	public abstract Long getAvailableDiskSapce();
+	public abstract Long getFreeDiskSapce();
 	
 	public abstract Long getDiskSize();
 	

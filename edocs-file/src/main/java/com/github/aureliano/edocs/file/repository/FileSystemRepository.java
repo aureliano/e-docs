@@ -18,7 +18,7 @@ public class FileSystemRepository implements IRepository {
 	}
 	
 	@Override
-	public Long getAvailableDiskSapce() {
+	public Long getFreeDiskSapce() {
 		String root = FileHelper.getRootPath(new File("").getAbsolutePath());
 		return new File(root).getFreeSpace();
 	}
