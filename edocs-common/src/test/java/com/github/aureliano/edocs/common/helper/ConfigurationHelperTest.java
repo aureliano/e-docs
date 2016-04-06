@@ -28,6 +28,7 @@ public class ConfigurationHelperTest {
 		assertNull(sc.getSalt());
 		
 		assertNull(frc.getRootPath());
+		assertNull(frc.getLimboPath());
 	}
 	
 	@Test
@@ -41,5 +42,6 @@ public class ConfigurationHelperTest {
 		assertEquals("test123", sc.getSalt());
 		
 		assertEquals("target/repository/file", frc.getRootPath());
+		assertEquals("target/repository/limbo", frc.getLimboPath());
 	}
 }
