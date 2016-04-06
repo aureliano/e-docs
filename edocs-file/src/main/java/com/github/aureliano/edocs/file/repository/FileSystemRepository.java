@@ -1,6 +1,8 @@
 package com.github.aureliano.edocs.file.repository;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
@@ -52,14 +54,23 @@ public class FileSystemRepository implements IRepository {
 
 	@Override
 	public InputStream getFileStream(IEntity entity) {
-		// TODO Auto-generated method stub
-		return null;
+		File file = this.getFile(entity);
+		InputStream stream = null;
+		
+		try {
+			stream = new FileInputStream(file);
+		} catch (IOException ex) {
+			throw new FileRepositoryException(ex);
+		}
+		
+		return stream;
 	}
 
 	@Override
 	public File getFile(IEntity entity) {
 		String fileName = entity.getId().toString();
 		String dirs = this.getDirs(fileName);
+		
 		return FileHelper.buildFile(this.configuration.getRootPath(), dirs, fileName);
 	}
 	

@@ -6,6 +6,8 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.List;
 
 import org.junit.Before;
@@ -177,5 +179,23 @@ public class FileSystemRepositoryTest {
 		
 		assertEquals(entity.getId().toString(), file.getName());
 		assertEquals(destFile, file);
+	}
+	
+	@Test
+	public void testGetFileStream() throws IOException {
+		IEntity entity = new FileEntity().withId(7);
+		
+		File sourceFile = FileHelper.buildFile("src", "test", "resources", entity.getId().toString());
+		String dir = this.repository.createDir(FileHelper.buildPath("8F", "14"));
+		File destFile = FileHelper.buildFile(dir, entity.getId().toString());
+		FileHelper.copyFile(sourceFile, destFile);
+		
+		assertTrue(new File(destFile.getAbsolutePath()).exists());
+		
+		FileInputStream stream = (FileInputStream) this.repository.getFileStream(entity);
+		assertNotNull(stream);
+		
+		assertTrue(stream.getFD().valid());
+		stream.close();
 	}
 }
