@@ -33,6 +33,13 @@ public class FileSystemRepositoryTest {
 	}
 	
 	@Test
+	public void testGetAvailableDiskSpace() {
+		Long size = this.repository.getAvailableDiskSapce();
+		assertNotNull(size);
+		assertTrue(size > 0);
+	}
+	
+	@Test
 	public void testGetDiskSize() {
 		Long size = this.repository.getDiskSize();
 		assertNotNull(size);
