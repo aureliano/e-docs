@@ -191,7 +191,7 @@ public class UserDaoTest {
 		this.validateContextMessage(u, "Expected field name to have size between 3 and 25 but got 1.");
 		
 		u.withName("1234567890123456789012345");
-		this.validateContextMessage(u, "Expected field name to have size between 3 and 25 but got 1.");
+		this.validateContextMessage(u, "Expected field name to have size between 3 and 25 but got 65.");
 	}
 	
 	private void checkInvalidPassword() {
@@ -199,10 +199,10 @@ public class UserDaoTest {
 		this.validateContextMessage(u, "Expected to find a not empty text for field password.");
 		
 		u.withPassword("1");
-		this.validateContextMessage(u, "Expected field password to have size between 3 and 25 but got 1.");
+		this.validateContextMessage(u, "Expected field password to have size between 3 and 64 but got 1.");
 		
-		u.withPassword("1234567890123456789012345");
-		this.validateContextMessage(u, "Expected field password to have size between 3 and 25 but got 1.");
+		u.withPassword("01234567890123456789012345678901234567890123456789012345678912345");
+		this.validateContextMessage(u, "Expected field password to have size between 3 and 64 but got 65.");
 	}
 	
 	private void validateContextMessage(User user, String message) {

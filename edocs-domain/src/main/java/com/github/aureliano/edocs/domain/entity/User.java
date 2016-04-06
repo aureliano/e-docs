@@ -34,7 +34,7 @@ public class User implements IEntity {
 	}
 
 	@NotEmpty
-	@Size(min = 3, max = 25)
+	@Size(min = 3, max = 64)
 	public String getPassword() {
 		return password;
 	}
