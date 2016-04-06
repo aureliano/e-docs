@@ -72,8 +72,29 @@ public class AttachmentServiceBean implements IServiceBean {
 		}
 		
 		attachment.withTemp(false);
+		Attachment entity = null;
 		
-		return ServiceHelper.executeActionInsideTransaction(attachment, true);
+		try {
+			this.pm.getConnection().setAutoCommit(false);
+			
+			entity = pm.save(attachment);
+			this.repository.saveFile(entity);
+			
+			pm.getConnection().commit();
+		} catch (EDocsException ex) {
+			try {
+				pm.getConnection().rollback();
+			} catch (SQLException ex2) {
+				throw new ServiceException(ex2);
+			}
+			
+			logger.severe(ex.getMessage());
+			logger.warning("Transaction rolled back!");
+		} catch (SQLException ex) {
+			throw new ServiceException(ex);
+		}
+		
+		return entity;
 	}
 	
 	public void deleteTempAttachment(Attachment attachment) {

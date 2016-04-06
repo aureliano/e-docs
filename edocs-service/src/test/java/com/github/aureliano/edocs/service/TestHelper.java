@@ -110,11 +110,15 @@ public class TestHelper {
 	}
 	
 	public static Attachment createAttachment(Document document) {
+		File file = getSampleFile();
+		
 		Attachment attachment = new Attachment()
-			.withName("attachment-dummy")
+			.withName(file.getName())
 			.withTemp(false)
-			.withUploadTime(new Date())
-			.withDocument(document);
+			.withUploadTime(new Date());
+		
+		AttachmentServiceBean bean = new AttachmentServiceBean();
+		attachment = bean.createTemporaryAttachment(file).withDocument(document);
 		
 		return new AttachmentServiceBean().saveAttachment(attachment);
 	}
