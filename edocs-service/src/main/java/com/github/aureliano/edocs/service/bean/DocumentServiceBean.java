@@ -16,6 +16,7 @@ import com.github.aureliano.edocs.domain.dao.DocumentDao;
 import com.github.aureliano.edocs.domain.entity.Attachment;
 import com.github.aureliano.edocs.domain.entity.Document;
 import com.github.aureliano.edocs.domain.entity.User;
+import com.github.aureliano.edocs.file.repository.IRepository;
 import com.github.aureliano.edocs.service.helper.ServiceHelper;
 
 public class DocumentServiceBean implements IServiceBean {
@@ -23,9 +24,11 @@ public class DocumentServiceBean implements IServiceBean {
 	private static final Logger logger = Logger.getLogger(DocumentServiceBean.class.getName());
 	
 	private IPersistenceManager pm;
+	private IRepository repository;
 	
 	public DocumentServiceBean() {
 		this.pm = PersistenceService.instance().getPersistenceManager();
+		this.repository = ServiceHelper.createRepository();
 	}
 
 	public Document findDocumentById(Integer id) {
@@ -61,6 +64,7 @@ public class DocumentServiceBean implements IServiceBean {
 			AttachmentDao attachmentDao = new AttachmentDao();
 			for (Attachment attachment : attachments) {
 				attachmentDao.delete(attachment);
+				this.repository.deleteFile(attachment);
 			}
 			
 			new DocumentDao().delete(entity);
