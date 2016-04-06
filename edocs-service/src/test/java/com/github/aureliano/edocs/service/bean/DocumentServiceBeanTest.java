@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.io.File;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -172,8 +173,9 @@ public class DocumentServiceBeanTest {
 		
 		int totalAttachments = 5;
 		AttachmentServiceBean attachmentServiceBean = new AttachmentServiceBean();
+		File file = TestHelper.getSampleFile();
 		for (byte i = 0; i < totalAttachments; i++) {
-			document.attach(attachmentServiceBean.createTemporaryAttachment("test-" + (i + 1)));
+			document.attach(attachmentServiceBean.createTemporaryAttachment(file));
 		}
 		
 		document = this.bean.createDocument(document);
@@ -242,8 +244,9 @@ public class DocumentServiceBeanTest {
 		
 		int totalInserted = 2;
 		List<Attachment> inserted = new ArrayList<>();
+		File file = TestHelper.getSampleFile();
 		for (byte i = 0; i < totalInserted; i++) {
-			inserted.add(attachmentServiceBean.createTemporaryAttachment("test-" + (i + 1)));
+			inserted.add(attachmentServiceBean.createTemporaryAttachment(file));
 		}
 		
 		int totalDeleted = 4;

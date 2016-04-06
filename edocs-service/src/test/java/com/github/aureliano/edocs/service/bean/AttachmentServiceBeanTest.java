@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.io.File;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
@@ -38,10 +39,11 @@ public class AttachmentServiceBeanTest {
 	
 	@Test
 	public void testCreateTemporaryAttachment() {
-		Attachment attachment = this.bean.createTemporaryAttachment("new-temp-file");
+		File sampleFile = TestHelper.getSampleFile();
+		Attachment attachment = this.bean.createTemporaryAttachment(sampleFile);
 		
 		assertNotNull(attachment.getId());
-		assertEquals("new-temp-file", attachment.getName());
+		assertEquals(sampleFile.getName(), attachment.getName());
 		assertEquals(TestHelper.getToday(), TestHelper.removeTime(attachment.getUploadTime()));
 		assertTrue(attachment.getTemp());
 	}
@@ -84,7 +86,8 @@ public class AttachmentServiceBeanTest {
 	
 	@Test
 	public void testDeleteTempAttachment() throws SQLException {
-		Attachment attachment = this.bean.createTemporaryAttachment("delete-temp-file");
+		File sampleFile = TestHelper.getSampleFile();
+		Attachment attachment = this.bean.createTemporaryAttachment(sampleFile);
 		
 		ResultSet rs = PersistenceHelper.instance().executeQuery("select count(id) from attachments where id = " + attachment.getId());
 		rs.next();
@@ -101,7 +104,8 @@ public class AttachmentServiceBeanTest {
 	
 	@Test
 	public void testFindAttachmentById() {
-		Attachment attachment1 = this.bean.createTemporaryAttachment("test-finding");
+		File sampleFile = TestHelper.getSampleFile();
+		Attachment attachment1 = this.bean.createTemporaryAttachment(sampleFile);
 		Attachment attachment2 = this.bean.findAttachmentById(attachment1.getId());
 		
 		assertEquals(attachment1, attachment2);

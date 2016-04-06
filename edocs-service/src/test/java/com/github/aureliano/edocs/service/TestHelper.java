@@ -1,5 +1,6 @@
 package com.github.aureliano.edocs.service;
 
+import java.io.File;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -59,8 +60,9 @@ public class TestHelper {
 			.withDeleted(false);
 		
 		AttachmentServiceBean attachmentServiceBean = new AttachmentServiceBean();
+		File file = getSampleFile();
 		for (byte i = 0; i < totalAttachments; i++) {
-			document.attach(attachmentServiceBean.createTemporaryAttachment("test-" + (i + 1)));
+			document.attach(attachmentServiceBean.createTemporaryAttachment(file));
 		}
 		
 		return document;
@@ -132,5 +134,9 @@ public class TestHelper {
 		c.set(Calendar.MILLISECOND, 0);
 		
 		return c.getTime();
+	}
+	
+	public static File getSampleFile() {
+		return new File("src/test/resources/sample-file");
 	}
 }
