@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.Properties;
 
 import com.github.aureliano.edocs.common.config.AppConfiguration;
+import com.github.aureliano.edocs.common.config.FileRepositoryConfiguration;
 import com.github.aureliano.edocs.common.config.SecureConfiguration;
 import com.github.aureliano.edocs.common.exception.EDocsException;
 
@@ -21,7 +22,8 @@ public final class ConfigurationHelper {
 	public static AppConfiguration parseConfiguration(String path) {
 		Properties properties = loadProperties(path);
 		return new AppConfiguration()
-			.withSecureConfiguration(buildSecureModel(properties));
+			.withSecureConfiguration(buildSecureModel(properties))
+			.withFileRepositoryConfiguration(buildFileRepositoryModel(properties));
 	}
 	
 	private static SecureConfiguration buildSecureModel(Properties properties) {
@@ -34,6 +36,13 @@ public final class ConfigurationHelper {
 		} else {
 			conf.withHashIterations(Integer.parseInt(properties.getProperty("app.secure.hash.iterations")));
 		}
+		
+		return conf;
+	}
+	
+	private static FileRepositoryConfiguration buildFileRepositoryModel(Properties properties) {
+		FileRepositoryConfiguration conf = new FileRepositoryConfiguration()
+			.withRootPath(properties.getProperty("app.repository.file.path"));
 		
 		return conf;
 	}
