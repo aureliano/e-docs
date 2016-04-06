@@ -25,8 +25,8 @@ public class FileSystemRepository implements IRepository {
 
 	@Override
 	public Long getDiskSize() {
-		// TODO Auto-generated method stub
-		return null;
+		String root = FileHelper.getRootPath(new File("").getAbsolutePath());
+		return new File(root).getTotalSpace();
 	}
 
 	@Override

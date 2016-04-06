@@ -1,5 +1,6 @@
 package com.github.aureliano.edocs.file.repository;
 
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
@@ -29,5 +30,12 @@ public class FileSystemRepositoryTest {
 	public void testCreateDir() {
 		String path = this.repository.createDir(FileHelper.buildPath("A1", "B2"));
 		assertTrue(new File(path).isDirectory());
+	}
+	
+	@Test
+	public void testGetDiskSize() {
+		Long size = this.repository.getDiskSize();
+		assertNotNull(size);
+		assertTrue(size > 0);
 	}
 }
