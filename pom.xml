@@ -73,6 +73,12 @@
 				<artifactId>edocs-secure</artifactId>
 				<version>0.1.0</version>
 			</dependency>
+			
+			<dependency>
+				<groupId>com.github.aureliano</groupId>
+				<artifactId>edocs-file</artifactId>
+				<version>0.1.0</version>
+			</dependency>
 		
 			<dependency>
 				<groupId>org.apache.derby</groupId>
