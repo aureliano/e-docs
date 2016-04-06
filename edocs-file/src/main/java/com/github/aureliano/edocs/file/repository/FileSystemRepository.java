@@ -2,6 +2,7 @@ package com.github.aureliano.edocs.file.repository;
 
 import java.io.File;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -45,8 +46,8 @@ public class FileSystemRepository implements IRepository {
 
 	@Override
 	public List<String> listFiles(String path) {
-		// TODO Auto-generated method stub
-		return null;
+		File dir = FileHelper.buildFile(this.configuration.getRootPath(), path);
+		return Arrays.asList(dir.list());
 	}
 
 	@Override

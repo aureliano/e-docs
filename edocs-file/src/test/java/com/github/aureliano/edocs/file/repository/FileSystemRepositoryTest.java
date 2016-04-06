@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -141,5 +142,20 @@ public class FileSystemRepositoryTest {
 		int expected = 0;
 		limbo = new File(this.configuration.getLimboPath());
 		assertEquals(expected, limbo.list().length);
+	}
+	
+	@Test
+	public void testListFiles() {
+		int totalFiles = 8;
+		File sourceFile = FileHelper.buildFile("src", "test", "resources", "7");
+		String dir = this.repository.createDir(FileHelper.buildPath("8F", "14"));
+		
+		for (byte i = 0; i < totalFiles; i++) {
+			File file = FileHelper.buildFile(dir, String.valueOf(i));
+			FileHelper.copyFile(sourceFile, file);
+		}
+		
+		List<String> files = this.repository.listFiles(FileHelper.buildPath("8F", "14"));
+		assertEquals(8, files.size());
 	}
 }
