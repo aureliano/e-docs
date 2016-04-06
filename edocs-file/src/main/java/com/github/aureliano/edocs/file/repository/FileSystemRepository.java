@@ -7,6 +7,7 @@ import java.util.List;
 import com.github.aureliano.edocs.common.config.ConfigurationSingleton;
 import com.github.aureliano.edocs.common.config.FileRepositoryConfiguration;
 import com.github.aureliano.edocs.common.helper.FileHelper;
+import com.github.aureliano.edocs.common.persistence.IEntity;
 
 public class FileSystemRepository implements IRepository {
 
@@ -44,25 +45,25 @@ public class FileSystemRepository implements IRepository {
 	}
 
 	@Override
-	public InputStream getFileStream(String path) {
+	public InputStream getFileStream(IEntity entity) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public File getFile(String path) {
+	public File getFile(IEntity entity) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public String saveFile(String path) {
+	public String saveFile(IEntity entity) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public void deleteFile(String path) {
+	public void deleteFile(IEntity entity) {
 		// TODO Auto-generated method stub
 		
 	}
