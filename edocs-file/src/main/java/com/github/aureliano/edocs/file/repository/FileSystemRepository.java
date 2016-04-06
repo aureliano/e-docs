@@ -106,4 +106,10 @@ public class FileSystemRepository implements IRepository {
 		FileHelper.delete(file);
 		logger.info("File " + file + " deleted.");
 	}
+	
+	@Override
+	public void clearLimbo() {
+		// TODO Auto-generated method stub
+		
+	}
 }

@@ -25,4 +25,6 @@ public interface IRepository {
 	public abstract String saveFile(IEntity entity);
 	
 	public abstract void deleteFile(IEntity entity);
+	
+	public abstract void clearLimbo();
 }
