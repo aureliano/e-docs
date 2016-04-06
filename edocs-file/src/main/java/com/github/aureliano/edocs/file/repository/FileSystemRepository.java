@@ -109,7 +109,10 @@ public class FileSystemRepository implements IRepository {
 	
 	@Override
 	public void clearLimbo() {
-		// TODO Auto-generated method stub
+		logger.info("Cleaning Limbo");
+		File limbo = new File(this.configuration.getLimboPath());
 		
+		int count = FileHelper.deleteAllFiles(limbo);
+		logger.info(count + " files were deleted from " + limbo.getAbsolutePath());
 	}
 }

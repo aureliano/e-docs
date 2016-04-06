@@ -123,4 +123,23 @@ public class FileSystemRepositoryTest {
 		
 		assertFalse(deletedFile.exists());
 	}
+	
+	@Test
+	public void testClearLimbo() {
+		int totalFiles = 12;
+		File sourceFile = FileHelper.buildFile("src", "test", "resources", "7");
+		
+		for (byte i = 0; i < totalFiles; i++) {
+			File file = FileHelper.buildFile(this.configuration.getLimboPath(), String.valueOf(i));
+			FileHelper.copyFile(sourceFile, file);
+		}
+		
+		File limbo = new File(this.configuration.getLimboPath());
+		assertEquals(totalFiles, limbo.list().length);
+		
+		this.repository.clearLimbo();
+		int expected = 0;
+		limbo = new File(this.configuration.getLimboPath());
+		assertEquals(expected, limbo.list().length);
+	}
 }
