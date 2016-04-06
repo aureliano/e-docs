@@ -50,8 +50,8 @@ public class FileSystemRepositoryTest {
 			FileHelper.delete(limbo, true);
 		}
 		
-		FileHelper.createDirectory(repo, false);
-		FileHelper.createDirectory(limbo, false);
+		FileHelper.createDirectory(repo, true);
+		FileHelper.createDirectory(limbo, true);
 	}
 	
 	@Test
