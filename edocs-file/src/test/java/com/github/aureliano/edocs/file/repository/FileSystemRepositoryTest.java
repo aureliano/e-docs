@@ -106,4 +106,21 @@ public class FileSystemRepositoryTest {
 		String endPath = FileHelper.buildPath("8F", "14", entity.getId().toString());
 		assertTrue(file.getAbsolutePath().endsWith(endPath));
 	}
+	
+	@Test
+	public void testDeleteFile() {
+		IEntity entity = new FileEntity().withId(7);
+		
+		File sourceFile = FileHelper.buildFile("src", "test", "resources", entity.getId().toString());
+		String dir = this.repository.createDir(FileHelper.buildPath("8F", "14"));
+		File destFile = FileHelper.buildFile(dir, entity.getId().toString());
+		FileHelper.copyFile(sourceFile, destFile);
+		
+		assertTrue(new File(destFile.getAbsolutePath()).exists());
+		
+		this.repository.deleteFile(entity);
+		File deletedFile = new File(destFile.getAbsolutePath());
+		
+		assertFalse(deletedFile.exists());
+	}
 }

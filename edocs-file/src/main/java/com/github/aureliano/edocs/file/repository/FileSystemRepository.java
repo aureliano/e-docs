@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 
 import com.github.aureliano.edocs.common.config.ConfigurationSingleton;
 import com.github.aureliano.edocs.common.config.FileRepositoryConfiguration;
+import com.github.aureliano.edocs.common.exception.FileRepositoryException;
 import com.github.aureliano.edocs.common.helper.FileHelper;
 import com.github.aureliano.edocs.common.persistence.IEntity;
 import com.github.aureliano.edocs.secure.hash.HashGenerator;
@@ -90,7 +91,19 @@ public class FileSystemRepository implements IRepository {
 
 	@Override
 	public void deleteFile(IEntity entity) {
-		// TODO Auto-generated method stub
+		String fileName = entity.getId().toString();
+		String hash = HashGenerator.md5(fileName);
 		
+		String parentDir = hash.substring(0, 2);
+		String dir = hash.substring(2, 4);
+		File file = FileHelper.buildFile(this.configuration.getRootPath(), parentDir, dir, fileName);
+		
+		if (!file.exists()) {
+			throw new FileRepositoryException("File " + file.getAbsolutePath() + " does not exist.");
+		}
+		
+		logger.info("Deleting file " + file);
+		FileHelper.delete(file);
+		logger.info("File " + file + " deleted.");
 	}
 }
