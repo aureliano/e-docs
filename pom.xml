@@ -45,6 +45,7 @@
 		<module>edocs-domain</module>
 		<module>edocs-secure</module>
 		<module>edocs-service</module>
+		<module>edocs-file</module>
 	</modules>
 	
 	<dependencyManagement>
