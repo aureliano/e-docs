@@ -18,7 +18,7 @@ public class PasswordHashGeneratorTest {
 			.withSalt("");
 
 		String hash = PasswordHashGenerator.generate(pwd);
-		assertEquals("5yfRRkrhJDbomacm2lsvEdg4GyY=", hash);
+		assertEquals("E727D1464AE12436E899A726DA5B2F11D8381B26", hash);
 		assertEquals(hash, PasswordHashGenerator.generate(pwd));
 		
 		pwd.withSalt("d+*4T=");

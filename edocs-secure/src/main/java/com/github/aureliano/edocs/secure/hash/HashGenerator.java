@@ -7,13 +7,14 @@ import java.security.NoSuchAlgorithmException;
 import javax.xml.bind.DatatypeConverter;
 
 import com.github.aureliano.edocs.common.exception.SecureException;
+import com.github.aureliano.edocs.secure.model.Algorithm;
 
 public final class HashGenerator {
 
 	private HashGenerator() {}
 	
 	public static String md5(String text) {
-		throw new SecureException("Not implemented yet.");
+		return generateHash(text, Algorithm.MD5.getLabel());
 	}
 	
 	public static String generateHash(String text, String algorithm) {
@@ -27,7 +28,7 @@ public final class HashGenerator {
 		}
 		
 		byte bytes[] = md.digest();
-		String hash = DatatypeConverter.printBase64Binary(bytes);
+		String hash = DatatypeConverter.printHexBinary(bytes);
 		
 		return hash;
 	}
