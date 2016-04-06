@@ -58,8 +58,9 @@ public class FileSystemRepository implements IRepository {
 
 	@Override
 	public File getFile(IEntity entity) {
-		// TODO Auto-generated method stub
-		return null;
+		String fileName = entity.getId().toString();
+		String dirs = this.getDirs(fileName);
+		return FileHelper.buildFile(this.configuration.getRootPath(), dirs, fileName);
 	}
 	
 	@Override

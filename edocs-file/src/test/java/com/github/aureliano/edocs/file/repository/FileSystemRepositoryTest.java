@@ -158,4 +158,24 @@ public class FileSystemRepositoryTest {
 		List<String> files = this.repository.listFiles(FileHelper.buildPath("8F", "14"));
 		assertEquals(8, files.size());
 	}
+	
+	@Test
+	public void testGetFile() {
+		IEntity entity = new FileEntity().withId(7);
+		
+		File sourceFile = FileHelper.buildFile("src", "test", "resources", entity.getId().toString());
+		String dir = this.repository.createDir(FileHelper.buildPath("8F", "14"));
+		File destFile = FileHelper.buildFile(dir, entity.getId().toString());
+		FileHelper.copyFile(sourceFile, destFile);
+		
+		assertTrue(new File(destFile.getAbsolutePath()).exists());
+		
+		File file = this.repository.getFile(entity);
+		assertTrue(file.exists());
+		assertFalse(file.isDirectory());
+		assertFalse(file.isHidden());
+		
+		assertEquals(entity.getId().toString(), file.getName());
+		assertEquals(destFile, file);
+	}
 }
