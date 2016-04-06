@@ -20,6 +20,8 @@ public interface IRepository {
 	
 	public abstract File getFile(IEntity entity);
 	
+	public abstract void writeToLimbo(File source, IEntity entity);
+	
 	public abstract String saveFile(IEntity entity);
 	
 	public abstract void deleteFile(IEntity entity);

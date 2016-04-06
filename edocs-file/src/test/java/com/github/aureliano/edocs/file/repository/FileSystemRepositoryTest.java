@@ -1,5 +1,6 @@
 package com.github.aureliano.edocs.file.repository;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -68,6 +69,22 @@ public class FileSystemRepositoryTest {
 		Long size = this.repository.getDiskSize();
 		assertNotNull(size);
 		assertTrue(size > 0);
+	}
+	
+	@Test
+	public void testWriteToLimbo() {
+		IEntity entity = new FileEntity().withId(7);
+		String limboPath = this.configuration.getLimboPath();
+		File sourceFile = FileHelper.buildFile("src", "test", "resources", entity.getId().toString());
+		
+		this.repository.writeToLimbo(sourceFile, entity);
+		
+		File limboFile = FileHelper.buildFile(limboPath, entity.getId().toString());
+		
+		assertTrue(limboFile.exists());
+		assertFalse(limboFile.isDirectory());
+		assertFalse(limboFile.isHidden());
+		assertEquals(entity.getId().toString(), limboFile.getName());
 	}
 	
 	@Test

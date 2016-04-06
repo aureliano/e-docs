@@ -59,6 +59,16 @@ public class FileSystemRepository implements IRepository {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	@Override
+	public void writeToLimbo(File source, IEntity entity) {
+		String fileName = entity.getId().toString();
+		File limboFile = FileHelper.buildFile(this.configuration.getLimboPath(), fileName);
+		
+		logger.info("Copying file " + source.getAbsolutePath() + " to " + limboFile.getAbsolutePath());
+		FileHelper.copyFile(source, limboFile, true);
+		logger.info("File " + limboFile.getAbsolutePath() + " saved.");
+	}
 
 	@Override
 	public String saveFile(IEntity entity) {
