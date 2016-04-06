@@ -90,6 +90,18 @@ public class FileHelperTest {
 		assertEquals(new File("src/test/resources"), FileHelper.buildFile("src", "test", "resources"));
 	}
 	
+	@Test
+	public void testGetRootPath() {
+		String root = FileHelper.getRootPath("/tmp/repo/files");
+		assertEquals("/", root);
+		
+		root = FileHelper.getRootPath(new File("tmp/repo/files").getAbsolutePath());
+		assertEquals("/", root);
+		
+		root = FileHelper.getRootPath("C:\\tmp\\repo\\files");
+		assertEquals("C:", root);
+	}
+	
 	public static void createDirectoryStructure() {
 		File sourceDir = new File("src/test/resources");
 		

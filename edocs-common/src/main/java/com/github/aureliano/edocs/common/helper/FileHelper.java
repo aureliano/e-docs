@@ -216,4 +216,11 @@ public final class FileHelper {
 			}
 		}
 	}
+	
+	public static String getRootPath(String path) {
+		String[] tokens = path.split("[\\\\/]+");
+		String root = tokens[0].equals("") ? "/" : tokens[0];
+		
+		return root;
+	}
 }
