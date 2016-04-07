@@ -12,6 +12,8 @@ public class AppFrame extends JFrame {
 
 	private static final long serialVersionUID = 7618501026967569839L;
 
+	private TabbedPane tabbedPane;
+	
 	public AppFrame() {
 		this.buildGui();
 	}
@@ -23,6 +25,9 @@ public class AppFrame extends JFrame {
 		JPanel panel = new JPanel(new BorderLayout());
 		panel.setOpaque(true);
 		panel.add(new VerticalToolBar(), BorderLayout.WEST);
+		
+		this.tabbedPane = new TabbedPane();
+		panel.add(this.tabbedPane, BorderLayout.CENTER);
 		
 		super.setContentPane(panel);
 		super.setJMenuBar(new MenuBar());
