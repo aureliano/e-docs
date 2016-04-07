@@ -1,5 +1,7 @@
 package com.github.aureliano.edocs.app.cmd;
 
+import com.github.aureliano.edocs.app.EdocsApp;
+
 public class ExitCommand implements ICommand {
 
 	public ExitCommand() {}
@@ -10,6 +12,7 @@ public class ExitCommand implements ICommand {
 			return;
 		}
 		
+		EdocsApp.instance().getFrame().dispose();
 		System.exit(0);
 	}
 
