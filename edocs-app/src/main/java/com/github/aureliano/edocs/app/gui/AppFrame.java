@@ -6,6 +6,8 @@ import java.awt.Dimension;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import com.github.aureliano.edocs.app.gui.menu.MenuBar;
+
 public class AppFrame extends JFrame {
 
 	private static final long serialVersionUID = 7618501026967569839L;
@@ -21,6 +23,8 @@ public class AppFrame extends JFrame {
 		JPanel panel = new JPanel(new BorderLayout());
 		panel.setOpaque(true);
 		super.setContentPane(panel);
+		
+		super.setJMenuBar(new MenuBar());
 	}
 	
 	public void showFrame() {
