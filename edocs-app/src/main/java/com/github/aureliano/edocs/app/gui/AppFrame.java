@@ -22,8 +22,9 @@ public class AppFrame extends JFrame {
 		
 		JPanel panel = new JPanel(new BorderLayout());
 		panel.setOpaque(true);
-		super.setContentPane(panel);
+		panel.add(new VerticalToolBar(), BorderLayout.WEST);
 		
+		super.setContentPane(panel);
 		super.setJMenuBar(new MenuBar());
 	}
 	
