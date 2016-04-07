@@ -1,34 +1,29 @@
 package com.github.aureliano.edocs.app;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
+
+import com.github.aureliano.edocs.app.gui.AppFrame;
 
 public class EdocsApp {
 
-	private static void createAndShowGui() {
-		JFrame frame = new JFrame("e-Docs");
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
- 
-		JPanel panel = new JPanel(new BorderLayout());
-		panel.setOpaque(true);
-		frame.setContentPane(panel);
-		
-		frame.pack();
-		frame.setVisible(true);
-		
-		frame.setSize(new Dimension(500, 500));
+	private AppFrame frame;
+	
+	public EdocsApp() {
+		this.frame = new AppFrame();
+	}
+	
+	public AppFrame getFrame() {
+		return this.frame;
 	}
 	
 	public static void main(String[] args) {
+		final EdocsApp application = new EdocsApp();
+		
 		SwingUtilities.invokeLater(new Runnable() {
 			
 			@Override
 			public void run() {
-				createAndShowGui();
+				application.getFrame().showFrame();
 			}
 		});
 	}
