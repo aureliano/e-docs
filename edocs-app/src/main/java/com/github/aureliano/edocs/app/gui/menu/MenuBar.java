@@ -8,6 +8,7 @@ public class MenuBar extends JMenuBar {
 	
 	private FileMenu fileMenu;
 	private DocumentMenu documentMenu;
+	private HelpMenu helpMenu;
 
 	public MenuBar() {
 		this.addMenus();
@@ -16,8 +17,10 @@ public class MenuBar extends JMenuBar {
 	private void addMenus() {
 		this.fileMenu = new FileMenu();
 		this.documentMenu = new DocumentMenu();
+		this.helpMenu = new HelpMenu();
 		
 		super.add(this.fileMenu);
 		super.add(this.documentMenu);
+		super.add(this.helpMenu);
 	}
 }
