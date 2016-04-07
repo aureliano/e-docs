@@ -46,6 +46,7 @@
 		<module>edocs-secure</module>
 		<module>edocs-service</module>
 		<module>edocs-file</module>
+		<module>edocs-app</module>
 	</modules>
 	
 	<dependencyManagement>
@@ -77,6 +78,12 @@
 			<dependency>
 				<groupId>com.github.aureliano</groupId>
 				<artifactId>edocs-file</artifactId>
+				<version>0.1.0</version>
+			</dependency>
+			
+			<dependency>
+				<groupId>com.github.aureliano</groupId>
+				<artifactId>edocs-service</artifactId>
 				<version>0.1.0</version>
 			</dependency>
 		
