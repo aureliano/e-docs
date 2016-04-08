@@ -47,6 +47,10 @@ public class AppFrame extends JFrame {
 		this.tabbedPane.removeTabAt(index);
 	}
 	
+	public void removeAllTabs() {
+		this.tabbedPane.removeAll();
+	}
+	
 	public int getActiveTab() {
 		return this.tabbedPane.getSelectedIndex();
 	}
