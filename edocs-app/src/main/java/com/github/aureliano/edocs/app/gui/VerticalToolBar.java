@@ -5,6 +5,8 @@ import java.awt.Insets;
 import javax.swing.JButton;
 import javax.swing.JToolBar;
 
+import com.github.aureliano.edocs.common.locale.EdocsLocale;
+
 public class VerticalToolBar extends JToolBar {
 
 	private static final long serialVersionUID = -176640015146742392L;
@@ -24,10 +26,12 @@ public class VerticalToolBar extends JToolBar {
 	}
 
 	private void configureButtons() {
+		EdocsLocale locale = EdocsLocale.instance();
+		
 		this.buttonFindDocuments = new JButton();
-		this.buttonFindDocuments.setToolTipText("Find document");
+		this.buttonFindDocuments.setToolTipText(locale.getMessage("gui.toolbar.vertical.button.find.document.tooltip"));
 		
 		this.buttonSaveDocument = new JButton();
-		this.buttonSaveDocument.setToolTipText("Save document");
+		this.buttonSaveDocument.setToolTipText(locale.getMessage("gui.toolbar.vertical.button.save.document.tooltip"));
 	}
 }
