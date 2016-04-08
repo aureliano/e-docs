@@ -43,6 +43,14 @@ public class AppFrame extends JFrame {
 		this.tabbedPane.setSelectedIndex(index);
 	}
 	
+	public void removeTab(int index) {
+		this.tabbedPane.removeTabAt(index);
+	}
+	
+	public int getActiveTab() {
+		return this.tabbedPane.getSelectedIndex();
+	}
+	
 	public void showFrame() {
 		super.pack();
 		super.setSize(new Dimension(800, 600));
