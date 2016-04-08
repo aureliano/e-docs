@@ -45,7 +45,7 @@ public class AppFrame extends JFrame {
 	
 	public void showFrame() {
 		super.pack();
-		super.setSize(new Dimension(500, 500));
+		super.setSize(new Dimension(800, 600));
 		super.setLocationRelativeTo(null);
 		super.setVisible(true);
 	}
