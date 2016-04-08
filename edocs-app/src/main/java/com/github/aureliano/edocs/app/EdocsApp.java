@@ -10,7 +10,7 @@ public class EdocsApp {
 	private AppFrame frame;
 	
 	public static void main(String[] args) {
-		final EdocsApp application = new EdocsApp();
+		final EdocsApp application = instance();
 		
 		SwingUtilities.invokeLater(new Runnable() {
 			
