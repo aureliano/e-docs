@@ -17,23 +17,27 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import com.github.aureliano.edocs.common.exception.EDocsException;
+import com.github.aureliano.edocs.common.locale.EdocsLocale;
 
 public class HelpDialog extends JDialog {
 
 	private static final long serialVersionUID = -3369353227801827761L;
 
 	private Properties properties;
+	private EdocsLocale locale;
 	
 	public HelpDialog(Frame parent) {
 		super(parent);
-		this.loadMetadata();
+		
+		this.locale = EdocsLocale.instance();
+		this.loadProperties();
 		this.buildGui(parent);
 	}
 	
-	private void loadMetadata() {
+	private void loadProperties() {
 		this.properties = new Properties();
 		try(InputStream stream = ClassLoader.getSystemResourceAsStream("metadata.properties")) {
-			properties.load(stream);
+			this.properties.load(stream);
 		} catch (IOException ex) {
 			throw new EDocsException(ex);
 		}
@@ -49,7 +53,7 @@ public class HelpDialog extends JDialog {
 		this.createLayout(labelTitle, labelDescription, labelVersion, labelCopyright, buttonOk);
 
 		super.setLocationRelativeTo(parent);
-		super.setTitle("About e-Docs");
+		super.setTitle(this.locale.getMessage("gui.frame.help.title"));
 		super.setModal(true);
 	}
 	
@@ -67,7 +71,7 @@ public class HelpDialog extends JDialog {
 	}
 	
 	private JLabel createLabelTitle() {
-		JLabel label = new JLabel("e-Docs");
+		JLabel label = new JLabel(this.locale.getMessage("gui.frame.help.subtitle"));
 		label.setBounds(120, 10, 100, 25);
 		label.setFont(new Font(Font.SERIF, Font.BOLD, 18));
 		
@@ -77,7 +81,7 @@ public class HelpDialog extends JDialog {
 	private JLabel createLabelDescription() {
 		String text = new StringBuilder("<html>")
 			.append("<p align=\"center\">")
-			.append(this.properties.getProperty("app.description"))
+			.append(this.locale.getMessage("gui.frame.help.description"))
 			.append("</p>")
 			.append("</html>")
 			.toString();
@@ -97,7 +101,7 @@ public class HelpDialog extends JDialog {
 	private JLabel createLabelCopyright() {
 		String text = new StringBuilder("<html>")
 			.append("<p align=\"center\">")
-			.append(this.properties.getProperty("app.copyright"))
+			.append(this.locale.getMessage("gui.frame.help.copyright"))
 			.append("</p>")
 			.append("</html>")
 			.toString();
@@ -108,7 +112,7 @@ public class HelpDialog extends JDialog {
 	}
 
 	private JButton createButtonOk() {
-		JButton button = new JButton("OK");
+		JButton button = new JButton(this.locale.getMessage("gui.frame.help.close"));
 		button.setBounds(210, 170, 100, 25);
 		
 		button.addActionListener(new ActionListener() {
