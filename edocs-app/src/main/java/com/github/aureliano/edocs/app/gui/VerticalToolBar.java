@@ -1,10 +1,13 @@
 package com.github.aureliano.edocs.app.gui;
 
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JToolBar;
 
+import com.github.aureliano.edocs.app.cmd.NewDocumentCommand;
 import com.github.aureliano.edocs.common.locale.EdocsLocale;
 
 public class VerticalToolBar extends JToolBar {
@@ -12,7 +15,7 @@ public class VerticalToolBar extends JToolBar {
 	private static final long serialVersionUID = -176640015146742392L;
 
 	private JButton buttonFindDocuments;
-	private JButton buttonSaveDocument;
+	private JButton buttonNewDocument;
 	
 	public VerticalToolBar() {
 		super.setFloatable(false);
@@ -22,7 +25,7 @@ public class VerticalToolBar extends JToolBar {
 		this.configureButtons();
 		
 		super.add(this.buttonFindDocuments);
-		super.add(this.buttonSaveDocument);
+		super.add(this.buttonNewDocument);
 	}
 
 	private void configureButtons() {
@@ -31,7 +34,14 @@ public class VerticalToolBar extends JToolBar {
 		this.buttonFindDocuments = new JButton();
 		this.buttonFindDocuments.setToolTipText(locale.getMessage("gui.toolbar.vertical.button.find.document.tooltip"));
 		
-		this.buttonSaveDocument = new JButton();
-		this.buttonSaveDocument.setToolTipText(locale.getMessage("gui.toolbar.vertical.button.save.document.tooltip"));
+		this.buttonNewDocument = new JButton();
+		this.buttonNewDocument.setToolTipText(locale.getMessage("gui.toolbar.vertical.button.new.document.tooltip"));
+		this.buttonNewDocument.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new NewDocumentCommand().execute();
+			}
+		});
 	}
 }
