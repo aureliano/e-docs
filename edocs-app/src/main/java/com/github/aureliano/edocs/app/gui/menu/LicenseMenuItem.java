@@ -7,6 +7,7 @@ import javax.swing.JMenuItem;
 
 import com.github.aureliano.edocs.app.cmd.ICommand;
 import com.github.aureliano.edocs.app.cmd.OpenLicenseDialogCommand;
+import com.github.aureliano.edocs.common.locale.EdocsLocale;
 
 public class LicenseMenuItem extends JMenuItem {
 
@@ -16,7 +17,7 @@ public class LicenseMenuItem extends JMenuItem {
 
 	public LicenseMenuItem() {
 		this.command = new OpenLicenseDialogCommand();
-		super.setText("License");
+		super.setText(EdocsLocale.instance().getMessage("gui.menubar.help.license"));
 		
 		super.addActionListener(new ActionListener() {
 			

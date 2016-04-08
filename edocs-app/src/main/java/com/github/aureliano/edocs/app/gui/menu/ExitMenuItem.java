@@ -7,6 +7,7 @@ import javax.swing.JMenuItem;
 
 import com.github.aureliano.edocs.app.cmd.ExitCommand;
 import com.github.aureliano.edocs.app.cmd.ICommand;
+import com.github.aureliano.edocs.common.locale.EdocsLocale;
 
 public class ExitMenuItem extends JMenuItem {
 
@@ -16,7 +17,7 @@ public class ExitMenuItem extends JMenuItem {
 	
 	public ExitMenuItem() {
 		this.command = new ExitCommand();
-		super.setText("Exit");
+		super.setText(EdocsLocale.instance().getMessage("gui.menubar.file.exit"));
 		
 		super.addActionListener(new ActionListener() {
 			

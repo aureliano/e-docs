@@ -7,6 +7,7 @@ import javax.swing.JMenuItem;
 
 import com.github.aureliano.edocs.app.cmd.ICommand;
 import com.github.aureliano.edocs.app.cmd.OpenAboutDialogCommand;
+import com.github.aureliano.edocs.common.locale.EdocsLocale;
 
 public class AboutMenuItem extends JMenuItem {
 
@@ -16,7 +17,7 @@ public class AboutMenuItem extends JMenuItem {
 	
 	public AboutMenuItem() {
 		this.command = new OpenAboutDialogCommand();
-		super.setText("About");
+		super.setText(EdocsLocale.instance().getMessage("gui.menubar.help.about"));
 		
 		super.addActionListener(new ActionListener() {
 			

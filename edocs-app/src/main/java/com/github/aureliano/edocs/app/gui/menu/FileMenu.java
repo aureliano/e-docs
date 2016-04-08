@@ -3,6 +3,8 @@ package com.github.aureliano.edocs.app.gui.menu;
 import javax.swing.JMenu;
 import javax.swing.JSeparator;
 
+import com.github.aureliano.edocs.common.locale.EdocsLocale;
+
 public class FileMenu extends JMenu {
 
 	private static final long serialVersionUID = -662548298147505185L;
@@ -12,7 +14,7 @@ public class FileMenu extends JMenu {
 	private ExitMenuItem exitMenuItem;
 	
 	public FileMenu() {
-		super.setText("File");
+		super.setText(EdocsLocale.instance().getMessage("gui.menubar.file"));
 		this.addMenuItems();
 	}
 

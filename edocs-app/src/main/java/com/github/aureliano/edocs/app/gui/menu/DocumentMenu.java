@@ -2,6 +2,8 @@ package com.github.aureliano.edocs.app.gui.menu;
 
 import javax.swing.JMenu;
 
+import com.github.aureliano.edocs.common.locale.EdocsLocale;
+
 public class DocumentMenu extends JMenu {
 
 	private static final long serialVersionUID = 8913482438475098482L;
@@ -10,7 +12,7 @@ public class DocumentMenu extends JMenu {
 	private SaveDocumentMenuItem saveDocumentMenuItem;
 	
 	public DocumentMenu() {
-		super.setText("Document");
+		super.setText(EdocsLocale.instance().getMessage("gui.menubar.document"));
 		this.addMenuItems();
 	}
 
