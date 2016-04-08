@@ -17,6 +17,7 @@ public class VerticalToolBar extends JToolBar {
 
 	private JButton buttonFindDocuments;
 	private JButton buttonNewDocument;
+	private JButton buttonTools;
 	
 	public VerticalToolBar() {
 		super.setFloatable(false);
@@ -27,6 +28,7 @@ public class VerticalToolBar extends JToolBar {
 		
 		super.add(this.buttonFindDocuments);
 		super.add(this.buttonNewDocument);
+		super.add(this.buttonTools);
 	}
 
 	private void configureButtons() {
@@ -46,5 +48,9 @@ public class VerticalToolBar extends JToolBar {
 				new NewDocumentCommand().execute();
 			}
 		});
+		
+		this.buttonTools = new JButton();
+		this.buttonTools.setIcon(GuiHelper.createIcon("img/tools.png"));
+		this.buttonTools.setToolTipText(locale.getMessage("gui.toolbar.vertical.button.tools.tooltip"));
 	}
 }
