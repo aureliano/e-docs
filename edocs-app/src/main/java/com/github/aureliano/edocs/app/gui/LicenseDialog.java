@@ -19,15 +19,19 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 import com.github.aureliano.edocs.common.exception.EDocsException;
+import com.github.aureliano.edocs.common.locale.EdocsLocale;
 
 public class LicenseDialog extends JDialog {
 
 	private static final long serialVersionUID = 8561875072232916684L;
 
 	private Properties properties;
+	private EdocsLocale locale;
 	
 	public LicenseDialog(Frame parent) {
 		super(parent);
+		
+		this.locale = EdocsLocale.instance();
 		this.loadMetadata();
 		this.buildGui(parent);
 	}
@@ -51,7 +55,7 @@ public class LicenseDialog extends JDialog {
 		buttonOk.grabFocus();
 		
 		super.setLocationRelativeTo(parent);
-		super.setTitle("License");
+		super.setTitle(this.locale.getMessage("gui.frame.license.title"));
 		super.setModal(true);
 		
 		super.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -71,7 +75,7 @@ public class LicenseDialog extends JDialog {
 	}
 	
 	private JLabel createLabelTitle() {
-		JLabel label = new JLabel("e-Docs");
+		JLabel label = new JLabel(this.locale.getMessage("gui.frame.license.subtitle"));
 		label.setBounds(160, 10, 100, 25);
 		label.setFont(new Font(Font.SERIF, Font.BOLD, 18));
 		
@@ -92,7 +96,7 @@ public class LicenseDialog extends JDialog {
 		
 		area.setLineWrap(true);
 		area.setWrapStyleWord(true);
-		area.setText(this.properties.getProperty("project.license"));
+		area.setText(this.locale.getMessage("project.license"));
 		area.setCaretPosition(0);
 		area.setEditable(false);
 		
@@ -100,7 +104,7 @@ public class LicenseDialog extends JDialog {
 	}
 
 	private JButton createButtonOk() {
-		JButton button = new JButton("OK");
+		JButton button = new JButton(this.locale.getMessage("gui.frame.license.close"));
 		button.setBounds(290, 330, 100, 25);
 		
 		button.addActionListener(new ActionListener() {
