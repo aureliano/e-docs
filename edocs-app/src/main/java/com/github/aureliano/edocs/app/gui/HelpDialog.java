@@ -6,6 +6,9 @@ import java.awt.Font;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -13,13 +16,27 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import com.github.aureliano.edocs.common.exception.EDocsException;
+
 public class HelpDialog extends JDialog {
 
 	private static final long serialVersionUID = -3369353227801827761L;
 
+	private Properties properties;
+	
 	public HelpDialog(Frame parent) {
 		super(parent);
+		this.loadMetadata();
 		this.buildGui(parent);
+	}
+	
+	private void loadMetadata() {
+		this.properties = new Properties();
+		try(InputStream stream = ClassLoader.getSystemResourceAsStream("metadata.properties")) {
+			properties.load(stream);
+		} catch (IOException ex) {
+			throw new EDocsException(ex);
+		}
 	}
 
 	private void buildGui(Component parent) {
@@ -73,7 +90,7 @@ public class HelpDialog extends JDialog {
 	}
 	
 	private JLabel createLabelVersion() {
-		JLabel label = new JLabel("Version 0.1.0");
+		JLabel label = new JLabel("Version " + this.properties.getProperty("app.version"));
 		label.setBounds(110, 90, 210, 25);
 		
 		return label;
