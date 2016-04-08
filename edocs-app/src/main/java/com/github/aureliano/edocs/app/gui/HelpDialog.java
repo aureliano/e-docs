@@ -99,9 +99,7 @@ public class HelpDialog extends JDialog {
 	private JLabel createLabelCopyright() {
 		String text = new StringBuilder("<html>")
 			.append("<p align=\"center\">")
-			.append("(c) Copyright e-Docs contributors")
-			.append("<br/>")
-			.append("and others 2016. All rights reserved.")
+			.append(this.properties.getProperty("app.copyright"))
 			.append("</p>")
 			.append("</html>")
 			.toString();
