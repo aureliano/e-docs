@@ -8,6 +8,7 @@ import javax.swing.JButton;
 import javax.swing.JToolBar;
 
 import com.github.aureliano.edocs.app.cmd.NewDocumentCommand;
+import com.github.aureliano.edocs.app.helper.GuiHelper;
 import com.github.aureliano.edocs.common.locale.EdocsLocale;
 
 public class VerticalToolBar extends JToolBar {
@@ -32,9 +33,11 @@ public class VerticalToolBar extends JToolBar {
 		EdocsLocale locale = EdocsLocale.instance();
 		
 		this.buttonFindDocuments = new JButton();
+		this.buttonFindDocuments.setIcon(GuiHelper.createIcon("img/search.png"));
 		this.buttonFindDocuments.setToolTipText(locale.getMessage("gui.toolbar.vertical.button.find.document.tooltip"));
 		
 		this.buttonNewDocument = new JButton();
+		this.buttonNewDocument.setIcon(GuiHelper.createIcon("img/documents.png"));
 		this.buttonNewDocument.setToolTipText(locale.getMessage("gui.toolbar.vertical.button.new.document.tooltip"));
 		this.buttonNewDocument.addActionListener(new ActionListener() {
 			
