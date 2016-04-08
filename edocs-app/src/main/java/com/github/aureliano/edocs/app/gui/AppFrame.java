@@ -38,6 +38,9 @@ public class AppFrame extends JFrame {
 	
 	public void addTabPanel(String title, JPanel panel) {
 		this.tabbedPane.addTab(title, panel);
+		
+		int index = this.tabbedPane.getTabCount() - 1;
+		this.tabbedPane.setSelectedIndex(index);
 	}
 	
 	public void showFrame() {
