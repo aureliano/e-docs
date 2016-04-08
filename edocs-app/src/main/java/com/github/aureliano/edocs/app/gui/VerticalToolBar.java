@@ -19,6 +19,7 @@ public class VerticalToolBar extends JToolBar {
 	private JButton buttonNewDocument;
 	private JButton buttonTools;
 	private JButton buttonFileRepository;
+	private JButton buttonDatabase;
 	private JButton buttonHelp;
 	
 	public VerticalToolBar() {
@@ -32,6 +33,7 @@ public class VerticalToolBar extends JToolBar {
 		super.add(this.buttonNewDocument);
 		super.add(this.buttonTools);
 		super.add(this.buttonFileRepository);
+		super.add(this.buttonDatabase);
 		super.add(this.buttonHelp);
 	}
 
@@ -60,6 +62,10 @@ public class VerticalToolBar extends JToolBar {
 		this.buttonFileRepository = new JButton();
 		this.buttonFileRepository.setIcon(GuiHelper.createIcon("img/folder.png"));
 		this.buttonFileRepository.setToolTipText(locale.getMessage("gui.toolbar.vertical.button.file.repository.tooltip"));
+		
+		this.buttonDatabase = new JButton();
+		this.buttonDatabase.setIcon(GuiHelper.createIcon("img/database.png"));
+		this.buttonDatabase.setToolTipText(locale.getMessage("gui.toolbar.vertical.button.database.tooltip"));
 		
 		this.buttonHelp = new JButton();
 		this.buttonHelp.setIcon(GuiHelper.createIcon("img/help.png"));
