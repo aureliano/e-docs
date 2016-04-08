@@ -77,9 +77,7 @@ public class HelpDialog extends JDialog {
 	private JLabel createLabelDescription() {
 		String text = new StringBuilder("<html>")
 			.append("<p align=\"center\">")
-			.append("A digital document repository")
-			.append("<br/>")
-			.append("management application.")
+			.append(this.properties.getProperty("app.description"))
 			.append("</p>")
 			.append("</html>")
 			.toString();
