@@ -31,9 +31,13 @@ public class AppFrame extends JFrame {
 		
 		this.tabbedPane = new TabbedPane();
 		panel.add(this.tabbedPane, BorderLayout.CENTER);
-		
+
 		super.setContentPane(panel);
 		super.setJMenuBar(new MenuBar());
+	}
+	
+	public void addTabPanel(String title, JPanel panel) {
+		this.tabbedPane.addTab(title, panel);
 	}
 	
 	public void showFrame() {
