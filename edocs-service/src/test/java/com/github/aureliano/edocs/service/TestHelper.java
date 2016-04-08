@@ -54,6 +54,7 @@ public class TestHelper {
 	
 	public static Document prepareDocumentToSave(int totalAttachments) {
 		Document document = new Document()
+			.withName("document")
 			.withCategory(Category.AGREEMENT)
 			.withDescription("description")
 			.withOwner(createUserSample())
@@ -94,6 +95,7 @@ public class TestHelper {
 	
 	public static Document createDocumentSample(User owner, boolean deleted) {
 		Document d = new Document()
+			.withName("document name")
 			.withCategory(Category.AGREEMENT)
 			.withDescription("description")
 			.withOwner(owner)

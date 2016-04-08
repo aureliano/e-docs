@@ -166,6 +166,7 @@ public class DocumentServiceBeanTest {
 	@Test
 	public void testCreateDocument() throws SQLException {
 		Document document = new Document()
+			.withName("doc")
 			.withCategory(Category.AGREEMENT)
 			.withDescription("description")
 			.withOwner(TestHelper.createUserSample())
