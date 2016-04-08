@@ -225,6 +225,7 @@ public class AttachmentDaoTest {
 	
 	private Document getValidDocument() {
 		Document d = new Document()
+			.withName(this.getValidName())
 			.withCategory(Category.AGREEMENT)
 			.withDescription("description")
 			.withDeleted(false)
@@ -234,7 +235,7 @@ public class AttachmentDaoTest {
 
 	private String getValidName() {
 		StringBuilder d = new StringBuilder();
-		for (short i = 0; i < 250; i++) {
+		for (short i = 0; i < 200; i++) {
 			d.append(".");
 		}
 		

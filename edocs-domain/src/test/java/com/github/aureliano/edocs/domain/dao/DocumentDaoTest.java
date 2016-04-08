@@ -50,6 +50,7 @@ public class DocumentDaoTest {
 	
 	@Test
 	public void testValidateSaveAction() {
+		this.checkInvalidName();
 		this.checkInvalidCategory();
 		this.checkInvalidDescription();
 		this.checkInvalidDeleted();
@@ -58,6 +59,7 @@ public class DocumentDaoTest {
 	@Test
 	public void testSave() {
 		Document d = new Document()
+			.withName(this.getValidName())
 			.withCategory(Category.AGREEMENT)
 			.withDescription(this.getValidDescription())
 			.withDueDate(this.getToday())
@@ -81,6 +83,7 @@ public class DocumentDaoTest {
 	public void testDeleteByEntity() throws SQLException {
 		Category category = Category.INVOICE;
 		Document d = new Document()
+			.withName(this.getValidName())
 			.withCategory(category)
 			.withDescription(this.getValidDescription())
 			.withDeleted(false);
@@ -104,6 +107,7 @@ public class DocumentDaoTest {
 	public void testDeleteById() throws SQLException {
 		Category category = Category.INVOICE;
 		Document d = new Document()
+			.withName(this.getValidName())
 			.withCategory(category)
 			.withDescription(this.getValidDescription())
 			.withDeleted(false);
@@ -126,6 +130,7 @@ public class DocumentDaoTest {
 	@Test
 	public void testFind() {
 		Document d = new Document()
+			.withName(this.getValidName())
 			.withCategory(Category.INVOICE)
 			.withDescription(this.getValidDescription())
 			.withDeleted(false);
@@ -139,12 +144,14 @@ public class DocumentDaoTest {
 	@Test
 	public void testSearchByEntity() {
 		Document d = new Document()
+			.withName(this.getValidName())
 			.withCategory(Category.AGREEMENT)
 			.withDescription(this.getValidDescription())
 			.withDeleted(false);
 		
 		Document doc1 = this.dao.save(d);
 		this.dao.save(new Document()
+			.withName(this.getValidName())
 			.withCategory(Category.CHECK)
 			.withDescription(this.getValidDescription())
 			.withDeleted(false));
@@ -160,12 +167,14 @@ public class DocumentDaoTest {
 	@Test
 	public void testSearchByQuery() {
 		Document d = new Document()
+			.withName(this.getValidName())
 			.withCategory(Category.AGREEMENT)
 			.withDescription(this.getValidDescription())
 			.withDeleted(false);
 		
 		Document doc1 = this.dao.save(d);
 		this.dao.save(new Document()
+			.withName(this.getValidName())
 			.withCategory(Category.CHECK)
 			.withDeleted(false)
 			.withDescription(this.getValidDescription()));
@@ -178,8 +187,23 @@ public class DocumentDaoTest {
 		assertEquals(doc1, doc2);
 	}
 
+	private void checkInvalidName() {
+		Document d = new Document()
+			.withCategory(Category.AGREEMENT)
+			.withDeleted(false)
+			.withDescription(this.getValidDescription());
+		this.validateContextMessage(d, "Expected to find a not empty text for field name.");
+		
+		d.withName("1");
+		this.validateContextMessage(d, "Expected field name to have size between 3 and 200 but got 1.");
+		
+		d.withName(this.getValidName() + "1");
+		this.validateContextMessage(d, "Expected field name to have size between 3 and 200 but got 201.");
+	}
+
 	private void checkInvalidCategory() {
 		Document d = new Document()
+			.withName(this.getValidName())
 			.withDescription(this.getValidDescription())
 			.withDeleted(false);
 		this.validateContextMessage(d, "Expected to find a not null value for field category.");
@@ -187,6 +211,7 @@ public class DocumentDaoTest {
 
 	private void checkInvalidDescription() {
 		Document d = new Document()
+			.withName(this.getValidName())
 			.withCategory(Category.AGREEMENT)
 			.withDeleted(false);
 		this.validateContextMessage(d, "Expected to find a not empty text for field description.");
@@ -200,18 +225,27 @@ public class DocumentDaoTest {
 	
 	private void checkInvalidDeleted() {
 		Document d = new Document()
+			.withName(this.getValidName())
 			.withCategory(Category.AGREEMENT)
 			.withDescription(this.getValidDescription());
 		this.validateContextMessage(d, "Expected to find a not null value for field deleted.");
 	}
+	
+	private String getValidName() {
+		return this.createString(200);
+	}
 
 	private String getValidDescription() {
-		StringBuilder d = new StringBuilder();
-		for (short i = 0; i < 1000; i++) {
-			d.append(".");
+		return this.createString(1000);
+	}
+
+	public String createString(int chars) {
+		StringBuilder b = new StringBuilder();
+		for (short i = 0; i < chars; i++) {
+			b.append(".");
 		}
 		
-		return d.toString();
+		return b.toString();
 	}
 	
 	private void validateContextMessage(Document document, String message) {

@@ -12,6 +12,7 @@ import com.github.aureliano.edocs.common.persistence.IEntity;
 public class Document implements IEntity {
 
 	private Integer id;
+	private String name;
 	private Category category;
 	private String description;
 	private Date dueDate;
@@ -29,6 +30,17 @@ public class Document implements IEntity {
 
 	public Document withId(Integer id) {
 		this.id = id;
+		return this;
+	}
+	
+	@NotEmpty
+	@Size(min = 3, max = 200)
+	public String getName() {
+		return name;
+	}
+	
+	public Document withName(String name) {
+		this.name = name;
 		return this;
 	}
 
@@ -102,6 +114,7 @@ public class Document implements IEntity {
 		result = prime * result + ((category == null) ? 0 : category.hashCode());
 		result = prime * result + ((dueDate == null) ? 0 : dueDate.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		return result;
 	}
 
@@ -125,6 +138,11 @@ public class Document implements IEntity {
 			if (other.id != null)
 				return false;
 		} else if (!id.equals(other.id))
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
 			return false;
 		return true;
 	}

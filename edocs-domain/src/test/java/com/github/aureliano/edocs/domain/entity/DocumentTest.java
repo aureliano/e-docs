@@ -23,6 +23,12 @@ public class DocumentTest {
 		d2.withId(127);
 		assertTrue(d1.equals(d2));
 		
+		d1.withName("test");
+		assertFalse(d1.equals(d2));
+		
+		d2.withName("test");
+		assertTrue(d1.equals(d2));
+		
 		d1.withCategory(Category.AGREEMENT);
 		assertFalse(d1.equals(d2));
 		
