@@ -35,6 +35,7 @@ public class AppFrame extends JFrame {
 
 		super.setContentPane(panel);
 		super.setJMenuBar(new MenuBar());
+		super.addWindowListener(new AppFrameWindowListener());
 	}
 	
 	public void addTabPanel(String title, JPanel panel) {
