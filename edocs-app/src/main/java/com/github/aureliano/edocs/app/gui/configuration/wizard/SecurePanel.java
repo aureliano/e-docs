@@ -1,6 +1,7 @@
 package com.github.aureliano.edocs.app.gui.configuration.wizard;
 
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
@@ -14,7 +15,6 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
@@ -124,7 +124,8 @@ public class SecurePanel extends JPanel {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(null, "Not implemented yet!");
+				CardLayout cardLayout = (CardLayout) getParent().getLayout();
+				cardLayout.show(getParent(), DatabasePanel.ID);
 			}
 		});
 	}

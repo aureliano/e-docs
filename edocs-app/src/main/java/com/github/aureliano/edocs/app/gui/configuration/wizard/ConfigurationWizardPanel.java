@@ -15,5 +15,6 @@ public class ConfigurationWizardPanel extends JPanel {
 	private void buildGui() {
 		super.setLayout(new CardLayout());
 		super.add(new SecurePanel(), SecurePanel.ID);
+		super.add(new DatabasePanel(), DatabasePanel.ID);
 	}
 }
