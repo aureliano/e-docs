@@ -7,6 +7,7 @@ import static org.junit.Assert.assertTrue;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -105,5 +106,16 @@ public class UserServiceBeanTest {
 		
 		assertEquals(user1, user2);
 		assertTrue(user1.getDbUser());
+	}
+	
+	@Test
+	public void testListUsers() {
+		int totalUsers = 50;
+		for (byte i = 0; i < totalUsers; i++) {
+			TestHelper.createUserSample("user_" + (i + 1));
+		}
+		
+		List<User> users = this.bean.listUsers();
+		assertEquals(totalUsers, users.size());
 	}
 }

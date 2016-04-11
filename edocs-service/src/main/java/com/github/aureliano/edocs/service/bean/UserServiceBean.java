@@ -56,4 +56,9 @@ public class UserServiceBean implements IServiceBean {
 	public User findUserById(Integer id) {
 		return this.pm.find(User.class, id);
 	}
+	
+	public List<User> listUsers() {
+		DataPagination<User> dataPagination = new DataPagination<User>().withEntity(new User());
+		return this.pm.search(dataPagination);
+	}
 }
