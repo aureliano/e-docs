@@ -5,6 +5,7 @@ import java.awt.Dimension;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
 
 import com.github.aureliano.edocs.app.gui.menu.MenuBar;
 import com.github.aureliano.edocs.common.locale.EdocsLocale;
@@ -53,6 +54,10 @@ public class AppFrame extends JFrame {
 	
 	public int getActiveTab() {
 		return this.tabbedPane.getSelectedIndex();
+	}
+	
+	public JTabbedPane getTabbedPane() {
+		return this.tabbedPane;
 	}
 	
 	public void showFrame() {
