@@ -55,4 +55,9 @@ public class CommonPersistenceManager implements IPersistenceManager {
 
 	@Override
 	public void clearContextMessages() {}
+
+	@Override
+	public boolean isConneceted() {
+		return false;
+	}
 }

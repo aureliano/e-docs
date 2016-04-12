@@ -11,6 +11,8 @@ public interface IPersistenceManager {
 
 	public abstract Connection getConnection();
 	
+	public abstract boolean isConneceted();
+	
 	public abstract <T> T save(T entity);
 	
 	public abstract <T> void delete(T entity);

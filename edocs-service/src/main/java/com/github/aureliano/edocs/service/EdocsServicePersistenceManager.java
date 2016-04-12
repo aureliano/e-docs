@@ -1,11 +1,13 @@
 package com.github.aureliano.edocs.service;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.github.aureliano.edocs.common.exception.EDocsException;
 import com.github.aureliano.edocs.common.message.ContextMessage;
 import com.github.aureliano.edocs.common.persistence.DataPagination;
 import com.github.aureliano.edocs.common.persistence.IDao;
@@ -25,6 +27,15 @@ public final class EdocsServicePersistenceManager implements IPersistenceManager
 	@Override
 	public Connection getConnection() {
 		return this.connection;
+	}
+	
+	@Override
+	public boolean isConneceted() {
+		try {
+			return (this.connection != null) && (!this.connection.isClosed());
+		} catch (SQLException ex) {
+			throw new EDocsException(ex);
+		}
 	}
 	
 	public void setConnection(Connection connection) {
