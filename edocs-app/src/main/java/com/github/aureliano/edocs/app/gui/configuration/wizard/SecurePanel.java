@@ -16,6 +16,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
@@ -24,6 +25,7 @@ import javax.swing.SpinnerNumberModel;
 
 import com.github.aureliano.edocs.app.helper.GuiHelper;
 import com.github.aureliano.edocs.app.model.ComboBoxItemModel;
+import com.github.aureliano.edocs.common.helper.StringHelper;
 import com.github.aureliano.edocs.common.locale.EdocsLocale;
 import com.github.aureliano.edocs.secure.hash.SaltGenerator;
 import com.github.aureliano.edocs.secure.model.Algorithm;
@@ -31,6 +33,8 @@ import com.github.aureliano.edocs.secure.model.Algorithm;
 public class SecurePanel extends JPanel {
 
 	private static final long serialVersionUID = -5014710216687095637L;
+	private static final byte SALT_LENGTH = 20;
+	private static final byte ITERATION_MAX = 50;
 	public static final String ID = "SECURE_CARD";
 
 	private EdocsLocale locale;
@@ -62,8 +66,37 @@ public class SecurePanel extends JPanel {
 		super.add(this.createBottom(), BorderLayout.SOUTH);
 	}
 	
-	private void configureComboBoxAlgorithms() {
+	public String applyValidation() {
+		List<String> messages = new ArrayList<>();
 		
+		@SuppressWarnings("unchecked")
+		ComboBoxItemModel<Algorithm> algorithm = (ComboBoxItemModel<Algorithm>) this.comboBoxAlgorithms.getSelectedItem();
+		if (algorithm.getValue() == null) {
+			messages.add(this.locale.getMessage("gui.frame.configuration.wizard.secure.validation.algoritm.empty"));
+		}
+		
+		String salt = this.textFieldSalt.getText();
+		final byte SALT_MIN = 5;
+		if ((salt.length() < SALT_MIN) || (salt.length() > SALT_LENGTH)) {
+			String message = this.locale.getMessage("gui.frame.configuration.wizard.secure.validation.salt.length");
+			messages.add(message
+					.replaceFirst("\\$\\{0\\}", String.valueOf(SALT_MIN))
+					.replaceFirst("\\$\\{1\\}", String.valueOf(SALT_LENGTH)));
+		}
+		
+		Integer iterations = (Integer) this.spinnerHashIterations.getValue();
+		final byte ITERATION_MIN = 1;
+		if ((iterations < ITERATION_MIN) || (iterations > ITERATION_MAX)) {
+			String message = this.locale.getMessage("gui.frame.configuration.wizard.secure.validation.hash.iterations.length");
+			messages.add(message
+					.replaceFirst("\\$\\{0\\}", String.valueOf(ITERATION_MIN))
+					.replaceFirst("\\$\\{1\\}", String.valueOf(ITERATION_MAX)));
+		}
+		
+		return (messages.isEmpty()) ? null : StringHelper.join(messages, "\n");
+	}
+	
+	private void configureComboBoxAlgorithms() {
 		List<ComboBoxItemModel<Algorithm>> items = new ArrayList<>();
 		items.add(new ComboBoxItemModel<Algorithm>("gui.combo.box.item.empty", null));
 		
@@ -95,14 +128,14 @@ public class SecurePanel extends JPanel {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String salt = SaltGenerator.generate(20);
+				String salt = SaltGenerator.generate(SALT_LENGTH);
 				textFieldSalt.setText(salt);
 			}
 		});
 	}
 	
 	private void configureSliderHashIterations() {
-		SpinnerModel model = new SpinnerNumberModel(15, 1, 50, 1);
+		SpinnerModel model = new SpinnerNumberModel(15, 1, ITERATION_MAX, 1);
 		this.spinnerHashIterations = new JSpinner(model);
 		this.spinnerHashIterations.setPreferredSize(new Dimension(235, 25));
 	}
@@ -115,6 +148,12 @@ public class SecurePanel extends JPanel {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				String message = applyValidation();
+				if (message != null) {
+					JOptionPane.showMessageDialog(getParent(), message);
+					return;
+				}
+				
 				CardLayout cardLayout = (CardLayout) getParent().getLayout();
 				cardLayout.show(getParent(), DatabasePanel.ID);
 			}
