@@ -1,7 +1,7 @@
 package com.github.aureliano.edocs.app.cmd;
 
 import com.github.aureliano.edocs.app.EdocsApp;
-import com.github.aureliano.edocs.app.gui.HelpDialog;
+import com.github.aureliano.edocs.app.gui.AboutDialog;
 
 public class OpenAboutDialogCommand implements ICommand {
 
@@ -11,7 +11,7 @@ public class OpenAboutDialogCommand implements ICommand {
 			return;
 		}
 		
-		new HelpDialog(EdocsApp.instance().getFrame()).setVisible(true);
+		new AboutDialog(EdocsApp.instance().getFrame()).setVisible(true);
 	}
 
 	@Override

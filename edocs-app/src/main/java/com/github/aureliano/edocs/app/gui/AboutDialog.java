@@ -19,14 +19,14 @@ import javax.swing.JPanel;
 import com.github.aureliano.edocs.common.exception.EDocsException;
 import com.github.aureliano.edocs.common.locale.EdocsLocale;
 
-public class HelpDialog extends JDialog {
+public class AboutDialog extends JDialog {
 
 	private static final long serialVersionUID = -3369353227801827761L;
 
 	private Properties properties;
 	private EdocsLocale locale;
 	
-	public HelpDialog(Frame parent) {
+	public AboutDialog(Frame parent) {
 		super(parent);
 		
 		this.locale = EdocsLocale.instance();
