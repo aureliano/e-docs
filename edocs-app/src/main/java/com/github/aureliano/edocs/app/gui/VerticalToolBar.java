@@ -28,6 +28,7 @@ public class VerticalToolBar extends JToolBar {
 		super.setMargin(new Insets(10, 5, 5, 5));
 		
 		this.configureButtons();
+		this.setDatabaseButtonsEnabled(false);
 		
 		super.add(this.buttonFindDocuments);
 		super.add(this.buttonNewDocument);
@@ -35,6 +36,12 @@ public class VerticalToolBar extends JToolBar {
 		super.add(this.buttonFileRepository);
 		super.add(this.buttonDatabase);
 		super.add(this.buttonHelp);
+	}
+	
+	public void setDatabaseButtonsEnabled(boolean enabled) {
+		this.buttonFindDocuments.setEnabled(enabled);
+		this.buttonNewDocument.setEnabled(enabled);
+		this.buttonDatabase.setEnabled(enabled);
 	}
 
 	private void configureButtons() {
