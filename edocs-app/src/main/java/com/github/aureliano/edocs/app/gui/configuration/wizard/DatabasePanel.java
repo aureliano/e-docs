@@ -10,7 +10,6 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
@@ -89,7 +88,8 @@ public class DatabasePanel extends JPanel {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(null, "Not implemented yet!");
+				CardLayout cardLayout = (CardLayout) getParent().getLayout();
+				cardLayout.show(getParent(), RepositoryPanel.ID);
 			}
 		});
 	}

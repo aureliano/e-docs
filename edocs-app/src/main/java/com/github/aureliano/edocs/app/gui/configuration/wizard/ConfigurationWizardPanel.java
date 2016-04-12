@@ -16,5 +16,6 @@ public class ConfigurationWizardPanel extends JPanel {
 		super.setLayout(new CardLayout());
 		super.add(new SecurePanel(), SecurePanel.ID);
 		super.add(new DatabasePanel(), DatabasePanel.ID);
+		super.add(new RepositoryPanel(), RepositoryPanel.ID);
 	}
 }
