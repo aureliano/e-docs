@@ -16,9 +16,11 @@ public class AppFrame extends JFrame {
 
 	private EdocsLocale locale;
 	private TabbedPane tabbedPane;
+	private boolean databaseConnected;
 	
 	public AppFrame() {
 		this.locale = EdocsLocale.instance();
+		this.setDatabaseConnected(false);
 		this.buildGui();
 	}
 	
@@ -66,5 +68,13 @@ public class AppFrame extends JFrame {
 		super.setSize(new Dimension(800, 600));
 		super.setLocationRelativeTo(null);
 		super.setVisible(true);
+	}
+
+	public boolean isDatabaseConnected() {
+		return databaseConnected;
+	}
+
+	public void setDatabaseConnected(boolean databaseConnected) {
+		this.databaseConnected = databaseConnected;
 	}
 }
