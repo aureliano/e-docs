@@ -7,6 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 import com.github.aureliano.edocs.common.exception.EDocsException;
 import com.github.aureliano.edocs.common.helper.FileHelper;
@@ -17,6 +18,7 @@ import com.github.aureliano.edocs.service.EdocsServicePersistenceManager;
 
 public final class DatabaseHelper {
 
+	private static final Logger logger = Logger.getLogger(DatabaseHelper.class.getName());
 	private static final String DATABASE = FileHelper.buildPath(new File("").getAbsolutePath(), "db");
 	
 	private DatabaseHelper() {}
@@ -25,10 +27,14 @@ public final class DatabaseHelper {
 		Connection connection = prepareConnection(user, password);
 		createSchema(connection);
 		initializePersistenceManager(connection);
+		
+		logger.info("Mapping entities.");
 		EntityHelper.mapEntities();
 	}
 	
 	private static void initializePersistenceManager(Connection conn) {
+		logger.info("Initialize persistence manager.");
+		
 		EdocsServicePersistenceManager pm = new EdocsServicePersistenceManager();
 		pm.setConnection(conn);
 		PersistenceService.instance().registerPersistenceManager(pm);
@@ -48,6 +54,7 @@ public final class DatabaseHelper {
 	}
 	
 	private static void createSchema(Connection conn) {
+		logger.info("Apply schema creation if needed.");
 		String schemaCreate = FileHelper.readResource("schema-create.sql");
 		
 		try {
@@ -77,6 +84,7 @@ public final class DatabaseHelper {
 		connectionProps.put("user", user);
 		connectionProps.put("password", password);
 		
+		logger.info("Open connection to database " + DATABASE + " with user " + user);
 		return DriverManager.getConnection("jdbc:derby:" + DATABASE, connectionProps);
 	}
 	

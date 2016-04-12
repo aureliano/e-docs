@@ -2,12 +2,14 @@ package com.github.aureliano.edocs.common.persistence;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import com.github.aureliano.edocs.common.exception.EDocsException;
 import com.github.aureliano.edocs.common.helper.ReflectionHelper;
 
 public final class PersistenceService {
 
+	private static final Logger logger = Logger.getLogger(PersistenceService.class.getName());
 	private static PersistenceService instance;
 	
 	private IPersistenceManager persistenceManager;
@@ -35,6 +37,8 @@ public final class PersistenceService {
 	
 	public PersistenceService mapEntity(Class<? extends IEntity> entity, Class<? extends IDao<?>> dao) {
 		this.entityMap.put(entity, dao);
+		logger.info("Mapped entity " + entity.getName() + " and with DAO " + dao.getName());
+		
 		return this;
 	}
 	
