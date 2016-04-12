@@ -1,7 +1,7 @@
 package com.github.aureliano.edocs.app.cmd;
 
 import com.github.aureliano.edocs.app.EdocsApp;
-import com.github.aureliano.edocs.app.gui.AboutDialog;
+import com.github.aureliano.edocs.app.gui.help.AboutDialog;
 
 public class OpenAboutDialogCommand implements ICommand {
 
