@@ -1,4 +1,4 @@
-package com.github.aureliano.edocs.app.gui;
+package com.github.aureliano.edocs.app.gui.help;
 
 import java.awt.Component;
 import java.awt.Dimension;
