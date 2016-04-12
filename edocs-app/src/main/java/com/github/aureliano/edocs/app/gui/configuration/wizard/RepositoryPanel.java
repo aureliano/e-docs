@@ -28,6 +28,7 @@ import javax.swing.JProgressBar;
 import javax.swing.JTextField;
 import javax.swing.SwingWorker;
 
+import com.github.aureliano.edocs.app.EdocsApp;
 import com.github.aureliano.edocs.app.helper.DatabaseHelper;
 import com.github.aureliano.edocs.app.helper.GuiHelper;
 import com.github.aureliano.edocs.app.model.ComboBoxItemModel;
@@ -242,6 +243,7 @@ public class RepositoryPanel extends JPanel {
 			DatabaseHelper.prepareDatabase(db.getUser(), db.getPassword());
 			
 			this.progressDone();
+			EdocsApp.instance().getFrame().getToolBar().setDatabaseButtonsEnabled(true);
 			this.getFrame().dispose();
 		} catch (EDocsException ex) {
 			logger.log(Level.SEVERE, ex.getMessage(), ex);
