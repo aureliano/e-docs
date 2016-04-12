@@ -54,6 +54,11 @@
 			<groupId>com.github.aureliano</groupId>
 			<artifactId>edocs-service</artifactId>
 		</dependency>
+		
+		<dependency>
+			<groupId>org.apache.derby</groupId>
+			<artifactId>derby</artifactId>
+		</dependency>
 	
 		<dependency>
 			<groupId>junit</groupId>

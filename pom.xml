@@ -91,7 +91,7 @@
 				<groupId>org.apache.derby</groupId>
 				<artifactId>derby</artifactId>
 				<version>10.8.1.2</version>
-				<scope>provided</scope>
+				<scope>compile</scope>
 			</dependency>
 		
 			<dependency>
