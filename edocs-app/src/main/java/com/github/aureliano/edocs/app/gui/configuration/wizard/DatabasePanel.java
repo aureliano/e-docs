@@ -8,14 +8,18 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import com.github.aureliano.edocs.app.helper.GuiHelper;
+import com.github.aureliano.edocs.common.helper.StringHelper;
 import com.github.aureliano.edocs.common.locale.EdocsLocale;
 
 public class DatabasePanel extends JPanel {
@@ -50,6 +54,32 @@ public class DatabasePanel extends JPanel {
 		super.add(this.createBottom(), BorderLayout.SOUTH);
 	}
 	
+	public String applyValidation() {
+		List<String> messages = new ArrayList<>();
+		
+		String userName = this.textFieldUserName.getText();
+		final byte NAME_MIN = 5;
+		final byte NAME_MAX = 25;
+		if ((userName.length() < NAME_MIN) || (userName.length() > NAME_MAX)) {
+			String message = this.locale.getMessage("gui.frame.configuration.wizard.database.validation.user.name.length");
+			messages.add(message
+					.replaceFirst("\\$\\{0\\}", String.valueOf(NAME_MIN))
+					.replaceFirst("\\$\\{1\\}", String.valueOf(NAME_MAX)));
+		}
+		
+		char[] userPass = this.passwordFieldUser.getPassword();
+		final byte PASS_MIN = 5;
+		final byte PASS_MAX = 30;
+		if ((userPass.length < PASS_MIN) || (userPass.length > PASS_MAX)) {
+			String message = this.locale.getMessage("gui.frame.configuration.wizard.database.validation.user.password.length");
+			messages.add(message
+					.replaceFirst("\\$\\{0\\}", String.valueOf(PASS_MIN))
+					.replaceFirst("\\$\\{1\\}", String.valueOf(PASS_MAX)));
+		}
+		
+		return (messages.isEmpty()) ? null : StringHelper.join(messages, "\n");
+	}
+	
 	private void configureTextFieldUserName() {
 		this.textFieldUserName = new JTextField();
 		this.textFieldUserName.setPreferredSize(new Dimension(300, 25));
@@ -82,6 +112,13 @@ public class DatabasePanel extends JPanel {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				String message = applyValidation();
+				if (message != null) {
+					String title = locale.getMessage("gui.frame.configuration.wizard.validation.title");
+					JOptionPane.showMessageDialog(getParent(), message, title, JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+				
 				CardLayout cardLayout = (CardLayout) getParent().getLayout();
 				cardLayout.show(getParent(), RepositoryPanel.ID);
 			}
