@@ -1,6 +1,8 @@
 *.class
 target
-log
+*.log
+conf
+db
 
 # Package files #
 *.jar
