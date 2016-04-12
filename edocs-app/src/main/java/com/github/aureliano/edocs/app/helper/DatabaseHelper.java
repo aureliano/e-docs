@@ -11,7 +11,9 @@ import java.util.Properties;
 import com.github.aureliano.edocs.common.exception.EDocsException;
 import com.github.aureliano.edocs.common.helper.FileHelper;
 import com.github.aureliano.edocs.common.helper.StringHelper;
+import com.github.aureliano.edocs.common.persistence.PersistenceService;
 import com.github.aureliano.edocs.domain.helper.EntityHelper;
+import com.github.aureliano.edocs.service.EdocsServicePersistenceManager;
 
 public final class DatabaseHelper {
 
@@ -22,7 +24,14 @@ public final class DatabaseHelper {
 	public static void prepareDatabase(String user, String password) {
 		Connection connection = prepareConnection(user, password);
 		createSchema(connection);
+		initializePersistenceManager(connection);
 		EntityHelper.mapEntities();
+	}
+	
+	private static void initializePersistenceManager(Connection conn) {
+		EdocsServicePersistenceManager pm = new EdocsServicePersistenceManager();
+		pm.setConnection(conn);
+		PersistenceService.instance().registerPersistenceManager(pm);
 	}
 	
 	private static Connection prepareConnection(String user, String password) {
