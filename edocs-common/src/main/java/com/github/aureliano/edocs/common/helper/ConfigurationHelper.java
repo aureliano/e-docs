@@ -1,6 +1,8 @@
 package com.github.aureliano.edocs.common.helper;
 
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
 
@@ -24,6 +26,31 @@ public final class ConfigurationHelper {
 		return new AppConfiguration()
 			.withSecureConfiguration(buildSecureModel(properties))
 			.withFileRepositoryConfiguration(buildFileRepositoryModel(properties));
+	}
+	
+	public static void saveConfigurationFile(AppConfiguration configuration, String comments) {
+		Properties properties = new Properties();
+		SecureConfiguration secure = configuration.getSecureConfiguration();
+		FileRepositoryConfiguration repo = configuration.getFileRepositoryConfiguration();
+		
+		properties.setProperty("app.secure.algorithm", secure.getAlgorithm());
+		properties.setProperty("app.secure.salt", secure.getSalt());
+		properties.setProperty("app.secure.hash.iterations", secure.getHashIterations().toString());
+		
+		properties.setProperty("app.repository.type", repo.getRepositoryType());
+		properties.setProperty("app.repository.file.path", repo.getRootPath());
+		properties.setProperty("app.repository.limbo.path", repo.getLimboPath());
+		
+		File confDir = new File("conf");
+		if (!confDir.exists()) {
+			FileHelper.createDirectory(confDir, false);
+		}
+		
+		try(FileOutputStream fos = new FileOutputStream(DEFAULT_CONFIGURATION_PATH)) {
+			properties.store(fos, comments);
+		} catch (IOException ex) {
+			throw new EDocsException(ex);
+		}
 	}
 	
 	private static SecureConfiguration buildSecureModel(Properties properties) {
