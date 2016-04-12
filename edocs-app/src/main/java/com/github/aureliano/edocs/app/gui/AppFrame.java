@@ -15,6 +15,7 @@ public class AppFrame extends JFrame {
 	private static final long serialVersionUID = 7618501026967569839L;
 
 	private EdocsLocale locale;
+	private VerticalToolBar toolBar;
 	private TabbedPane tabbedPane;
 	
 	public AppFrame() {
@@ -28,7 +29,8 @@ public class AppFrame extends JFrame {
 		
 		JPanel panel = new JPanel(new BorderLayout());
 		panel.setOpaque(true);
-		panel.add(new VerticalToolBar(), BorderLayout.WEST);
+		this.toolBar = new VerticalToolBar();
+		panel.add(this.toolBar, BorderLayout.WEST);
 		
 		this.tabbedPane = new TabbedPane();
 		panel.add(this.tabbedPane, BorderLayout.CENTER);
@@ -55,6 +57,10 @@ public class AppFrame extends JFrame {
 	
 	public int getActiveTab() {
 		return this.tabbedPane.getSelectedIndex();
+	}
+	
+	public VerticalToolBar getToolBar() {
+		return this.toolBar;
 	}
 	
 	public JTabbedPane getTabbedPane() {
