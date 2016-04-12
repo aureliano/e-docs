@@ -18,11 +18,13 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import com.github.aureliano.edocs.app.helper.GuiHelper;
 import com.github.aureliano.edocs.app.model.ComboBoxItemModel;
+import com.github.aureliano.edocs.common.helper.StringHelper;
 import com.github.aureliano.edocs.common.locale.EdocsLocale;
 import com.github.aureliano.edocs.file.repository.RepositoryType;
 
@@ -42,6 +44,7 @@ public class RepositoryPanel extends JPanel {
 	private JButton buttonLimboDir;
 	private JButton buttonCancel;
 	private JButton buttonPrevious;
+	private JButton buttonFinish;
 	
 	public RepositoryPanel() {
 		this.locale = EdocsLocale.instance();
@@ -58,10 +61,33 @@ public class RepositoryPanel extends JPanel {
 		
 		this.buttonCancel = ConfigurationWizardDialog.createButtonCancel();
 		this.configureButtonPrevious();
+		this.configureButtonFinish();
 		
 		super.setLayout(new BorderLayout());
 		super.add(this.createBody(), BorderLayout.CENTER);
 		super.add(this.createBottom(), BorderLayout.SOUTH);
+	}
+	
+	public String applyValidation() {
+		List<String> messages = new ArrayList<>();
+		
+		@SuppressWarnings("unchecked")
+		ComboBoxItemModel<RepositoryType> repositoryType = (ComboBoxItemModel<RepositoryType>) this.comboBoxRepositoryTypes.getSelectedItem();
+		if (repositoryType.getValue() == null) {
+			messages.add(this.locale.getMessage("gui.frame.configuration.wizard.repository.validation.type"));
+		}
+		
+		File repositoryFile = new File(this.textFieldRepositoryFileDir.getText());
+		if (!repositoryFile.isDirectory()) {
+			messages.add(this.locale.getMessage("gui.frame.configuration.wizard.repository.validation.file"));
+		}
+		
+		File limboFile = new File(this.textFieldLimboDir.getText());
+		if (!limboFile.isDirectory()) {
+			messages.add(this.locale.getMessage("gui.frame.configuration.wizard.repository.validation.limbo"));
+		}
+		
+		return (messages.isEmpty()) ? null : StringHelper.join(messages, "\n");
 	}
 	
 	private void configureFileChooser() {
@@ -153,6 +179,23 @@ public class RepositoryPanel extends JPanel {
 		});
 	}
 	
+	private void configureButtonFinish() {
+		this.buttonFinish = new JButton();
+		this.buttonFinish.setText(this.locale.getMessage("gui.frame.configuration.wizard.finish"));
+		this.buttonFinish.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String message = applyValidation();
+				if (message != null) {
+					String title = locale.getMessage("gui.frame.configuration.wizard.validation.title");
+					JOptionPane.showMessageDialog(getParent(), message, title, JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+			}
+		});
+	}
+	
 	private JPanel createBody() {
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(0, 1));
@@ -194,6 +237,7 @@ public class RepositoryPanel extends JPanel {
 		JPanel navigationPanel = new JPanel();
 		navigationPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
 		navigationPanel.add(this.buttonPrevious);
+		navigationPanel.add(this.buttonFinish);
 		
 		panel.add(cancelPanel);
 		panel.add(navigationPanel);
