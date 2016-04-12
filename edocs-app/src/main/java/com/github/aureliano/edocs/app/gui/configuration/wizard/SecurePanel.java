@@ -150,7 +150,8 @@ public class SecurePanel extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				String message = applyValidation();
 				if (message != null) {
-					JOptionPane.showMessageDialog(getParent(), message);
+					String title = locale.getMessage("gui.frame.configuration.wizard.validation.title");
+					JOptionPane.showMessageDialog(getParent(), message, title, JOptionPane.ERROR_MESSAGE);
 					return;
 				}
 				
