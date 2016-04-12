@@ -15,6 +15,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import com.github.aureliano.edocs.app.EdocsApp;
+import com.github.aureliano.edocs.app.helper.GuiHelper;
 import com.github.aureliano.edocs.common.locale.EdocsLocale;
 
 public class DatabasePanel extends JPanel {
@@ -50,12 +51,12 @@ public class DatabasePanel extends JPanel {
 	
 	private void configureTextFieldUserName() {
 		this.textFieldUserName = new JTextField();
-		this.textFieldUserName.setPreferredSize(new Dimension(270, 25));
+		this.textFieldUserName.setPreferredSize(new Dimension(300, 25));
 	}
 	
 	private void configurePasswordFieldUser() {
 		this.passwordFieldUser = new JPasswordField();
-		this.passwordFieldUser.setPreferredSize(new Dimension(270, 25));
+		this.passwordFieldUser.setPreferredSize(new Dimension(300, 25));
 	}
 	
 	private void configureButtonCancel() {
@@ -71,7 +72,9 @@ public class DatabasePanel extends JPanel {
 	}
 	
 	private void configureButtonPrevious() {
-		this.buttonPrevious = new JButton(this.locale.getMessage("gui.frame.configuration.wizard.previous"));
+		this.buttonPrevious = new JButton();
+		this.buttonPrevious.setIcon(GuiHelper.createIcon("img/left-play.png"));
+		this.buttonPrevious.setText(this.locale.getMessage("gui.frame.configuration.wizard.previous"));
 		this.buttonPrevious.addActionListener(new ActionListener() {
 			
 			@Override
@@ -83,7 +86,9 @@ public class DatabasePanel extends JPanel {
 	}
 	
 	private void configureButtonNext() {
-		this.buttonNext = new JButton(this.locale.getMessage("gui.frame.configuration.wizard.next"));
+		this.buttonNext = new JButton();
+		this.buttonNext.setIcon(GuiHelper.createIcon("img/right-play.png"));
+		this.buttonNext.setText(this.locale.getMessage("gui.frame.configuration.wizard.next"));
 		this.buttonNext.addActionListener(new ActionListener() {
 			
 			@Override

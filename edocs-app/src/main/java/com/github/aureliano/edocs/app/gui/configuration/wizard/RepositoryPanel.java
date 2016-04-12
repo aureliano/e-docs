@@ -85,12 +85,12 @@ public class RepositoryPanel extends JPanel {
 		
 		this.comboBoxRepositoryTypes = new JComboBox<>(model);
 		int height = (int) this.comboBoxRepositoryTypes.getPreferredSize().getHeight();
-		this.comboBoxRepositoryTypes.setPreferredSize(new Dimension(295, height));
+		this.comboBoxRepositoryTypes.setPreferredSize(new Dimension(320, height));
 	}
 	
 	private void configureTextFieldRepositoryFileDir() {
 		this.textFieldRepositoryFileDir = new JTextField();
-		this.textFieldRepositoryFileDir.setPreferredSize(new Dimension(240, 25));
+		this.textFieldRepositoryFileDir.setPreferredSize(new Dimension(265, 25));
 		this.textFieldRepositoryFileDir.setText(HOME);
 		this.textFieldRepositoryFileDir.setEditable(false);
 	}
@@ -115,7 +115,7 @@ public class RepositoryPanel extends JPanel {
 	
 	private void configureTextFieldLimboDir() {
 		this.textFieldLimboDir = new JTextField();
-		this.textFieldLimboDir.setPreferredSize(new Dimension(240, 25));
+		this.textFieldLimboDir.setPreferredSize(new Dimension(265, 25));
 		this.textFieldLimboDir.setText(HOME);
 		this.textFieldLimboDir.setEditable(false);
 	}
@@ -151,7 +151,9 @@ public class RepositoryPanel extends JPanel {
 	}
 	
 	private void configureButtonPrevious() {
-		this.buttonPrevious = new JButton(this.locale.getMessage("gui.frame.configuration.wizard.previous"));
+		this.buttonPrevious = new JButton();
+		this.buttonPrevious.setIcon(GuiHelper.createIcon("img/left-play.png"));
+		this.buttonPrevious.setText(this.locale.getMessage("gui.frame.configuration.wizard.previous"));
 		this.buttonPrevious.addActionListener(new ActionListener() {
 			
 			@Override

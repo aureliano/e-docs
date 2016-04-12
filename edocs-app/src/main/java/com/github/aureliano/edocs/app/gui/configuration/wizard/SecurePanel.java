@@ -77,12 +77,12 @@ public class SecurePanel extends JPanel {
 		
 		this.comboBoxAlgorithms = new JComboBox<>(model);
 		int height = (int) this.comboBoxAlgorithms.getPreferredSize().getHeight();
-		this.comboBoxAlgorithms.setPreferredSize(new Dimension(205, height));
+		this.comboBoxAlgorithms.setPreferredSize(new Dimension(235, height));
 	}
 	
 	private void configureTextFieldSalt() {
 		this.textFieldSalt = new JTextField();
-		this.textFieldSalt.setPreferredSize(new Dimension(150, 25));
+		this.textFieldSalt.setPreferredSize(new Dimension(180, 25));
 	}
 	
 	private void configureButtonGenerateSalt() {
@@ -103,7 +103,7 @@ public class SecurePanel extends JPanel {
 	private void configureSliderHashIterations() {
 		SpinnerModel model = new SpinnerNumberModel(15, 1, 50, 1);
 		this.spinnerHashIterations = new JSpinner(model);
-		this.spinnerHashIterations.setPreferredSize(new Dimension(205, 25));
+		this.spinnerHashIterations.setPreferredSize(new Dimension(235, 25));
 	}
 	
 	private void configureButtonCancel() {
@@ -119,7 +119,9 @@ public class SecurePanel extends JPanel {
 	}
 	
 	private void configureButtonNext() {
-		this.buttonNext = new JButton(this.locale.getMessage("gui.frame.configuration.wizard.next"));
+		this.buttonNext = new JButton();
+		this.buttonNext.setIcon(GuiHelper.createIcon("img/right-play.png"));
+		this.buttonNext.setText(this.locale.getMessage("gui.frame.configuration.wizard.next"));
 		this.buttonNext.addActionListener(new ActionListener() {
 			
 			@Override
