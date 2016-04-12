@@ -22,7 +22,6 @@ import javax.swing.JTextField;
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
 
-import com.github.aureliano.edocs.app.EdocsApp;
 import com.github.aureliano.edocs.app.helper.GuiHelper;
 import com.github.aureliano.edocs.app.model.ComboBoxItemModel;
 import com.github.aureliano.edocs.common.locale.EdocsLocale;
@@ -54,7 +53,8 @@ public class SecurePanel extends JPanel {
 		this.configureTextFieldSalt();
 		this.configureButtonGenerateSalt();
 		this.configureSliderHashIterations();
-		this.configureButtonCancel();
+		
+		this.buttonCancel = ConfigurationWizardDialog.createButtonCancel();
 		this.configureButtonNext();
 		
 		super.setLayout(new BorderLayout());
@@ -105,18 +105,6 @@ public class SecurePanel extends JPanel {
 		SpinnerModel model = new SpinnerNumberModel(15, 1, 50, 1);
 		this.spinnerHashIterations = new JSpinner(model);
 		this.spinnerHashIterations.setPreferredSize(new Dimension(235, 25));
-	}
-	
-	private void configureButtonCancel() {
-		this.buttonCancel = new JButton(this.locale.getMessage("gui.frame.configuration.wizard.cancel"));
-		this.buttonCancel.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				EdocsApp.instance().getFrame().dispose();
-				System.exit(0);
-			}
-		});
 	}
 	
 	private void configureButtonNext() {

@@ -21,7 +21,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import com.github.aureliano.edocs.app.EdocsApp;
 import com.github.aureliano.edocs.app.helper.GuiHelper;
 import com.github.aureliano.edocs.app.model.ComboBoxItemModel;
 import com.github.aureliano.edocs.common.locale.EdocsLocale;
@@ -56,7 +55,8 @@ public class RepositoryPanel extends JPanel {
 		this.configureComboBoxRepositoryTypes();
 		this.configureButtonLimboDir();
 		this.configureButtonRepositoryFileDir();
-		this.configureButtonCancel();
+		
+		this.buttonCancel = ConfigurationWizardDialog.createButtonCancel();
 		this.configureButtonPrevious();
 		
 		super.setLayout(new BorderLayout());
@@ -135,18 +135,6 @@ public class RepositoryPanel extends JPanel {
 					String path = fileChooser.getSelectedFile().getAbsolutePath();
 					textFieldLimboDir.setText(path);
 				}
-			}
-		});
-	}
-	
-	private void configureButtonCancel() {
-		this.buttonCancel = new JButton(this.locale.getMessage("gui.frame.configuration.wizard.cancel"));
-		this.buttonCancel.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				EdocsApp.instance().getFrame().dispose();
-				System.exit(0);
 			}
 		});
 	}

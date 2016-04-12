@@ -15,7 +15,6 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
-import com.github.aureliano.edocs.app.EdocsApp;
 import com.github.aureliano.edocs.app.helper.GuiHelper;
 import com.github.aureliano.edocs.common.locale.EdocsLocale;
 
@@ -41,7 +40,8 @@ public class DatabasePanel extends JPanel {
 	private void buildGui() {
 		this.configureTextFieldUserName();
 		this.configurePasswordFieldUser();
-		this.configureButtonCancel();
+		
+		this.buttonCancel = ConfigurationWizardDialog.createButtonCancel();
 		this.configureButtonPrevious();
 		this.configureButtonNext();
 		
@@ -58,18 +58,6 @@ public class DatabasePanel extends JPanel {
 	private void configurePasswordFieldUser() {
 		this.passwordFieldUser = new JPasswordField();
 		this.passwordFieldUser.setPreferredSize(new Dimension(300, 25));
-	}
-	
-	private void configureButtonCancel() {
-		this.buttonCancel = new JButton(this.locale.getMessage("gui.frame.configuration.wizard.cancel"));
-		this.buttonCancel.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				EdocsApp.instance().getFrame().dispose();
-				System.exit(0);
-			}
-		});
 	}
 	
 	private void configureButtonPrevious() {
