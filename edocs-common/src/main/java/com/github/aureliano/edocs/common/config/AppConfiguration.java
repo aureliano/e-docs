@@ -4,6 +4,7 @@ public final class AppConfiguration {
 
 	private SecureConfiguration secureConfiguration;
 	private FileRepositoryConfiguration fileRepositoryConfiguration;
+	private DatabaseConfiguration databaseConfiguration;
 	
 	public AppConfiguration() {}
 
@@ -22,6 +23,15 @@ public final class AppConfiguration {
 
 	public AppConfiguration withFileRepositoryConfiguration(FileRepositoryConfiguration fileRepositoryConfiguration) {
 		this.fileRepositoryConfiguration = fileRepositoryConfiguration;
+		return this;
+	}
+	
+	public DatabaseConfiguration getDatabaseConfiguration() {
+		return databaseConfiguration;
+	}
+	
+	public AppConfiguration withDatabaseConfiguration(DatabaseConfiguration databaseConfiguration) {
+		this.databaseConfiguration = databaseConfiguration;
 		return this;
 	}
 }
