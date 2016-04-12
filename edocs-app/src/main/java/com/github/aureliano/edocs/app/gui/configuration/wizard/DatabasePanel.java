@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -102,6 +103,13 @@ public class DatabasePanel extends JPanel {
 	private JPanel createBody() {
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(0, 1));
+		
+		JPanel panelTitle = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		JLabel title = new JLabel(this.locale.getMessage("gui.frame.configuration.wizard.database.title"));
+		Font font = title.getFont();
+		title.setFont(new Font(font.getName(), font.getStyle(), 16));
+		panelTitle.add(title);
+		panel.add(panelTitle);
 		
 		JPanel panelUserName = new JPanel(new FlowLayout(FlowLayout.RIGHT, 5, 5));
 		panelUserName.add(new JLabel(this.locale.getMessage("gui.frame.configuration.wizard.user.name")));

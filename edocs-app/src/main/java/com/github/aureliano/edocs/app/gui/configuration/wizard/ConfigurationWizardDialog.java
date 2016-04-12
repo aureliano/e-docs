@@ -25,7 +25,7 @@ public class ConfigurationWizardDialog extends JDialog {
 		ConfigurationWizardPanel panel = new ConfigurationWizardPanel();
 		
 		super.setContentPane(panel);
-		super.setSize(new Dimension(450, 170));
+		super.setSize(new Dimension(450, 200));
 		super.setResizable(false);
 
 		super.setLocationRelativeTo(parent);
