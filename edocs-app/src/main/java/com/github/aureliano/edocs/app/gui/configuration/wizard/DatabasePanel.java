@@ -54,7 +54,7 @@ public class DatabasePanel extends JPanel {
 		super.add(this.createBottom(), BorderLayout.SOUTH);
 	}
 	
-	public String applyValidation() {
+	private String applyValidation() {
 		List<String> messages = new ArrayList<>();
 		
 		String userName = this.textFieldUserName.getText();

@@ -66,7 +66,7 @@ public class SecurePanel extends JPanel {
 		super.add(this.createBottom(), BorderLayout.SOUTH);
 	}
 	
-	public String applyValidation() {
+	private String applyValidation() {
 		List<String> messages = new ArrayList<>();
 		
 		@SuppressWarnings("unchecked")
