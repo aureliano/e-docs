@@ -2,6 +2,7 @@ package com.github.aureliano.edocs.app.gui.configuration.wizard;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -11,19 +12,29 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
 import javax.swing.JTextField;
+import javax.swing.SwingWorker;
 
+import com.github.aureliano.edocs.app.helper.DatabaseHelper;
 import com.github.aureliano.edocs.app.helper.GuiHelper;
 import com.github.aureliano.edocs.app.model.ComboBoxItemModel;
+import com.github.aureliano.edocs.common.config.AppConfiguration;
+import com.github.aureliano.edocs.common.config.DatabaseConfiguration;
+import com.github.aureliano.edocs.common.exception.EDocsException;
+import com.github.aureliano.edocs.common.helper.ConfigurationHelper;
 import com.github.aureliano.edocs.common.helper.StringHelper;
 import com.github.aureliano.edocs.common.locale.EdocsLocale;
 import com.github.aureliano.edocs.file.repository.RepositoryType;
@@ -31,6 +42,7 @@ import com.github.aureliano.edocs.file.repository.RepositoryType;
 public class RepositoryPanel extends JPanel {
 
 	private static final long serialVersionUID = -2987262533751437254L;
+	private static final Logger logger = Logger.getLogger(RepositoryPanel.class.getName());
 	public static final String ID = "REPOSITORY_CARD";
 	private static final String HOME = new File("").getAbsolutePath();
 
@@ -45,6 +57,7 @@ public class RepositoryPanel extends JPanel {
 	private JButton buttonCancel;
 	private JButton buttonPrevious;
 	private JButton buttonFinish;
+	private JProgressBar progressBar;
 	
 	public RepositoryPanel() {
 		this.locale = EdocsLocale.instance();
@@ -58,6 +71,7 @@ public class RepositoryPanel extends JPanel {
 		this.configureComboBoxRepositoryTypes();
 		this.configureButtonLimboDir();
 		this.configureButtonRepositoryFileDir();
+		this.configureProgressBar();
 		
 		this.buttonCancel = ConfigurationWizardDialog.createButtonCancel();
 		this.configureButtonPrevious();
@@ -71,23 +85,33 @@ public class RepositoryPanel extends JPanel {
 	private String applyValidation() {
 		List<String> messages = new ArrayList<>();
 		
-		@SuppressWarnings("unchecked")
-		ComboBoxItemModel<RepositoryType> repositoryType = (ComboBoxItemModel<RepositoryType>) this.comboBoxRepositoryTypes.getSelectedItem();
-		if (repositoryType.getValue() == null) {
+		if (this.getRepositoryType() == null) {
 			messages.add(this.locale.getMessage("gui.frame.configuration.wizard.repository.validation.type"));
 		}
 		
-		File repositoryFile = new File(this.textFieldRepositoryFileDir.getText());
-		if (!repositoryFile.isDirectory()) {
+		if (!this.getRepositoryFile().isDirectory()) {
 			messages.add(this.locale.getMessage("gui.frame.configuration.wizard.repository.validation.file"));
 		}
 		
-		File limboFile = new File(this.textFieldLimboDir.getText());
-		if (!limboFile.isDirectory()) {
+		if (!this.getLimboFile().isDirectory()) {
 			messages.add(this.locale.getMessage("gui.frame.configuration.wizard.repository.validation.limbo"));
 		}
 		
 		return (messages.isEmpty()) ? null : StringHelper.join(messages, "\n");
+	}
+	
+	public RepositoryType getRepositoryType() {
+		@SuppressWarnings("unchecked")
+		ComboBoxItemModel<RepositoryType> repositoryType = (ComboBoxItemModel<RepositoryType>) this.comboBoxRepositoryTypes.getSelectedItem();
+		return repositoryType.getValue();
+	}
+	
+	public File getRepositoryFile() {
+		return new File(this.textFieldRepositoryFileDir.getText());
+	}
+	
+	public File getLimboFile() {
+		return new File(this.textFieldLimboDir.getText());
 	}
 	
 	private void configureFileChooser() {
@@ -192,8 +216,80 @@ public class RepositoryPanel extends JPanel {
 					JOptionPane.showMessageDialog(getParent(), message, title, JOptionPane.ERROR_MESSAGE);
 					return;
 				}
+				
+				new ConfigurationWorker().execute();
 			}
 		});
+	}
+	
+	private void configureProgressBar() {
+		this.progressBar = new JProgressBar();
+		this.progressBar.setIndeterminate(true);
+	}
+	
+	private void applyConfiguration() {
+		this.inProgress();
+		AppConfiguration configuration = GuiHelper.buildConfigurationFromWizard(super.getParent().getComponents());
+		String comments = new StringBuilder()
+			.append("e-Docs configuration created by ")
+			.append(configuration.getDatabaseConfiguration().getUser())
+			.append(" from application.")
+			.toString();
+		
+		try {
+			ConfigurationHelper.saveConfigurationFile(configuration, comments);
+			DatabaseConfiguration db = configuration.getDatabaseConfiguration();
+			DatabaseHelper.prepareDatabase(db.getUser(), db.getPassword());
+			
+			this.progressDone();
+			this.getFrame().dispose();
+		} catch (EDocsException ex) {
+			logger.log(Level.SEVERE, ex.getMessage(), ex);
+			
+			String title = this.locale.getMessage("gui.frame.configuration.wizard.apply.error.title");
+			String message = this.locale.getMessage("gui.frame.configuration.wizard.save.file.error");
+			JOptionPane.showMessageDialog(super.getParent(), message, title, JOptionPane.ERROR_MESSAGE);
+			this.progressDone();
+		}
+	}
+	
+	private void inProgress() {
+		this.getFrame().setSize(450, 240);
+		JPanel panel = (JPanel) super.getComponent(0);
+		panel.add(this.progressBar);
+		
+		this.comboBoxRepositoryTypes.setEnabled(false);
+		this.setButtonsEnabled(false);
+	}
+	
+	private void progressDone() {
+		JPanel panel = (JPanel) super.getComponent(0);
+		panel.add(this.progressBar);
+		this.getFrame().setSize(450, 200);
+
+		this.comboBoxRepositoryTypes.setEnabled(true);
+		this.setButtonsEnabled(true);
+	}
+	
+	private void setButtonsEnabled(boolean enabled) {
+		this.buttonRepositoryFileDir.setEnabled(enabled);
+		this.buttonLimboDir.setEnabled(enabled);
+		this.buttonCancel.setEnabled(enabled);
+		this.buttonPrevious.setEnabled(enabled);
+		this.buttonFinish.setEnabled(enabled);
+	}
+	
+	private JDialog getFrame() {
+		return this.getFrame(super.getParent());
+	}
+	
+	private JDialog getFrame(Component component) {
+		Component c = component.getParent();
+		if (ConfigurationWizardDialog.class.equals(c.getClass())) {
+			return (JDialog) c;
+		}
+		
+		return this.getFrame(c);
 	}
 	
 	private JPanel createBody() {
@@ -243,5 +339,14 @@ public class RepositoryPanel extends JPanel {
 		panel.add(navigationPanel);
 		
 		return panel;
+	}
+	
+	private class ConfigurationWorker extends SwingWorker<Void, Void> {
+
+		@Override
+		protected Void doInBackground() throws Exception {
+			applyConfiguration();
+			return null;
+		}
 	}
 }

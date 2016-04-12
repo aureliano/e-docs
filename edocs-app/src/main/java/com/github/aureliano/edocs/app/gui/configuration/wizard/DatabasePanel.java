@@ -57,7 +57,7 @@ public class DatabasePanel extends JPanel {
 	private String applyValidation() {
 		List<String> messages = new ArrayList<>();
 		
-		String userName = this.textFieldUserName.getText();
+		String userName = this.getUserName();
 		final byte NAME_MIN = 5;
 		final byte NAME_MAX = 25;
 		if ((userName.length() < NAME_MIN) || (userName.length() > NAME_MAX)) {
@@ -67,10 +67,10 @@ public class DatabasePanel extends JPanel {
 					.replaceFirst("\\$\\{1\\}", String.valueOf(NAME_MAX)));
 		}
 		
-		char[] userPass = this.passwordFieldUser.getPassword();
+		String userPass = this.getPassword();
 		final byte PASS_MIN = 5;
 		final byte PASS_MAX = 30;
-		if ((userPass.length < PASS_MIN) || (userPass.length > PASS_MAX)) {
+		if ((userPass.length() < PASS_MIN) || (userPass.length() > PASS_MAX)) {
 			String message = this.locale.getMessage("gui.frame.configuration.wizard.database.validation.user.password.length");
 			messages.add(message
 					.replaceFirst("\\$\\{0\\}", String.valueOf(PASS_MIN))
@@ -78,6 +78,14 @@ public class DatabasePanel extends JPanel {
 		}
 		
 		return (messages.isEmpty()) ? null : StringHelper.join(messages, "\n");
+	}
+	
+	public String getUserName() {
+		return this.textFieldUserName.getText();
+	}
+	
+	public String getPassword() {
+		return new String(this.passwordFieldUser.getPassword());
 	}
 	
 	private void configureTextFieldUserName() {

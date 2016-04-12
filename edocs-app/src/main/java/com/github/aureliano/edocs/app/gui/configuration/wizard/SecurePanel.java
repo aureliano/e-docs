@@ -69,13 +69,11 @@ public class SecurePanel extends JPanel {
 	private String applyValidation() {
 		List<String> messages = new ArrayList<>();
 		
-		@SuppressWarnings("unchecked")
-		ComboBoxItemModel<Algorithm> algorithm = (ComboBoxItemModel<Algorithm>) this.comboBoxAlgorithms.getSelectedItem();
-		if (algorithm.getValue() == null) {
+		if (this.getAlgorithm() == null) {
 			messages.add(this.locale.getMessage("gui.frame.configuration.wizard.secure.validation.algoritm.empty"));
 		}
 		
-		String salt = this.textFieldSalt.getText();
+		String salt = this.getSalt();
 		final byte SALT_MIN = 5;
 		if ((salt.length() < SALT_MIN) || (salt.length() > SALT_LENGTH)) {
 			String message = this.locale.getMessage("gui.frame.configuration.wizard.secure.validation.salt.length");
@@ -84,7 +82,7 @@ public class SecurePanel extends JPanel {
 					.replaceFirst("\\$\\{1\\}", String.valueOf(SALT_LENGTH)));
 		}
 		
-		Integer iterations = (Integer) this.spinnerHashIterations.getValue();
+		Integer iterations = this.getHashIterations();
 		final byte ITERATION_MIN = 1;
 		if ((iterations < ITERATION_MIN) || (iterations > ITERATION_MAX)) {
 			String message = this.locale.getMessage("gui.frame.configuration.wizard.secure.validation.hash.iterations.length");
@@ -94,6 +92,20 @@ public class SecurePanel extends JPanel {
 		}
 		
 		return (messages.isEmpty()) ? null : StringHelper.join(messages, "\n");
+	}
+	
+	public Algorithm getAlgorithm() {
+		@SuppressWarnings("unchecked")
+		ComboBoxItemModel<Algorithm> algorithm = (ComboBoxItemModel<Algorithm>) this.comboBoxAlgorithms.getSelectedItem();
+		return algorithm.getValue();
+	}
+	
+	public String getSalt() {
+		return this.textFieldSalt.getText();
+	}
+	
+	public Integer getHashIterations() {
+		return (Integer) this.spinnerHashIterations.getValue();
 	}
 	
 	private void configureComboBoxAlgorithms() {
