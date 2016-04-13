@@ -2,6 +2,8 @@ package com.github.aureliano.edocs.app.gui.menu.file;
 
 import javax.swing.JMenu;
 import javax.swing.JSeparator;
+import javax.swing.event.MenuEvent;
+import javax.swing.event.MenuListener;
 
 import com.github.aureliano.edocs.app.model.IDatabaseConnectionDependent;
 import com.github.aureliano.edocs.common.locale.EdocsLocale;
@@ -39,6 +41,24 @@ public class FileMenu extends JMenu implements IDatabaseConnectionDependent {
 		super.add(new JSeparator());
 		
 		super.add(this.exitMenuItem);
+		
+		super.addMenuListener(new MenuListener() {
+			
+			@Override
+			public void menuSelected(MenuEvent e) {
+				connectMenuItem.setMenuItemAvailability();
+				disconnectMenuItem.setMenuItemAvailability();
+				closeTabMenuItem.setMenuItemAvailability();
+				closeAllTabsMenuItem.setMenuItemAvailability();
+				exitMenuItem.setMenuItemAvailability();
+			}
+
+			@Override
+			public void menuDeselected(MenuEvent e) {}
+
+			@Override
+			public void menuCanceled(MenuEvent e) {}
+		});
 	}
 	
 	@Override

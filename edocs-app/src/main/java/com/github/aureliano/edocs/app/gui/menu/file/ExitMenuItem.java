@@ -7,9 +7,10 @@ import javax.swing.JMenuItem;
 
 import com.github.aureliano.edocs.app.cmd.ExitCommand;
 import com.github.aureliano.edocs.app.cmd.ICommand;
+import com.github.aureliano.edocs.app.model.IMenuItemAvailability;
 import com.github.aureliano.edocs.common.locale.EdocsLocale;
 
-public class ExitMenuItem extends JMenuItem {
+public class ExitMenuItem extends JMenuItem implements IMenuItemAvailability {
 
 	private static final long serialVersionUID = -2424096936359107552L;
 
@@ -26,5 +27,10 @@ public class ExitMenuItem extends JMenuItem {
 				command.execute();
 			}
 		});
+	}
+
+	@Override
+	public void setMenuItemAvailability() {
+		super.setEnabled(this.command.canExecute());
 	}
 }

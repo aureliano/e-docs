@@ -7,9 +7,10 @@ import javax.swing.JMenuItem;
 
 import com.github.aureliano.edocs.app.cmd.ICommand;
 import com.github.aureliano.edocs.app.cmd.OpenAboutDialogCommand;
+import com.github.aureliano.edocs.app.model.IMenuItemAvailability;
 import com.github.aureliano.edocs.common.locale.EdocsLocale;
 
-public class AboutMenuItem extends JMenuItem {
+public class AboutMenuItem extends JMenuItem implements IMenuItemAvailability {
 
 	private static final long serialVersionUID = 3258389699083751538L;
 
@@ -26,5 +27,10 @@ public class AboutMenuItem extends JMenuItem {
 				command.execute();
 			}
 		});
+	}
+
+	@Override
+	public void setMenuItemAvailability() {
+		super.setEnabled(this.command.canExecute());
 	}
 }

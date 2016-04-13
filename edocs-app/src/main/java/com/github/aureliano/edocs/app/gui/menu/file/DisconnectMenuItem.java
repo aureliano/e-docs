@@ -7,9 +7,10 @@ import javax.swing.JMenuItem;
 
 import com.github.aureliano.edocs.app.cmd.DisconnectCommand;
 import com.github.aureliano.edocs.app.cmd.ICommand;
+import com.github.aureliano.edocs.app.model.IMenuItemAvailability;
 import com.github.aureliano.edocs.common.locale.EdocsLocale;
 
-public class DisconnectMenuItem extends JMenuItem {
+public class DisconnectMenuItem extends JMenuItem implements IMenuItemAvailability {
 
 	private static final long serialVersionUID = -6899709122453780576L;
 	
@@ -26,5 +27,10 @@ public class DisconnectMenuItem extends JMenuItem {
 				command.execute();
 			}
 		});
+	}
+
+	@Override
+	public void setMenuItemAvailability() {
+		super.setEnabled(this.command.canExecute());
 	}
 }
