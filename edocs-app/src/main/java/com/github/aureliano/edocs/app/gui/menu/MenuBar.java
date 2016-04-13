@@ -3,6 +3,7 @@ package com.github.aureliano.edocs.app.gui.menu;
 import javax.swing.JMenuBar;
 
 import com.github.aureliano.edocs.app.gui.menu.file.FileMenu;
+import com.github.aureliano.edocs.app.gui.menu.help.HelpMenu;
 
 public class MenuBar extends JMenuBar {
 
