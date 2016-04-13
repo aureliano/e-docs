@@ -3,6 +3,7 @@ package com.github.aureliano.edocs.app.cmd;
 import java.util.logging.Logger;
 
 import com.github.aureliano.edocs.app.EdocsApp;
+import com.github.aureliano.edocs.app.helper.DatabaseHelper;
 
 public class ExitCommand implements ICommand {
 
@@ -16,13 +17,18 @@ public class ExitCommand implements ICommand {
 			return;
 		}
 		
-		EdocsApp.instance().getFrame().dispose();
-		logger.info(" >>> Shut down!");
-		System.exit(0);
+		DatabaseHelper.closeConnection();;
+		this.shutDown();
 	}
 
 	@Override
 	public boolean canExecute() {
 		return true;
+	}
+	
+	private void shutDown() {
+		EdocsApp.instance().getFrame().dispose();
+		logger.info(" >>> Shut down!");
+		System.exit(0);
 	}
 }

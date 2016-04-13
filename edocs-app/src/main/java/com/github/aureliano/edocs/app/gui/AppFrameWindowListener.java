@@ -8,6 +8,7 @@ import java.util.logging.Logger;
 
 import com.github.aureliano.edocs.app.cmd.OpenConnectionDialogCommand;
 import com.github.aureliano.edocs.app.gui.configuration.wizard.ConfigurationWizardDialog;
+import com.github.aureliano.edocs.app.helper.DatabaseHelper;
 import com.github.aureliano.edocs.common.config.AppConfiguration;
 import com.github.aureliano.edocs.common.config.ConfigurationSingleton;
 
@@ -27,6 +28,7 @@ public class AppFrameWindowListener implements WindowListener {
 
 	@Override
 	public void windowClosing(WindowEvent evt) {
+		DatabaseHelper.closeConnection();
 		logger.info(" >>> Shut down!");
 	}
 
