@@ -27,7 +27,9 @@ public class AppFrameWindowListener implements WindowListener {
 	public void windowClosing(WindowEvent evt) {}
 
 	@Override
-	public void windowClosed(WindowEvent evt) {}
+	public void windowClosed(WindowEvent evt) {
+		logger.info(" >>> Shut down!");
+	}
 
 	@Override
 	public void windowIconified(WindowEvent evt) {}
