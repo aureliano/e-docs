@@ -4,16 +4,23 @@ import java.awt.Frame;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
+import java.util.logging.Logger;
 
 import com.github.aureliano.edocs.app.gui.configuration.wizard.ConfigurationWizardDialog;
+import com.github.aureliano.edocs.common.config.AppConfiguration;
+import com.github.aureliano.edocs.common.config.ConfigurationSingleton;
 
 public class AppFrameWindowListener implements WindowListener {
 
+	private static final Logger logger = Logger.getLogger(AppFrameWindowListener.class.getName());
+	
 	@Override
 	public void windowOpened(WindowEvent evt) {
 		if (!this.isApplicationEnvironmentConfigured()) {
 			new ConfigurationWizardDialog((Frame) evt.getComponent()).setVisible(true);
 		}
+		
+		this.loadDefaultConfiguration();
 	}
 
 	@Override
@@ -40,5 +47,11 @@ public class AppFrameWindowListener implements WindowListener {
 		File databaseDir = new File("db");
 		
 		return confDir.isDirectory() && configurationFile.isFile() && databaseDir.isDirectory();
+	}
+	
+	private void loadDefaultConfiguration() {
+		logger.info("Load default application configuration.");
+		AppConfiguration configuration = ConfigurationSingleton.instance().loadDefaultAppConfiguration();
+		ConfigurationSingleton.instance().setAppConfiguration(configuration);
 	}
 }
