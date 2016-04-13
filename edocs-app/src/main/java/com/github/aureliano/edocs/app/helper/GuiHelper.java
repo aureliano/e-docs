@@ -5,6 +5,7 @@ import java.net.URL;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JDialog;
 
 import com.github.aureliano.edocs.app.gui.configuration.wizard.DatabasePanel;
 import com.github.aureliano.edocs.app.gui.configuration.wizard.RepositoryPanel;
@@ -58,5 +59,14 @@ public final class GuiHelper {
 		}
 		
 		return configuration;
+	}
+	
+	public static JDialog getFrame(Component component) {
+		Component c = component.getParent();
+		if (c instanceof JDialog) {
+			return (JDialog) c;
+		}
+		
+		return getFrame(c);
 	}
 }
