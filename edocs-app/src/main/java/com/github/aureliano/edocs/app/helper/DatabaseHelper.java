@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 import com.github.aureliano.edocs.common.exception.EDocsException;
 import com.github.aureliano.edocs.common.helper.FileHelper;
 import com.github.aureliano.edocs.common.helper.StringHelper;
+import com.github.aureliano.edocs.common.persistence.IPersistenceManager;
 import com.github.aureliano.edocs.common.persistence.PersistenceService;
 import com.github.aureliano.edocs.domain.helper.EntityHelper;
 import com.github.aureliano.edocs.service.EdocsServicePersistenceManager;
@@ -42,6 +43,20 @@ public final class DatabaseHelper {
 		
 		logger.info("Mapping entities.");
 		EntityHelper.mapEntities();
+	}
+	
+	public static void closeConnection() {
+		IPersistenceManager pm = PersistenceService.instance().getPersistenceManager();
+		if ((pm.getConnection() != null) && (pm.isConneceted())) {
+			try {
+				logger.info("Closing connection.");
+				pm.getConnection().close();
+			} catch (SQLException ex) {
+				logger.warning("Close connection failed. Detail: " + ex.getMessage());
+			} finally {
+				logger.info("Close connection is done.");
+			}
+		}
 	}
 	
 	private static void initializePersistenceManager(Connection conn) {
