@@ -1,4 +1,4 @@
-package com.github.aureliano.edocs.app.gui.menu;
+package com.github.aureliano.edocs.app.gui.menu.doc;
 
 import javax.swing.JMenuItem;
 
