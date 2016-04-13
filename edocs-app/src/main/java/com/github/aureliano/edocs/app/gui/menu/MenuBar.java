@@ -2,6 +2,8 @@ package com.github.aureliano.edocs.app.gui.menu;
 
 import javax.swing.JMenuBar;
 
+import com.github.aureliano.edocs.app.gui.menu.file.FileMenu;
+
 public class MenuBar extends JMenuBar {
 
 	private static final long serialVersionUID = 5179328504511930019L;
