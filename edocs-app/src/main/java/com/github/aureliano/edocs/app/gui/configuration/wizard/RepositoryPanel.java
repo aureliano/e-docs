@@ -32,11 +32,15 @@ import com.github.aureliano.edocs.app.helper.GuiHelper;
 import com.github.aureliano.edocs.app.model.ComboBoxItemModel;
 import com.github.aureliano.edocs.common.config.AppConfiguration;
 import com.github.aureliano.edocs.common.config.DatabaseConfiguration;
+import com.github.aureliano.edocs.common.config.SecureConfiguration;
 import com.github.aureliano.edocs.common.exception.EDocsException;
 import com.github.aureliano.edocs.common.helper.ConfigurationHelper;
 import com.github.aureliano.edocs.common.helper.StringHelper;
 import com.github.aureliano.edocs.common.locale.EdocsLocale;
 import com.github.aureliano.edocs.file.repository.RepositoryType;
+import com.github.aureliano.edocs.secure.hash.PasswordHashGenerator;
+import com.github.aureliano.edocs.secure.model.Algorithm;
+import com.github.aureliano.edocs.secure.model.PasswordEncryptionModel;
 
 public class RepositoryPanel extends JPanel {
 
@@ -238,7 +242,10 @@ public class RepositoryPanel extends JPanel {
 		try {
 			ConfigurationHelper.saveConfigurationFile(configuration, comments);
 			DatabaseConfiguration db = configuration.getDatabaseConfiguration();
-			DatabaseHelper.prepareDatabase(db.getUser(), db.getPassword());
+			
+			PasswordEncryptionModel pwd = this.buildPasswordEncryptionModel(
+					configuration.getSecureConfiguration(), db.getPassword());
+			DatabaseHelper.prepareDatabase(db.getUser(), PasswordHashGenerator.generate(pwd));
 			
 			this.progressDone();
 			EdocsApp.instance().getFrame().getToolBar().setDatabaseButtonsEnabled(true);
@@ -251,6 +258,14 @@ public class RepositoryPanel extends JPanel {
 			JOptionPane.showMessageDialog(super.getParent(), message, title, JOptionPane.ERROR_MESSAGE);
 			this.progressDone();
 		}
+	}
+	
+	private PasswordEncryptionModel buildPasswordEncryptionModel(SecureConfiguration configuration, String password) {
+		return new PasswordEncryptionModel()
+			.withAlgorithm(Algorithm.valueOf(configuration.getAlgorithm()))
+			.withHashIterations(configuration.getHashIterations())
+			.withSalt(configuration.getSalt())
+			.withPassword(password);
 	}
 	
 	private void inProgress() {
