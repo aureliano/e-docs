@@ -5,7 +5,9 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.io.File;
 
+import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
@@ -21,6 +23,7 @@ public class ConnectionBodyPanel extends JPanel {
 	
 	private JTextField textFieldUserName;
 	private JPasswordField passwordFieldUser;
+	private JCheckBox checkBoxRemember;
 	
 	public ConnectionBodyPanel() {
 		this.locale = EdocsLocale.instance();
@@ -31,13 +34,26 @@ public class ConnectionBodyPanel extends JPanel {
 		return this.textFieldUserName.getText();
 	}
 	
+	public void setUser(String user) {
+		this.textFieldUserName.setText(user);
+	}
+	
 	public String getPassword() {
 		return new String(this.passwordFieldUser.getPassword());
+	}
+	
+	public void setPassword(String password) {
+		this.passwordFieldUser.setText(password);
+	}
+	
+	public boolean hasToRemember() {
+		return this.checkBoxRemember.isSelected();
 	}
 	
 	private void buildGui() {
 		this.configureTextFieldUserName();
 		this.configurePasswordFieldUser();
+		this.configureCheckBoxRemember();
 		
 		super.setLayout(new BorderLayout());
 		super.add(this.createBody(), BorderLayout.CENTER);
@@ -51,6 +67,14 @@ public class ConnectionBodyPanel extends JPanel {
 	private void configurePasswordFieldUser() {
 		this.passwordFieldUser = new JPasswordField();
 		this.passwordFieldUser.setPreferredSize(new Dimension(300, 25));
+	}
+	
+	private void configureCheckBoxRemember() {
+		File file = new File(OpenDatabaseConnectionDialog.PREFERENCE_PATH);
+		
+		this.checkBoxRemember = new JCheckBox();
+		this.checkBoxRemember.setText(this.locale.getMessage("gui.frame.connection.remember"));
+		this.checkBoxRemember.setSelected(file.exists());
 	}
 	
 	private JPanel createBody() {
@@ -73,6 +97,10 @@ public class ConnectionBodyPanel extends JPanel {
 		panelUserPassword.add(new JLabel(this.locale.getMessage("gui.frame.connection.user.password")));
 		panelUserPassword.add(this.passwordFieldUser);
 		panel.add(panelUserPassword);
+		
+		JPanel panelRemember = new JPanel(new FlowLayout(FlowLayout.RIGHT, 5, 5));
+		panelRemember.add(this.checkBoxRemember);
+		panel.add(panelRemember);
 		
 		return panel;
 	}

@@ -5,6 +5,7 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -16,7 +17,9 @@ import com.github.aureliano.edocs.app.EdocsApp;
 import com.github.aureliano.edocs.app.helper.DatabaseHelper;
 import com.github.aureliano.edocs.app.helper.GuiHelper;
 import com.github.aureliano.edocs.common.exception.EDocsException;
+import com.github.aureliano.edocs.common.helper.FileHelper;
 import com.github.aureliano.edocs.common.locale.EdocsLocale;
+import com.github.aureliano.edocs.secure.crypto.BasicEncryption;
 import com.github.aureliano.edocs.secure.hash.PasswordHashGenerator;
 
 public class ConnectionBottomPanel extends JPanel {
@@ -68,6 +71,8 @@ public class ConnectionBottomPanel extends JPanel {
 					String password = PasswordHashGenerator.generateFromAppConfiguration(bodyPanel.getPassword());
 					DatabaseHelper.openConnection(bodyPanel.getUser(), password);
 					EdocsApp.instance().getFrame().setDatabaseGuiEnabled(true);
+					
+					applyRememberChoose(bodyPanel.hasToRemember(), bodyPanel.getUser(), bodyPanel.getPassword());
 					GuiHelper.getFrame(getParent()).dispose();
 				} catch (EDocsException ex) {
 					logger.log(Level.SEVERE, ex.getMessage(), ex);
@@ -78,6 +83,38 @@ public class ConnectionBottomPanel extends JPanel {
 				}
 			}
 		});
+	}
+	
+	private void applyRememberChoose(boolean remember, String user, String password) {
+		if (remember) {
+			this.saveCredentials(user, password);
+		} else {
+			this.deleteSavedCredentials();
+		}
+	}
+	
+	private void saveCredentials(String user, String password) {
+		String credentials = new StringBuilder()
+			.append("user")
+			.append(OpenDatabaseConnectionDialog.SEPARATOR)
+			.append(user)
+			.append("\n")
+			.append("password")
+			.append(OpenDatabaseConnectionDialog.SEPARATOR)
+			.append(password)
+			.toString();
+		
+		logger.info("Remembering credentials to use on next startup.");
+		String encryptedCredentials = BasicEncryption.encrypt(credentials);
+		FileHelper.writeFile(OpenDatabaseConnectionDialog.PREFERENCE_PATH, encryptedCredentials);
+	}
+	
+	private void deleteSavedCredentials() {
+		File file = new File(OpenDatabaseConnectionDialog.PREFERENCE_PATH);
+		if (file.exists()) {
+			logger.info("Deleting remembered credentials.");
+			FileHelper.delete(file);
+		}
 	}
 	
 	private JPanel createBody() {
