@@ -6,6 +6,7 @@ import java.awt.event.WindowListener;
 import java.io.File;
 import java.util.logging.Logger;
 
+import com.github.aureliano.edocs.app.cmd.OpenConnectionDialogCommand;
 import com.github.aureliano.edocs.app.gui.configuration.wizard.ConfigurationWizardDialog;
 import com.github.aureliano.edocs.common.config.AppConfiguration;
 import com.github.aureliano.edocs.common.config.ConfigurationSingleton;
@@ -21,15 +22,16 @@ public class AppFrameWindowListener implements WindowListener {
 		}
 		
 		this.loadDefaultConfiguration();
+		new OpenConnectionDialogCommand().execute();
 	}
 
 	@Override
-	public void windowClosing(WindowEvent evt) {}
-
-	@Override
-	public void windowClosed(WindowEvent evt) {
+	public void windowClosing(WindowEvent evt) {
 		logger.info(" >>> Shut down!");
 	}
+
+	@Override
+	public void windowClosed(WindowEvent evt) {}
 
 	@Override
 	public void windowIconified(WindowEvent evt) {}
