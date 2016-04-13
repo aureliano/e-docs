@@ -40,6 +40,10 @@ public class AppFrame extends JFrame {
 		super.addWindowListener(new AppFrameWindowListener());
 	}
 	
+	public void setDatabaseGuiEnabled(boolean enabled) {
+		this.toolBar.setDatabaseButtonsEnabled(enabled);
+	}
+	
 	public void addTabPanel(String title, JPanel panel) {
 		this.tabbedPane.addTab(title, panel);
 		
