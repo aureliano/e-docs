@@ -2,7 +2,6 @@ package com.github.aureliano.edocs.app.gui.configuration.wizard;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -19,7 +18,6 @@ import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -244,7 +242,7 @@ public class RepositoryPanel extends JPanel {
 			
 			this.progressDone();
 			EdocsApp.instance().getFrame().getToolBar().setDatabaseButtonsEnabled(true);
-			this.getFrame().dispose();
+			GuiHelper.getFrame(super.getParent()).dispose();
 		} catch (EDocsException ex) {
 			logger.log(Level.SEVERE, ex.getMessage(), ex);
 			
@@ -256,7 +254,7 @@ public class RepositoryPanel extends JPanel {
 	}
 	
 	private void inProgress() {
-		this.getFrame().setSize(450, 240);
+		GuiHelper.getFrame(super.getParent()).setSize(450, 240);
 		JPanel panel = (JPanel) super.getComponent(0);
 		panel.add(this.progressBar);
 		
@@ -267,7 +265,7 @@ public class RepositoryPanel extends JPanel {
 	private void progressDone() {
 		JPanel panel = (JPanel) super.getComponent(0);
 		panel.add(this.progressBar);
-		this.getFrame().setSize(450, 200);
+		GuiHelper.getFrame(super.getParent()).setSize(450, 200);
 
 		this.comboBoxRepositoryTypes.setEnabled(true);
 		this.setButtonsEnabled(true);
@@ -279,19 +277,6 @@ public class RepositoryPanel extends JPanel {
 		this.buttonCancel.setEnabled(enabled);
 		this.buttonPrevious.setEnabled(enabled);
 		this.buttonFinish.setEnabled(enabled);
-	}
-	
-	private JDialog getFrame() {
-		return this.getFrame(super.getParent());
-	}
-	
-	private JDialog getFrame(Component component) {
-		Component c = component.getParent();
-		if (ConfigurationWizardDialog.class.equals(c.getClass())) {
-			return (JDialog) c;
-		}
-		
-		return this.getFrame(c);
 	}
 	
 	private JPanel createBody() {
