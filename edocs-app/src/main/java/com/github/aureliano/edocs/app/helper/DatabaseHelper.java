@@ -47,7 +47,7 @@ public final class DatabaseHelper {
 	
 	public static void closeConnection() {
 		IPersistenceManager pm = PersistenceService.instance().getPersistenceManager();
-		if ((pm.getConnection() != null) && (pm.isConneceted())) {
+		if ((pm != null) && (pm.getConnection() != null) && (pm.isConneceted())) {
 			try {
 				logger.info("Closing connection.");
 				pm.getConnection().close();
