@@ -248,7 +248,7 @@ public class RepositoryPanel extends JPanel {
 			DatabaseHelper.prepareDatabase(db.getUser(), PasswordHashGenerator.generate(pwd));
 			
 			this.progressDone();
-			EdocsApp.instance().getFrame().getToolBar().setDatabaseButtonsEnabled(true);
+			EdocsApp.instance().getFrame().setDatabaseGuiEnabled(true);
 			GuiHelper.getFrame(super.getParent()).dispose();
 		} catch (EDocsException ex) {
 			logger.log(Level.SEVERE, ex.getMessage(), ex);

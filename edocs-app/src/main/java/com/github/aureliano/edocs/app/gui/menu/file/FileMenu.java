@@ -3,9 +3,10 @@ package com.github.aureliano.edocs.app.gui.menu.file;
 import javax.swing.JMenu;
 import javax.swing.JSeparator;
 
+import com.github.aureliano.edocs.app.model.IDatabaseConnectionDependent;
 import com.github.aureliano.edocs.common.locale.EdocsLocale;
 
-public class FileMenu extends JMenu {
+public class FileMenu extends JMenu implements IDatabaseConnectionDependent {
 
 	private static final long serialVersionUID = -662548298147505185L;
 
@@ -38,5 +39,11 @@ public class FileMenu extends JMenu {
 		super.add(new JSeparator());
 		
 		super.add(this.exitMenuItem);
+	}
+	
+	@Override
+	public void setDatabaseGuiEnabled(boolean enabled) {
+		this.connectMenuItem.setEnabled(!enabled);
+		this.disconnectMenuItem.setEnabled(enabled);
 	}
 }

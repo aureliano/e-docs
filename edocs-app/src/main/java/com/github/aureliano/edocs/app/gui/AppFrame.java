@@ -8,13 +8,15 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
 import com.github.aureliano.edocs.app.gui.menu.MenuBar;
+import com.github.aureliano.edocs.app.model.IDatabaseConnectionDependent;
 import com.github.aureliano.edocs.common.locale.EdocsLocale;
 
-public class AppFrame extends JFrame {
+public class AppFrame extends JFrame implements IDatabaseConnectionDependent {
 
 	private static final long serialVersionUID = 7618501026967569839L;
 
 	private EdocsLocale locale;
+	private MenuBar menuBar;
 	private VerticalToolBar toolBar;
 	private TabbedPane tabbedPane;
 	
@@ -36,12 +38,17 @@ public class AppFrame extends JFrame {
 		panel.add(this.tabbedPane, BorderLayout.CENTER);
 
 		super.setContentPane(panel);
-		super.setJMenuBar(new MenuBar());
+		this.menuBar = new MenuBar();
+		super.setJMenuBar(this.menuBar);
 		super.addWindowListener(new AppFrameWindowListener());
+		
+		this.setDatabaseGuiEnabled(false);
 	}
 	
+	@Override
 	public void setDatabaseGuiEnabled(boolean enabled) {
-		this.toolBar.setDatabaseButtonsEnabled(enabled);
+		this.menuBar.setDatabaseGuiEnabled(enabled);
+		this.toolBar.setDatabaseGuiEnabled(enabled);
 	}
 	
 	public void addTabPanel(String title, JPanel panel) {

@@ -2,9 +2,10 @@ package com.github.aureliano.edocs.app.gui.menu.doc;
 
 import javax.swing.JMenu;
 
+import com.github.aureliano.edocs.app.model.IDatabaseConnectionDependent;
 import com.github.aureliano.edocs.common.locale.EdocsLocale;
 
-public class DocumentMenu extends JMenu {
+public class DocumentMenu extends JMenu implements IDatabaseConnectionDependent {
 
 	private static final long serialVersionUID = 8913482438475098482L;
 
@@ -22,5 +23,11 @@ public class DocumentMenu extends JMenu {
 		
 		super.add(this.findDocumentMenuItem);
 		super.add(this.saveDocumentMenuItem);
+	}
+
+	@Override
+	public void setDatabaseGuiEnabled(boolean enabled) {
+		this.findDocumentMenuItem.setEnabled(enabled);
+		this.saveDocumentMenuItem.setEnabled(enabled);
 	}
 }

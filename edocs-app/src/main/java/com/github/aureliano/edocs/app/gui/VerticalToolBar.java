@@ -9,9 +9,10 @@ import javax.swing.JToolBar;
 
 import com.github.aureliano.edocs.app.cmd.NewDocumentCommand;
 import com.github.aureliano.edocs.app.helper.GuiHelper;
+import com.github.aureliano.edocs.app.model.IDatabaseConnectionDependent;
 import com.github.aureliano.edocs.common.locale.EdocsLocale;
 
-public class VerticalToolBar extends JToolBar {
+public class VerticalToolBar extends JToolBar implements IDatabaseConnectionDependent {
 
 	private static final long serialVersionUID = -176640015146742392L;
 
@@ -28,7 +29,6 @@ public class VerticalToolBar extends JToolBar {
 		super.setMargin(new Insets(10, 5, 5, 5));
 		
 		this.configureButtons();
-		this.setDatabaseButtonsEnabled(false);
 		
 		super.add(this.buttonFindDocuments);
 		super.add(this.buttonNewDocument);
@@ -38,7 +38,8 @@ public class VerticalToolBar extends JToolBar {
 		super.add(this.buttonHelp);
 	}
 	
-	public void setDatabaseButtonsEnabled(boolean enabled) {
+	@Override
+	public void setDatabaseGuiEnabled(boolean enabled) {
 		this.buttonFindDocuments.setEnabled(enabled);
 		this.buttonNewDocument.setEnabled(enabled);
 		this.buttonDatabase.setEnabled(enabled);
