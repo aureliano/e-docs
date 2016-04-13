@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 import com.github.aureliano.edocs.common.config.AppConfiguration;
 import com.github.aureliano.edocs.common.config.FileRepositoryConfiguration;
@@ -14,6 +15,7 @@ import com.github.aureliano.edocs.common.exception.EDocsException;
 public final class ConfigurationHelper {
 
 	private static final String DEFAULT_CONFIGURATION_PATH = "conf/app-configuration.properties";
+	private static final Logger logger = Logger.getLogger(ConfigurationHelper.class.getName());
 
 	private ConfigurationHelper() {}
 	
@@ -22,6 +24,7 @@ public final class ConfigurationHelper {
 	}
 	
 	public static AppConfiguration parseConfiguration(String path) {
+		logger.info("Parse configuration file: " + path);
 		Properties properties = loadProperties(path);
 		return new AppConfiguration()
 			.withSecureConfiguration(buildSecureModel(properties))
