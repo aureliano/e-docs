@@ -27,6 +27,18 @@ public final class DatabaseHelper {
 		Connection connection = prepareConnection(user, password);
 		createSchema(connection);
 		initializePersistenceManager(connection);
+	}
+	
+	public static void openConnection(String user, String password) {
+		Connection conn = null;
+		
+		try {
+			conn = createConnection(user, password);
+		} catch (Exception ex) {
+			throw new EDocsException(ex);
+		}
+		
+		initializePersistenceManager(conn);
 		
 		logger.info("Mapping entities.");
 		EntityHelper.mapEntities();
@@ -45,7 +57,7 @@ public final class DatabaseHelper {
 		
 		try {
 			conn = createConnection(user, password);
-			configureDatabase(conn);
+			configureDatabase(conn, user, password);
 		} catch (Exception ex) {
 			throw new EDocsException(ex);
 		}
@@ -88,14 +100,14 @@ public final class DatabaseHelper {
 		return DriverManager.getConnection("jdbc:derby:" + DATABASE, connectionProps);
 	}
 	
-	private static void configureDatabase(Connection conn) throws SQLException {
+	private static void configureDatabase(Connection conn, String user, String password) throws SQLException {
 		Statement s = conn.createStatement();
 		s.executeUpdate("CALL SYSCS_UTIL.SYSCS_SET_DATABASE_PROPERTY(\n"
 				+ "    'derby.connection.requireAuthentication', 'true')");
 		s.executeUpdate("CALL SYSCS_UTIL.SYSCS_SET_DATABASE_PROPERTY(\n"
 				+ "    'derby.authentication.provider', 'BUILTIN')");
 		s.executeUpdate("CALL SYSCS_UTIL.SYSCS_SET_DATABASE_PROPERTY(\n"
-				+ "    'derby.user.usr_edocs', 'pwd-edocs-2016')");
+				+ "    'derby.user." + user + "', '" + password + "')");
 		s.executeUpdate("CALL SYSCS_UTIL.SYSCS_SET_DATABASE_PROPERTY(\n"
 				+ "    'derby.database.propertiesOnly', 'true')");
 	}
