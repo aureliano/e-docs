@@ -1,9 +1,11 @@
 package com.github.aureliano.edocs.common.helper;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -226,5 +228,19 @@ public final class FileHelper {
 		String root = tokens[0].equals("") ? "/" : tokens[0];
 		
 		return root;
+	}
+	
+	public static void writeFile(String path, String text) {
+		writeFile(new File(path), text);
+	}
+	
+	public static void writeFile(File file, String text) {
+		try (FileWriter fw = new FileWriter(file)) {
+			BufferedWriter writer = new BufferedWriter(fw);
+			writer.write(text);
+			writer.flush();
+		} catch (IOException ex) {
+			throw new EDocsException(ex);
+		}
 	}
 }

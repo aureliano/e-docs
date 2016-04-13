@@ -102,6 +102,16 @@ public class FileHelperTest {
 		assertEquals("C:", root);
 	}
 	
+	@Test
+	public void testWriteFile() {
+		String text = "I want to persist that string.";
+		File file = new File("target/test-write-file");
+		FileHelper.writeFile(file, text);
+		
+		String actual = FileHelper.readFile(file);
+		assertEquals(text, actual);
+	}
+	
 	public static void createDirectoryStructure() {
 		File sourceDir = new File("src/test/resources");
 		
