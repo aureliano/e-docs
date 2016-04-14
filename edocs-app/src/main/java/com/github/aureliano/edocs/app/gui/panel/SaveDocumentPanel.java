@@ -11,6 +11,8 @@ import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.InputMethodEvent;
+import java.awt.event.InputMethodListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -21,14 +23,19 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import com.github.aureliano.edocs.app.cmd.CloseActiveTabCommand;
+import com.github.aureliano.edocs.app.cmd.ICommand;
 import com.github.aureliano.edocs.app.model.ComboBoxItemModel;
 import com.github.aureliano.edocs.common.locale.EdocsLocale;
 import com.github.aureliano.edocs.domain.entity.Category;
+import com.github.aureliano.edocs.domain.entity.Document;
 import com.github.aureliano.edocs.domain.entity.User;
 import com.github.aureliano.edocs.service.bean.UserServiceBean;
 
@@ -43,6 +50,9 @@ public class SaveDocumentPanel extends JPanel {
 
 	private EdocsLocale locale;
 	
+	private Document document;
+	private boolean changed;
+	
 	private JTextField textFieldName;
 	private JComboBox<ComboBoxItemModel<Category>> comboBoxCategory;
 	private JTextArea textAreaDescription;
@@ -55,6 +65,9 @@ public class SaveDocumentPanel extends JPanel {
 	
 	public SaveDocumentPanel() {
 		this.locale = EdocsLocale.instance();
+		this.document = new Document();
+		this.changed = false;
+		
 		this.buildGui();
 	}
 
@@ -138,6 +151,25 @@ public class SaveDocumentPanel extends JPanel {
 		this.textFieldName = new JTextField();
 		this.textFieldName.setPreferredSize(new Dimension(200, 25));
 		this.textFieldName.setName("gui.frame.main.tab.panel.document.save.name");
+		this.textFieldName.setText(this.document.getName());
+		
+		this.textFieldName.getDocument().addDocumentListener(new DocumentListener() {
+			
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				changed = !textFieldName.getText().equals(document.getName());
+				System.out.println("Removed: " + changed);
+			}
+			
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				changed = !textFieldName.getText().equals(document.getName());
+				System.out.println("Inserted: " + changed);
+			}
+			
+			@Override
+			public void changedUpdate(DocumentEvent e) {}
+		});
 	}
 	
 	private void configureComboBoxCategory() {
@@ -223,8 +255,32 @@ public class SaveDocumentPanel extends JPanel {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				new CloseActiveTabCommand().execute();
+				ICommand command = new CloseActiveTabCommand();
+				
+				if (changed) {
+					int option = showConfirmQuitMessage();
+					if (JOptionPane.NO_OPTION == option) {
+						return;
+					}
+				}
+				
+				command.execute();
 			}
 		});
+	}
+	
+	private int showConfirmQuitMessage() {
+		String title = this.locale.getMessage("gui.frame.main.tab.panel.document.save.confirm.title");
+		String message = this.locale.getMessage("gui.frame.main.tab.panel.document.save.confirm.message");
+		Object[] options = new Object[] {
+			this.locale.getMessage("gui.message.yes"),
+			this.locale.getMessage("gui.message.no")
+		};
+		String initialValue = this.locale.getMessage("gui.message.no");
+		
+		return JOptionPane.showOptionDialog(
+			super.getParent(), message, title, JOptionPane.YES_NO_OPTION,
+			JOptionPane.QUESTION_MESSAGE, null, options, initialValue
+		);
 	}
 }
