@@ -31,6 +31,7 @@ import com.github.aureliano.edocs.app.helper.DatabaseHelper;
 import com.github.aureliano.edocs.app.helper.GuiHelper;
 import com.github.aureliano.edocs.app.model.ComboBoxItemModel;
 import com.github.aureliano.edocs.common.config.AppConfiguration;
+import com.github.aureliano.edocs.common.config.ConfigurationSingleton;
 import com.github.aureliano.edocs.common.config.DatabaseConfiguration;
 import com.github.aureliano.edocs.common.config.SecureConfiguration;
 import com.github.aureliano.edocs.common.exception.EDocsException;
@@ -41,6 +42,7 @@ import com.github.aureliano.edocs.file.repository.RepositoryType;
 import com.github.aureliano.edocs.secure.hash.PasswordHashGenerator;
 import com.github.aureliano.edocs.secure.model.Algorithm;
 import com.github.aureliano.edocs.secure.model.PasswordEncryptionModel;
+import com.github.aureliano.edocs.service.bean.UserServiceBean;
 
 public class RepositoryPanel extends JPanel {
 
@@ -240,13 +242,19 @@ public class RepositoryPanel extends JPanel {
 			.toString();
 		
 		try {
+			logger.info("Persist configuration file.");
 			ConfigurationHelper.saveConfigurationFile(configuration, comments);
+			ConfigurationSingleton.instance().setAppConfiguration(configuration);
 			DatabaseConfiguration db = configuration.getDatabaseConfiguration();
 			
+			logger.info("Create system database.");
 			PasswordEncryptionModel pwd = this.buildPasswordEncryptionModel(
 					configuration.getSecureConfiguration(), db.getPassword());
 			DatabaseHelper.prepareDatabase(db.getUser(), PasswordHashGenerator.generate(pwd));
 			
+			logger.info("Create user " + db.getUser());
+			new UserServiceBean().createDatabaseUser(db.getUser(), db.getPassword());
+
 			this.progressDone();
 			EdocsApp.instance().getFrame().setDatabaseGuiEnabled(true);
 			GuiHelper.getFrame(super.getParent()).dispose();
