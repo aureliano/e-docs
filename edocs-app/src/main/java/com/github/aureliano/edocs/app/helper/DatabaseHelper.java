@@ -28,6 +28,7 @@ public final class DatabaseHelper {
 		Connection connection = prepareConnection(user, password);
 		createSchema(connection);
 		initializePersistenceManager(connection);
+		EntityHelper.mapEntities();
 	}
 	
 	public static void openConnection(String user, String password) {
