@@ -15,7 +15,7 @@ public class HelpMenu extends JMenu implements IDatabaseConnectionDependent {
 	private AboutMenuItem aboutMenuItem;
 	
 	public HelpMenu() {
-		super.setText(EdocsLocale.instance().getMessage(""));
+		super.setText(EdocsLocale.instance().getMessage("gui.menubar.help"));
 		this.addMenuItems();
 	}
 
